@@ -1,2 +1,5 @@
-*.class
-*.log
+
+sample_files/
+/bin/
+pkg/
+.idea/
