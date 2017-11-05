@@ -5,8 +5,8 @@ import (
 	"os"
 	"bufio"
 	"log"
-	"fmt"
-	"strings"
+	"encoding/csv"
+	"io"
 )
 
 
@@ -22,31 +22,31 @@ func readFile(filename string){
 	defer csvFile.Close()
 
 
-	scanner := bufio.NewScanner(csvFile)
-	scanner.Split(bufio.ScanLines)
+	scanner := csv.NewReader(bufio.NewReader(csvFile))
 
-	scanner.Scan()
-
-	var headers = strings.Split(scanner.Text(), ",")
-
+	headers, err := scanner.Read()
+	checkErr(err)
 
 	var blooms = []Bloom{}
 
 	for i, label := range headers {
-		fmt.Printf("h%v,%s\n", i, label)
 		var b = new(Bloom)
 		b.name = label
 		blooms = append(blooms, *b)
 	}
 
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-		var values = strings.Split(scanner.Text(), ",")
-		for i, value := range values {
-			fmt.Printf("%v,%s\n", i, value)
+	for {
+		record, err := scanner.Read()
+		if err == io.EOF {
+			break
+		}
+		checkErr(err)
+
+		for i, value := range record {
 			blooms[i].addRecord(value)
 		}
 	}
+
 }
 
 func main() {
