@@ -27,12 +27,12 @@ func readFile(filename string){
 	headers, err := scanner.Read()
 	checkErr(err)
 
-	var blooms = []Bloom{}
+	var ceutas = []Ceuta{}
 
-	for i, label := range headers {
-		var b = new(Bloom)
-		b.name = label
-		blooms = append(blooms, *b)
+	for _, label := range headers {
+		var c = new(Ceuta)
+		c.name = label
+		ceutas = append(ceutas, *c)
 	}
 
 	for {
@@ -43,7 +43,7 @@ func readFile(filename string){
 		checkErr(err)
 
 		for i, value := range record {
-			blooms[i].addRecord(value)
+			ceutas[i].addRecord(value)
 		}
 	}
 
