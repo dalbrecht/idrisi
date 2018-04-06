@@ -1,0 +1,2 @@
+tinymongo
+presto-python-client
