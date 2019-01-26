@@ -103,3 +103,10 @@ venv.bak/
 # mypy
 .mypy_cache/
 geodata/data/*
+*.iml
+MapBuilder/package-lock.json
+MapServer/.idea/encodings.xml
+MapServer/.idea/misc.xml
+MapServer/.idea/modules.xml
+MapServer/.idea/workspace.xml
+geodata
