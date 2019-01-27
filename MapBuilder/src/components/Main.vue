@@ -6,122 +6,84 @@
       fixed
       app
     >
-      <v-list dense>
-        <template v-for="item in items">
-          <v-layout
-            v-if="item.heading"
-            :key="item.heading"
-            row
-            align-center
-          >
-            <v-flex xs6>
-              <v-subheader v-if="item.heading">
-                {{ item.heading }}
-              </v-subheader>
-            </v-flex>
-            <v-flex xs6 class="text-xs-center">
-              <a href="#!" class="body-2 black--text">EDIT</a>
-            </v-flex>
-          </v-layout>
-          <v-list-group
-            v-else-if="item.children"
-            v-model="item.model"
-            :key="item.text"
-            :prepend-icon="item.model ? item.icon : item['icon-alt']"
-            append-icon=""
-          >
-            <v-list-tile slot="activator">
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ item.text }}
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="search"
+        label="Find Place"
+        @keyup.enter="find_places"
+        v-model="search_term"
+        placeholder="where?"></v-text-field>
+      <template v-if="search_results">
+        <v-list two-line>
+          <template v-for="(item, index) in search_results">
             <v-list-tile
-              v-for="(child, i) in item.children"
-              :key="i"
-              @click=""
+              :key="item.geoname_id"
+              ripple
+              @click="add_to_map(item)"
             >
-              <v-list-tile-action v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
-              </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ child.text }}
-                </v-list-tile-title>
+                <v-list-tile-title>{{ item.name }}, {{ item.admin1_code }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ item.latitude }},{{ item.longitude}}</v-list-tile-sub-title>
               </v-list-tile-content>
+
+              <v-list-tile-action>
+
+                <v-icon
+                  color="red darken-2"
+                >
+                  place
+                </v-icon>
+                <v-list-tile-action-text>Add To Map</v-list-tile-action-text>
+
+              </v-list-tile-action>
+
             </v-list-tile>
-          </v-list-group>
-          <v-list-tile v-else :key="item.text" @click="">
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                {{ item.text }}
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-      </v-list>
+            <v-divider
+              v-if="index + 1 < search_results.length"
+              :key="index"
+            ></v-divider>
+          </template>
+        </v-list>
+      </template>
     </v-navigation-drawer>
     <v-toolbar
       :clipped-left="$vuetify.breakpoint.lgAndUp"
-      color="blue darken-3"
+      color="grey darken-3"
       dark
       app
       fixed
     >
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <span class="hidden-sm-and-down">Google Contacts</span>
+        <span class="hidden-sm-and-down">MapBuilder</span>
       </v-toolbar-title>
-      <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        prepend-inner-icon="search"
-        label="Search"
-        class="hidden-sm-and-down"
-      ></v-text-field>
+
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>apps</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>notifications</v-icon>
-      </v-btn>
-      <v-btn icon large>
-        <v-avatar size="32px" tile>
-          <img
-            src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-            alt="Vuetify"
-          >
-        </v-avatar>
-      </v-btn>
     </v-toolbar>
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout justify-center align-center>
-          <v-tooltip right>
-            <v-btn
-              slot="activator"
-              :href="source"
-              icon
-              large
-              target="_blank"
+      <v-container fluid fill-height child flex-1>
+            <v-data-table
+              :headers="headers"
+              :items="places"
+              class="fill-height fluid"
+              fill-height
+              fluid
             >
-              <v-icon large>code</v-icon>
-            </v-btn>
-            <span>Source</span>
-          </v-tooltip>
-          <v-tooltip right>
-            <v-btn slot="activator" icon large href="https://codepen.io/johnjleider/pen/EQOYVV" target="_blank">
-              <v-icon large>mdi-codepen</v-icon>
-            </v-btn>
-            <span>Codepen</span>
-          </v-tooltip>
-        </v-layout>
+              <template slot="items" slot-scope="props">
+                <td>{{ props.item.name }}</td>
+                <td class="text-xs-right">{{ props.item.latitude }}</td>
+                <td class="text-xs-right">{{ props.item.longitude }}</td>
+                <td class="text-xs-right">{{ props.item.admin1_code }}</td>
+                <td class="text-xs-right">{{ props.item.geoname_id }}</td>
+              </template>
+                  <template slot="no-data">
+      <v-alert :value="true" color="warning" icon="warning">
+        No Places Added, use the tools to the left to add places
+      </v-alert>
+    </template>
+            </v-data-table>
       </v-container>
     </v-content>
     <v-btn
@@ -202,45 +164,78 @@
 </template>
 
 <script>
+
+import axios from 'axios'
+
 export default {
   data: () => ({
+    headers: [
+      {text: 'Place', value: 'name'},
+      {text: 'Latitude', value: 'latitude'},
+      {text: 'Longitude', value: 'longitude'},
+      {text: 'country', value: 'Country'},
+      {text: 'gid', value: 'gid'}
+    ],
     dialog: false,
     drawer: null,
-    items: [
-      { icon: 'contacts', text: 'Contacts' },
-      { icon: 'history', text: 'Frequently contacted' },
-      { icon: 'content_copy', text: 'Duplicates' },
+    search_term: '',
+    search_results: [
       {
-        icon: 'keyboard_arrow_up',
-        'icon-alt': 'keyboard_arrow_down',
-        text: 'Labels',
-        model: true,
-        children: [
-          { icon: 'add', text: 'Create label' }
-        ]
+        'geoname_id': 2615876,
+        'name': 'Odense',
+        'latitude': 55.39594,
+        'longitude': 10.38831,
+        'admin1_code': 'DK'
       },
       {
-        icon: 'keyboard_arrow_up',
-        'icon-alt': 'keyboard_arrow_down',
-        text: 'More',
-        model: false,
-        children: [
-          { text: 'Import' },
-          { text: 'Export' },
-          { text: 'Print' },
-          { text: 'Undo changes' },
-          { text: 'Other contacts' }
-        ]
-      },
-      { icon: 'settings', text: 'Settings' },
-      { icon: 'chat_bubble', text: 'Send feedback' },
-      { icon: 'help', text: 'Help' },
-      { icon: 'phonelink', text: 'App downloads' },
-      { icon: 'keyboard', text: 'Go to the old version' }
-    ]
+        'geoname_id': 4276573,
+        'name': 'Odense',
+        'latitude': 37.7031,
+        'longitude': -95.25192,
+        'admin1_code': 'US'
+      }
+    ],
+    places: []
   }),
   props: {
     source: String
+  },
+  methods: {
+    add_to_map: function (item) {
+      this.places.push(item)
+      axios.post('http://localhost:5000/projects/1/places/',
+        {'geoname_id': item.geoname_id},
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+        }).catch(e => {
+          this.errors.push(e)
+        })
+    },
+    find_places: function (event) {
+      axios.get('http://localhost:5000/lookup/' + this.search_term)
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.search_results = response.data
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    }
+  },
+
+  created () {
+    axios.get('http://localhost:5000/projects/1')
+      .then(response => {
+        // JSON responses are automatically parsed.
+        this.places = response.data
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
   }
 }
 </script>
