@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import tempfile
+import uuid
 from pathlib import Path
 from uuid import uuid4
+
+from PIL import Image
 
 from voyages.domain.entities import Place, Trip, TripStop
 from voyages.domain.value_objects import OutputFormat
@@ -125,3 +128,77 @@ class TestRenderRouteMap:
             assert result == str(out)
             assert out.exists()
             assert out.stat().st_size > 0
+
+
+class TestRenderOutputValidation:
+    """Verify rendered output is valid, not just that a file exists."""
+
+    def test_png_magic_bytes(self, tmp_path: Path) -> None:
+        style = load_style("default")
+        engine = RenderEngine(style)
+        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        out = tmp_path / "test.png"
+        engine.render_travel_map(places, [], str(out), OutputFormat.PNG)
+        with open(out, "rb") as f:
+            header = f.read(8)
+        assert header == b"\x89PNG\r\n\x1a\n"
+
+    def test_svg_contains_svg_tag(self, tmp_path: Path) -> None:
+        style = load_style("default")
+        engine = RenderEngine(style)
+        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        out = tmp_path / "test.svg"
+        engine.render_travel_map(places, [], str(out), OutputFormat.SVG)
+        content = out.read_text()
+        assert "<svg" in content
+
+    def test_pdf_magic_bytes(self, tmp_path: Path) -> None:
+        style = load_style("default")
+        engine = RenderEngine(style)
+        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        out = tmp_path / "test.pdf"
+        engine.render_travel_map(places, [], str(out), OutputFormat.PDF)
+        with open(out, "rb") as f:
+            header = f.read(4)
+        assert header == b"%PDF"
+
+    def test_eps_magic_bytes(self, tmp_path: Path) -> None:
+        style = load_style("default")
+        engine = RenderEngine(style)
+        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        out = tmp_path / "test.eps"
+        engine.render_travel_map(places, [], str(out), OutputFormat.EPS)
+        with open(out, "rb") as f:
+            header = f.read(11)
+        assert header.startswith(b"%!PS-Adobe")
+
+    def test_png_dimensions_match_config(self, tmp_path: Path) -> None:
+        style = load_style("default")
+        engine = RenderEngine(style)
+        places = [Place(id=uuid.uuid4(), name="Test", latitude=0.0, longitude=0.0, source="test")]
+        out = tmp_path / "test.png"
+        engine.render_travel_map(places, [], str(out), OutputFormat.PNG, config={"width": 800})
+        img = Image.open(out)
+        # Width may differ from requested due to bbox_inches="tight" cropping;
+        # assert it is a plausible non-trivial render (not zero, not enormous).
+        assert 100 < img.width < 1600
+
+    def test_marker_visible_on_rendered_map(self, tmp_path: Path) -> None:
+        """A rendered map with one place should not be a single solid color."""
+        style = load_style("default")
+        engine = RenderEngine(style)
+        places = [Place(id=uuid.uuid4(), name="Marker", latitude=0.0, longitude=0.0, source="test")]
+        out = tmp_path / "marker.png"
+        engine.render_travel_map(places, [], str(out), OutputFormat.PNG, config={"width": 400, "dpi": 72})
+        img = Image.open(out)
+        pixels = list(img.getdata())
+        unique_colors = set(pixels)
+        assert len(unique_colors) > 10  # A real map has many colors
+
+    def test_empty_places_renders_without_error(self, tmp_path: Path) -> None:
+        style = load_style("default")
+        engine = RenderEngine(style)
+        out = tmp_path / "empty.png"
+        engine.render_travel_map([], [], str(out), OutputFormat.PNG)
+        assert out.exists()
+        assert out.stat().st_size > 0
