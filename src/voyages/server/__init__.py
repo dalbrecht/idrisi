@@ -72,8 +72,8 @@ def create_app(database_url: str = "sqlite:///voyages.db") -> FastAPI:
 
     @app.exception_handler(EntityNotFoundError)
     async def entity_not_found_handler(
-        request: Request,
-        exc: EntityNotFoundError,  # noqa: ARG001
+        request: Request,  # noqa: ARG001
+        exc: EntityNotFoundError,
     ) -> JSONResponse:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
 

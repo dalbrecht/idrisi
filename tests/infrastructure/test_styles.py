@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import tempfile
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 from voyages.infrastructure.renderer.styles import MapStyle, get_builtin_styles, load_style
 
@@ -51,9 +54,7 @@ marker_size: 10
 title_size: 20
 label_size: 12
 """
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yml", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as f:
             f.write(custom_yaml)
             f.flush()
             style = load_style(f.name)
@@ -80,9 +81,11 @@ label_size: 12
 
     def test_invalid_yaml_syntax_raises(self, tmp_path: Path) -> None:
         """Malformed YAML should raise an error."""
+        import yaml
+
         style_file = tmp_path / "bad.yml"
         style_file.write_text("name: bad\nocean: [invalid\n")
-        with pytest.raises(Exception):
+        with pytest.raises(yaml.YAMLError):
             load_style(str(style_file))
 
     def test_all_builtin_styles_have_all_fields(self) -> None:

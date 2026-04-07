@@ -1,4 +1,5 @@
 """Integration tests: project creation and render workflow via API."""
+
 from __future__ import annotations
 
 from starlette.testclient import TestClient

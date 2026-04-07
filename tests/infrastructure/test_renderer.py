@@ -136,7 +136,9 @@ class TestRenderOutputValidation:
     def test_png_magic_bytes(self, tmp_path: Path) -> None:
         style = load_style("default")
         engine = RenderEngine(style)
-        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        places = [
+            Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")
+        ]
         out = tmp_path / "test.png"
         engine.render_travel_map(places, [], str(out), OutputFormat.PNG)
         with open(out, "rb") as f:
@@ -146,7 +148,9 @@ class TestRenderOutputValidation:
     def test_svg_contains_svg_tag(self, tmp_path: Path) -> None:
         style = load_style("default")
         engine = RenderEngine(style)
-        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        places = [
+            Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")
+        ]
         out = tmp_path / "test.svg"
         engine.render_travel_map(places, [], str(out), OutputFormat.SVG)
         content = out.read_text()
@@ -155,7 +159,9 @@ class TestRenderOutputValidation:
     def test_pdf_magic_bytes(self, tmp_path: Path) -> None:
         style = load_style("default")
         engine = RenderEngine(style)
-        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        places = [
+            Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")
+        ]
         out = tmp_path / "test.pdf"
         engine.render_travel_map(places, [], str(out), OutputFormat.PDF)
         with open(out, "rb") as f:
@@ -165,7 +171,9 @@ class TestRenderOutputValidation:
     def test_eps_magic_bytes(self, tmp_path: Path) -> None:
         style = load_style("default")
         engine = RenderEngine(style)
-        places = [Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")]
+        places = [
+            Place(id=uuid.uuid4(), name="Paris", latitude=48.85, longitude=2.35, source="test")
+        ]
         out = tmp_path / "test.eps"
         engine.render_travel_map(places, [], str(out), OutputFormat.EPS)
         with open(out, "rb") as f:
@@ -189,7 +197,9 @@ class TestRenderOutputValidation:
         engine = RenderEngine(style)
         places = [Place(id=uuid.uuid4(), name="Marker", latitude=0.0, longitude=0.0, source="test")]
         out = tmp_path / "marker.png"
-        engine.render_travel_map(places, [], str(out), OutputFormat.PNG, config={"width": 400, "dpi": 72})
+        engine.render_travel_map(
+            places, [], str(out), OutputFormat.PNG, config={"width": 400, "dpi": 72}
+        )
         img = Image.open(out)
         pixels = list(img.getdata())
         unique_colors = set(pixels)

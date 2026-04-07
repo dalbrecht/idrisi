@@ -1,4 +1,5 @@
 """Integration tests: full-stack place CRUD workflow via API."""
+
 from __future__ import annotations
 
 from starlette.testclient import TestClient
@@ -18,7 +19,13 @@ class TestPlaceCrudWorkflow:
 
         create_resp = client.post(
             "/api/places",
-            json={"name": "Paris", "lat": 48.8566, "lon": 2.3522, "source": "manual", "country": "France"},
+            json={
+                "name": "Paris",
+                "lat": 48.8566,
+                "lon": 2.3522,
+                "source": "manual",
+                "country": "France",
+            },
         )
         assert create_resp.status_code == 201
         place_id = create_resp.json()["id"]
@@ -37,9 +44,15 @@ class TestPlaceCrudWorkflow:
     def test_create_multiple_and_search(self) -> None:
         client = _make_client()
 
-        client.post("/api/places", json={"name": "Paris", "lat": 48.85, "lon": 2.35, "source": "manual"})
-        client.post("/api/places", json={"name": "Parma", "lat": 44.80, "lon": 10.33, "source": "manual"})
-        client.post("/api/places", json={"name": "Berlin", "lat": 52.52, "lon": 13.40, "source": "manual"})
+        client.post(
+            "/api/places", json={"name": "Paris", "lat": 48.85, "lon": 2.35, "source": "manual"}
+        )
+        client.post(
+            "/api/places", json={"name": "Parma", "lat": 44.80, "lon": 10.33, "source": "manual"}
+        )
+        client.post(
+            "/api/places", json={"name": "Berlin", "lat": 52.52, "lon": 13.40, "source": "manual"}
+        )
 
         search_resp = client.get("/api/places/search", params={"q": "Par"})
         assert search_resp.status_code == 200
