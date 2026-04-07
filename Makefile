@@ -43,8 +43,4 @@ ls: ## List all make targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sed 's/:.*//' | sort
 
 sync-standards: ## Sync coding-standards submodule to latest
-	@if [ -d ".standards" ]; then \
-		cd .standards && git pull origin main; \
-	else \
-		echo "No .standards directory found."; exit 1; \
-	fi
+	git submodule update --init --remote .standards
