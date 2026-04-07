@@ -102,3 +102,9 @@ disable_error_code = ["assignment", "unused-ignore"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "--strict-markers -q"
+
+[tool.coverage.run]
+source = ["voyages"]
+
+[tool.coverage.report]
+show_missing = true
