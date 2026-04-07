@@ -217,10 +217,10 @@ class TestCliErrorPaths:
     @patch("voyages.cli.project_commands.get_project_service")
     def test_project_create_invalid_map_type(self, mock_get_svc: MagicMock) -> None:
         svc = MagicMock()
-        svc.create.side_effect = ValueError("'invalid' is not a valid MapType")
         mock_get_svc.return_value = svc
         result = runner.invoke(app, ["project", "create", "Test", "--map-type", "invalid"])
         assert result.exit_code != 0
+        svc.create.assert_not_called()
 
     def test_trip_create_missing_name(self) -> None:
         result = runner.invoke(app, ["trip", "create"])

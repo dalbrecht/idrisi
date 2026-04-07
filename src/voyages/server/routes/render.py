@@ -10,7 +10,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
 
-from voyages.domain.errors import ProjectNotFoundError
+from voyages.domain.errors import BadRequestError, ProjectNotFoundError
 
 
 def _get_dependencies(request: Request) -> tuple[Any, ...]:
@@ -48,7 +48,10 @@ def create_render_router() -> APIRouter:
             request
         )
 
-        entity_id = uuid.UUID(project_id)
+        try:
+            entity_id = uuid.UUID(project_id)
+        except ValueError:
+            raise BadRequestError(f"Invalid UUID: {project_id}") from None
         project = project_service.get(entity_id)
         if project is None:
             raise ProjectNotFoundError(entity_id)

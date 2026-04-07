@@ -8,6 +8,7 @@ import pytest
 
 from voyages.application.photo_service import PhotoService
 from voyages.domain.entities import Photo
+from voyages.domain.errors import PhotoNotFoundError
 
 if TYPE_CHECKING:
     from voyages.domain.value_objects import Coordinates
@@ -159,11 +160,11 @@ class TestPhotoService:
     def test_assign_to_trip_photo_not_found(self) -> None:
         nonexistent_id = uuid.uuid4()
         trip_id = uuid.uuid4()
-        with pytest.raises(ValueError, match="not found"):
+        with pytest.raises(PhotoNotFoundError):
             self.service.assign_to_trip(nonexistent_id, trip_id)
 
     def test_assign_to_place_photo_not_found(self) -> None:
         nonexistent_id = uuid.uuid4()
         place_id = uuid.uuid4()
-        with pytest.raises(ValueError, match="not found"):
+        with pytest.raises(PhotoNotFoundError):
             self.service.assign_to_place(nonexistent_id, place_id)

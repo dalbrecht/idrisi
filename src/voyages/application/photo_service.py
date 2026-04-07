@@ -9,6 +9,8 @@ if TYPE_CHECKING:
     from voyages.application.interfaces import ExifService, GeocodingService, PhotoRepository
     from voyages.domain.entities import Photo
 
+from voyages.domain.errors import PhotoNotFoundError
+
 
 class PhotoService:
     """Application service for managing Photos."""
@@ -45,8 +47,7 @@ class PhotoService:
         """Assign a photo to a trip and persist the change."""
         photo = self._photo_repo.get(photo_id)
         if photo is None:
-            msg = f"Photo not found: {photo_id}"
-            raise ValueError(msg)
+            raise PhotoNotFoundError(photo_id)
         photo.trip_id = trip_id
         return self._photo_repo.save(photo)
 
@@ -54,7 +55,6 @@ class PhotoService:
         """Assign a photo to a place and persist the change."""
         photo = self._photo_repo.get(photo_id)
         if photo is None:
-            msg = f"Photo not found: {photo_id}"
-            raise ValueError(msg)
+            raise PhotoNotFoundError(photo_id)
         photo.place_id = place_id
         return self._photo_repo.save(photo)
