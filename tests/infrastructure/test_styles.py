@@ -50,9 +50,7 @@ marker_size: 10
 title_size: 20
 label_size: 12
 """
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yml", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as f:
             f.write(custom_yaml)
             f.flush()
             style = load_style(f.name)

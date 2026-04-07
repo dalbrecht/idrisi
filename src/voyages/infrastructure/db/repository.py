@@ -65,11 +65,7 @@ class SqlPlaceRepository:
         return [self._to_entity(m) for m in models]
 
     def search_by_name(self, query: str) -> list[Place]:
-        models = (
-            self._session.query(PlaceModel)
-            .filter(PlaceModel.name.ilike(f"%{query}%"))
-            .all()
-        )
+        models = self._session.query(PlaceModel).filter(PlaceModel.name.ilike(f"%{query}%")).all()
         return [self._to_entity(m) for m in models]
 
     def save(self, place: Place) -> Place:
@@ -273,11 +269,7 @@ class SqlProjectRepository:
         return self._to_entity(model)
 
     def get_by_name(self, name: str) -> Project | None:
-        model = (
-            self._session.query(ProjectModel)
-            .filter(ProjectModel.name == name)
-            .first()
-        )
+        model = self._session.query(ProjectModel).filter(ProjectModel.name == name).first()
         if model is None:
             return None
         return self._to_entity(model)
@@ -306,39 +298,25 @@ class SqlProjectRepository:
 
         # Sync junction tables: delete all, re-insert
         pid = str(project.id)
-        self._session.query(ProjectPlaceModel).filter(
-            ProjectPlaceModel.project_id == pid
-        ).delete()
-        self._session.query(ProjectTripModel).filter(
-            ProjectTripModel.project_id == pid
-        ).delete()
+        self._session.query(ProjectPlaceModel).filter(ProjectPlaceModel.project_id == pid).delete()
+        self._session.query(ProjectTripModel).filter(ProjectTripModel.project_id == pid).delete()
         self._session.query(ProjectRegionModel).filter(
             ProjectRegionModel.project_id == pid
         ).delete()
 
         for place_id in project.place_ids:
-            self._session.add(
-                ProjectPlaceModel(project_id=pid, place_id=str(place_id))
-            )
+            self._session.add(ProjectPlaceModel(project_id=pid, place_id=str(place_id)))
         for trip_id in project.trip_ids:
-            self._session.add(
-                ProjectTripModel(project_id=pid, trip_id=str(trip_id))
-            )
+            self._session.add(ProjectTripModel(project_id=pid, trip_id=str(trip_id)))
         for region_id in project.region_ids:
-            self._session.add(
-                ProjectRegionModel(project_id=pid, region_id=str(region_id))
-            )
+            self._session.add(ProjectRegionModel(project_id=pid, region_id=str(region_id)))
         self._session.commit()
         return project
 
     def delete(self, project_id: UUID) -> None:
         pid = str(project_id)
-        self._session.query(ProjectPlaceModel).filter(
-            ProjectPlaceModel.project_id == pid
-        ).delete()
-        self._session.query(ProjectTripModel).filter(
-            ProjectTripModel.project_id == pid
-        ).delete()
+        self._session.query(ProjectPlaceModel).filter(ProjectPlaceModel.project_id == pid).delete()
+        self._session.query(ProjectTripModel).filter(ProjectTripModel.project_id == pid).delete()
         self._session.query(ProjectRegionModel).filter(
             ProjectRegionModel.project_id == pid
         ).delete()
@@ -351,21 +329,21 @@ class SqlProjectRepository:
         pid = str(model.id)
         place_ids = [
             UUID(str(row.place_id))
-            for row in self._session.query(ProjectPlaceModel).filter(
-                ProjectPlaceModel.project_id == pid
-            ).all()
+            for row in self._session.query(ProjectPlaceModel)
+            .filter(ProjectPlaceModel.project_id == pid)
+            .all()
         ]
         trip_ids = [
             UUID(str(row.trip_id))
-            for row in self._session.query(ProjectTripModel).filter(
-                ProjectTripModel.project_id == pid
-            ).all()
+            for row in self._session.query(ProjectTripModel)
+            .filter(ProjectTripModel.project_id == pid)
+            .all()
         ]
         region_ids = [
             UUID(str(row.region_id))
-            for row in self._session.query(ProjectRegionModel).filter(
-                ProjectRegionModel.project_id == pid
-            ).all()
+            for row in self._session.query(ProjectRegionModel)
+            .filter(ProjectRegionModel.project_id == pid)
+            .all()
         ]
         config_str = str(model.config) if model.config else None
         config: dict[str, object] = json.loads(config_str) if config_str else {}
@@ -394,11 +372,7 @@ class SqlPhotoRepository:
         return self._to_entity(model)
 
     def list_by_trip(self, trip_id: UUID) -> list[Photo]:
-        models = (
-            self._session.query(PhotoModel)
-            .filter(PhotoModel.trip_id == str(trip_id))
-            .all()
-        )
+        models = self._session.query(PhotoModel).filter(PhotoModel.trip_id == str(trip_id)).all()
         return [self._to_entity(m) for m in models]
 
     def save(self, photo: Photo) -> Photo:

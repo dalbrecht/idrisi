@@ -22,9 +22,7 @@ def _make_mock_image_with_gps() -> MagicMock:
     exif = MagicMock()
     # Return GPS info tag to indicate presence
     exif.get.side_effect = lambda tag, default=None: (
-        True if tag == 34853 else (
-            "2024:07:04 18:30:00" if tag == 36867 else default
-        )
+        True if tag == 34853 else ("2024:07:04 18:30:00" if tag == 36867 else default)
     )
     exif.__bool__ = lambda self: True
     # get_ifd returns the GPS IFD with GPSTAGS-decoded keys
