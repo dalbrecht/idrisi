@@ -7,9 +7,11 @@ from typing import Any
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.pool import StaticPool
 
+from voyages.domain.errors import BadRequestError, EntityNotFoundError
 from voyages.infrastructure.db.models import Base
 from voyages.infrastructure.db.session import get_session
 from voyages.server.routes.places import create_places_router
@@ -63,6 +65,17 @@ def create_app(database_url: str = "sqlite:///voyages.db") -> FastAPI:
         finally:
             session.close()
         return response
+
+    @app.exception_handler(BadRequestError)
+    async def bad_request_handler(request: Request, exc: BadRequestError) -> JSONResponse:  # noqa: ARG001
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
+
+    @app.exception_handler(EntityNotFoundError)
+    async def entity_not_found_handler(
+        request: Request,  # noqa: ARG001
+        exc: EntityNotFoundError,
+    ) -> JSONResponse:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
 
     # Include API routers
     app.include_router(create_places_router(), prefix="/api")

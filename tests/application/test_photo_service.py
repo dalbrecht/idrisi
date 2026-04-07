@@ -4,8 +4,11 @@ import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import pytest
+
 from voyages.application.photo_service import PhotoService
 from voyages.domain.entities import Photo
+from voyages.domain.errors import PhotoNotFoundError
 
 if TYPE_CHECKING:
     from voyages.domain.value_objects import Coordinates
@@ -153,3 +156,15 @@ class TestPhotoService:
         fetched = self.photo_repo.get(PHOTO_WITH_GPS.id)
         assert fetched is not None
         assert fetched.place_id == place_id
+
+    def test_assign_to_trip_photo_not_found(self) -> None:
+        nonexistent_id = uuid.uuid4()
+        trip_id = uuid.uuid4()
+        with pytest.raises(PhotoNotFoundError):
+            self.service.assign_to_trip(nonexistent_id, trip_id)
+
+    def test_assign_to_place_photo_not_found(self) -> None:
+        nonexistent_id = uuid.uuid4()
+        place_id = uuid.uuid4()
+        with pytest.raises(PhotoNotFoundError):
+            self.service.assign_to_place(nonexistent_id, place_id)

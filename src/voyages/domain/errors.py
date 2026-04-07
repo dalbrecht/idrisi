@@ -47,5 +47,16 @@ class RegionNotFoundError(EntityNotFoundError):
         super().__init__(entity_type="Region", entity_id=entity_id)
 
 
+class BadRequestError(VoyagesError):
+    """Raised for malformed client input (invalid UUIDs, enum values, etc.)."""
+
+
+class PhotoNotFoundError(EntityNotFoundError):
+    """Raised when a photo cannot be found."""
+
+    def __init__(self, entity_id: UUID) -> None:
+        super().__init__("Photo", entity_id)
+
+
 class RenderError(VoyagesError):
     """Raised when map rendering fails."""

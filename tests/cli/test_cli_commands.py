@@ -71,15 +71,11 @@ def test_place_search_no_results(mock_get_svc: MagicMock) -> None:
 @patch("voyages.cli.place_commands.get_place_service")
 def test_place_add(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
-    place = Place(
-        id=uuid.uuid4(), name="Test", latitude=1.0, longitude=2.0, source="cli"
-    )
+    place = Place(id=uuid.uuid4(), name="Test", latitude=1.0, longitude=2.0, source="cli")
     svc.create.return_value = place
     mock_get_svc.return_value = svc
 
-    result = runner.invoke(
-        app, ["place", "add", "--name", "Test", "--lat", "1.0", "--lon", "2.0"]
-    )
+    result = runner.invoke(app, ["place", "add", "--name", "Test", "--lat", "1.0", "--lon", "2.0"])
     assert result.exit_code == 0
     assert "Created place" in result.output
 
@@ -196,3 +192,47 @@ def test_trip_create(mock_get_svc: MagicMock) -> None:
     assert result.exit_code == 0
     assert "Created trip" in result.output
     svc.create.assert_called_once()
+
+
+# ---------------------------------------------------------------------------
+# Error path tests
+# ---------------------------------------------------------------------------
+
+
+class TestCliErrorPaths:
+    """Test CLI commands with invalid input."""
+
+    def test_place_add_missing_name(self) -> None:
+        result = runner.invoke(app, ["place", "add", "--lat", "48.85", "--lon", "2.35"])
+        assert result.exit_code != 0
+
+    def test_place_add_missing_lat(self) -> None:
+        result = runner.invoke(app, ["place", "add", "--name", "Paris", "--lon", "2.35"])
+        assert result.exit_code != 0
+
+    def test_place_add_missing_lon(self) -> None:
+        result = runner.invoke(app, ["place", "add", "--name", "Paris", "--lat", "48.85"])
+        assert result.exit_code != 0
+
+    @patch("voyages.cli.project_commands.get_project_service")
+    def test_project_create_invalid_map_type(self, mock_get_svc: MagicMock) -> None:
+        svc = MagicMock()
+        mock_get_svc.return_value = svc
+        result = runner.invoke(app, ["project", "create", "Test", "--map-type", "invalid"])
+        assert result.exit_code != 0
+        svc.create.assert_not_called()
+
+    def test_trip_create_missing_name(self) -> None:
+        result = runner.invoke(app, ["trip", "create"])
+        assert result.exit_code != 0
+
+    @patch("voyages.cli.place_commands.get_place_service")
+    def test_place_add_invalid_coordinates(self, mock_get_svc: MagicMock) -> None:
+        """Document behavior when lat > 90 — CLI has no validation."""
+        svc = MagicMock()
+        place = Place(id=uuid.uuid4(), name="Bad", latitude=999.0, longitude=0.0, source="cli")
+        svc.create.return_value = place
+        mock_get_svc.return_value = svc
+        result = runner.invoke(app, ["place", "add", "--name", "Bad", "--lat", "999", "--lon", "0"])
+        # CLI currently accepts any float — no coordinate validation
+        assert result.exit_code == 0

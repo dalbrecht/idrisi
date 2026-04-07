@@ -75,8 +75,16 @@ def create_regions_router() -> APIRouter:
 
     @router.delete("/regions/{region_id}", status_code=204)
     def delete_region(request: Request, region_id: str) -> Response:
+        from voyages.domain.errors import BadRequestError, RegionNotFoundError  # noqa: PLC0415
+
         service = _get_service(request)
-        service.delete(uuid.UUID(region_id))
+        try:
+            entity_id = uuid.UUID(region_id)
+        except ValueError:
+            raise BadRequestError(f"Invalid UUID: {region_id}") from None
+        if service.get(entity_id) is None:
+            raise RegionNotFoundError(entity_id)
+        service.delete(entity_id)
         return Response(status_code=204)
 
     return router

@@ -102,8 +102,16 @@ def create_places_router() -> APIRouter:
 
     @router.delete("/places/{place_id}", status_code=204)
     def delete_place(request: Request, place_id: str) -> Response:
+        from voyages.domain.errors import BadRequestError, PlaceNotFoundError  # noqa: PLC0415
+
         service = _get_service(request)
-        service.delete(uuid.UUID(place_id))
+        try:
+            entity_id = uuid.UUID(place_id)
+        except ValueError:
+            raise BadRequestError(f"Invalid UUID: {place_id}") from None
+        if service.get(entity_id) is None:
+            raise PlaceNotFoundError(entity_id)
+        service.delete(entity_id)
         return Response(status_code=204)
 
     return router

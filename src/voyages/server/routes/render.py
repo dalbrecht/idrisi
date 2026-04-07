@@ -10,6 +10,8 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
 
+from voyages.domain.errors import BadRequestError, ProjectNotFoundError
+
 
 def _get_dependencies(request: Request) -> tuple[Any, ...]:
     """Create all dependencies needed for rendering."""
@@ -42,13 +44,17 @@ def create_render_router() -> APIRouter:
     def render_project(request: Request, project_id: str) -> FileResponse:
         from voyages.domain.value_objects import MapType, OutputFormat  # noqa: PLC0415
 
-        project_service, place_repo, trip_repo, region_repo, render_engine = (
-            _get_dependencies(request)
+        project_service, place_repo, trip_repo, region_repo, render_engine = _get_dependencies(
+            request
         )
 
-        project = project_service.get(uuid.UUID(project_id))
+        try:
+            entity_id = uuid.UUID(project_id)
+        except ValueError:
+            raise BadRequestError(f"Invalid UUID: {project_id}") from None
+        project = project_service.get(entity_id)
         if project is None:
-            raise HTTPException(status_code=404, detail="Project not found")
+            raise ProjectNotFoundError(entity_id)
 
         fmt = OutputFormat.PNG
         config = {"dpi": 200, "width": 1200}
@@ -66,11 +72,19 @@ def create_render_router() -> APIRouter:
 
         if project.map_type == MapType.TRAVEL:
             render_engine.render_travel_map(
-                filtered_places, filtered_regions, output_path, fmt, config,
+                filtered_places,
+                filtered_regions,
+                output_path,
+                fmt,
+                config,
             )
         elif project.map_type == MapType.REGION:
             render_engine.render_region_map(
-                filtered_places, filtered_regions, output_path, fmt, config,
+                filtered_places,
+                filtered_regions,
+                output_path,
+                fmt,
+                config,
             )
         elif project.map_type == MapType.ROUTE:
             trips = [trip_repo.get(tid) for tid in project.trip_ids]
