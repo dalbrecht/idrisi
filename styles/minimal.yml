@@ -1,0 +1,12 @@
+name: minimal
+ocean: "#FFFFFF"
+land: "#F0F0F0"
+visited: "#333333"
+visited_light: "#999999"
+route: "#333333"
+font: "Helvetica"
+borders: "#E0E0E0"
+marker: "#333333"
+marker_size: 3
+title_size: 14
+label_size: 7

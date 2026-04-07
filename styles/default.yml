@@ -1,0 +1,12 @@
+name: default
+ocean: "#ACBEBE"
+land: "#F4F4EF"
+visited: "#A01D26"
+visited_light: "#D4737A"
+route: "#2C5F7C"
+font: "DejaVu Sans"
+borders: "#CCCCCC"
+marker: "#A01D26"
+marker_size: 4
+title_size: 16
+label_size: 8
