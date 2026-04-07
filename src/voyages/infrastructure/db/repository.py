@@ -7,8 +7,6 @@ from datetime import date, datetime
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from sqlalchemy.orm import Session
-
 from voyages.domain.entities import Photo, Place, Project, Region, Trip, TripStop
 from voyages.domain.value_objects import MapType
 from voyages.infrastructure.db.models import (
@@ -24,7 +22,7 @@ from voyages.infrastructure.db.models import (
 )
 
 if TYPE_CHECKING:
-    pass
+    from sqlalchemy.orm import Session
 
 _DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 _DATE_FORMAT = "%Y-%m-%d"
@@ -116,8 +114,8 @@ class SqlPlaceRepository:
         return Place(
             id=UUID(str(model.id)),
             name=str(model.name),
-            latitude=float(model.latitude),  # type: ignore[arg-type]
-            longitude=float(model.longitude),  # type: ignore[arg-type]
+            latitude=float(model.latitude),
+            longitude=float(model.longitude),
             source=str(model.source),
             country=str(model.country) if model.country else None,
             admin1=str(model.admin1) if model.admin1 else None,
@@ -197,7 +195,7 @@ class SqlTripRepository:
         stops = [
             TripStop(
                 place_id=UUID(str(s.place_id)),
-                position=int(s.position),  # type: ignore[arg-type]
+                position=int(s.position),
                 arrived_at=_str_to_dt(str(s.arrived_at) if s.arrived_at else None),
                 departed_at=_str_to_dt(str(s.departed_at) if s.departed_at else None),
             )

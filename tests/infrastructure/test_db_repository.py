@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from uuid import uuid4
 
 import pytest
@@ -241,7 +241,7 @@ class TestSqlPhotoRepository:
             file_path="/photos/sunset.jpg",
             latitude=48.8566,
             longitude=2.3522,
-            taken_at=datetime(2024, 7, 4, 18, 30, 0, tzinfo=timezone.utc),
+            taken_at=datetime(2024, 7, 4, 18, 30, 0, tzinfo=UTC),
         )
         repo.save(photo)
         loaded = repo.get(photo.id)

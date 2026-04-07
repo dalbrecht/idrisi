@@ -72,7 +72,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["S101", "ARG001", "ARG002"]
+"tests/**/*.py" = ["S101", "ARG001", "ARG002", "ARG005", "PLR2004"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["voyages"]
@@ -91,6 +91,11 @@ module = [
     "matplotlib.*",
 ]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "voyages.infrastructure.db.repository"
+# Legacy-style Column models produce false positives on attribute assignment
+disable_error_code = ["assignment", "unused-ignore"]
 
 # ---------- Pytest ----------
 [tool.pytest.ini_options]
