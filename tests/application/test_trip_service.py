@@ -147,6 +147,16 @@ class TestTripService:
         assert updated.stops[EXPECTED_TWO].place_id == LONDON_ID
         assert updated.stops[EXPECTED_TWO].position == EXPECTED_TWO
 
+    def test_reorder_stops_with_unknown_place_id(self) -> None:
+        """Reorder with place_ids not in the trip — document actual behavior."""
+        trip = self.service.create(name="Test Trip")
+        known_place = uuid.uuid4()
+        self.service.add_stop(trip.id, known_place)
+        unknown_place = uuid.uuid4()
+        updated = self.service.reorder_stops(trip.id, [unknown_place, known_place])
+        known_stops = [s for s in updated.stops if s.place_id == known_place]
+        assert len(known_stops) == 1
+
     def test_reorder_stops_trip_not_found_raises(self) -> None:
         with pytest.raises(TripNotFoundError):
             self.service.reorder_stops(uuid.uuid4(), [PARIS_ID])

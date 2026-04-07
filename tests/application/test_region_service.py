@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import uuid
 
+import pytest
+
 from voyages.application.region_service import RegionService
 from voyages.domain.entities import Place, Region
 
@@ -164,3 +166,33 @@ class TestRegionService:
 
     def test_delete_nonexistent_does_not_raise(self) -> None:
         self.service.delete(uuid.uuid4())  # should not raise
+
+    def test_derive_from_places_case_sensitive(self) -> None:
+        """Verify that 'France' and 'france' are treated as different countries."""
+        places = [
+            Place(
+                id=uuid.uuid4(),
+                name="Paris",
+                latitude=48.85,
+                longitude=2.35,
+                source="manual",
+                country="France",
+            ),
+            Place(
+                id=uuid.uuid4(),
+                name="Lyon",
+                latitude=45.76,
+                longitude=4.83,
+                source="manual",
+                country="france",
+            ),
+        ]
+        self.place_repo = FakePlaceRepository(places=places)
+        self.service = RegionService(
+            region_repo=self.region_repo, place_repo=self.place_repo
+        )
+        regions = self.service.derive_from_places()
+        region_names = {r.name for r in regions}
+        assert "France" in region_names
+        assert "france" in region_names
+        assert len(regions) == 2  # noqa: PLR2004
