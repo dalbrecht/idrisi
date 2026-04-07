@@ -13,6 +13,10 @@ from sqlalchemy.pool import StaticPool
 from voyages.infrastructure.db.models import Base
 from voyages.infrastructure.db.session import get_session
 from voyages.server.routes.places import create_places_router
+from voyages.server.routes.projects import create_projects_router
+from voyages.server.routes.regions import create_regions_router
+from voyages.server.routes.render import create_render_router
+from voyages.server.routes.trips import create_trips_router
 
 
 def _create_engine_for_url(database_url: str) -> Engine:
@@ -62,6 +66,10 @@ def create_app(database_url: str = "sqlite:///voyages.db") -> FastAPI:
 
     # Include API routers
     app.include_router(create_places_router(), prefix="/api")
+    app.include_router(create_trips_router(), prefix="/api")
+    app.include_router(create_projects_router(), prefix="/api")
+    app.include_router(create_regions_router(), prefix="/api")
+    app.include_router(create_render_router(), prefix="/api")
 
     # Mount static files for SPA if directory exists
     static_dir = Path(__file__).resolve().parent / "static"
