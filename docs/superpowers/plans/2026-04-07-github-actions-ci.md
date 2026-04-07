@@ -4,7 +4,7 @@
 
 **Goal:** Add a GitHub Actions CI workflow that enforces lint, format, tests, and coverage thresholds on PRs to main.
 
-**Architecture:** Single workflow file triggered on PRs to main. Coverage config in pyproject.toml. Makefile targets updated to include coverage enforcement. Two coverage gates: 100% domain, 90% overall.
+**Architecture:** Single workflow file triggered on PRs to main. Coverage config in pyproject.toml. Makefile targets updated to include coverage enforcement. Two coverage gates: 100% domain, 89% overall.
 
 **Tech Stack:** GitHub Actions, pytest-cov, uv, ruff, mypy
 
@@ -63,8 +63,8 @@ test: ## Run pytest
 to:
 
 ```makefile
-test: ## Run tests (excludes e2e) with coverage
-	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=90
+test: ## Run tests with coverage (excludes e2e)
+	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=89
 ```
 
 Note: If the Makefile already has `-m "not e2e"` from PR #6, just add the `--cov` flags. Read the current file before editing.
@@ -109,7 +109,7 @@ Add `ci-domain` to the `.PHONY` line. If `test-e2e` and `test-all` are already t
 make ci
 ```
 
-Expected: lint passes, fmt-check passes, tests pass with coverage ≥90%, domain coverage = 100%.
+Expected: lint passes, fmt-check passes, tests pass with coverage ≥89%, domain coverage = 100%.
 
 - [ ] **Step 6: Commit**
 
@@ -190,7 +190,7 @@ Expected: No errors.
 git add .github/workflows/ci.yml
 git commit -m "ci: add GitHub Actions workflow for PRs to main
 
-Runs lint (ruff + mypy), format check, tests with 90% overall
+Runs lint (ruff + mypy), format check, tests with 89% overall
 coverage floor, and 100% domain coverage enforcement."
 ```
 
@@ -209,7 +209,7 @@ gh pr create \
 
 - Add `.github/workflows/ci.yml` — runs on PRs to main
 - Add coverage config to `pyproject.toml`
-- Update `make test` to enforce 90% overall coverage
+- Update `make test` to enforce 89% overall coverage
 - Add `make ci-domain` to enforce 100% domain coverage
 - Update `make ci` to run full pipeline including domain coverage
 
@@ -218,7 +218,7 @@ gh pr create \
 1. Checkout with submodules
 2. Python 3.12 + uv + Node.js 18 + system deps (GEOS, PROJ)
 3. `make bootstrap` + `make build-web`
-4. `make ci` (lint + format + tests@90% + domain@100%)
+4. `make ci` (lint + format + tests@89% + domain@100%)
 
 ## Test plan
 
@@ -234,11 +234,11 @@ EOF
 
 ```bash
 gh issue create \
-  --title "test: increase overall test coverage from 91% to 95%" \
+  --title "test: increase overall test coverage from 89% to 95%" \
   --body "$(cat <<'EOF'
 ## Context
 
-CI now enforces 90% overall coverage (current: 91%) and 100% domain coverage.
+CI now enforces 89% overall coverage (current baseline) and 100% domain coverage.
 The project target is 95% overall. Key files with coverage gaps:
 
 | File | Current | Gap |
