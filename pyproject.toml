@@ -7,7 +7,7 @@ name = "voyages"
 version = "0.1.0"
 description = "A Python map generation toolbox for travel cartography."
 requires-python = ">=3.12"
-license = "MIT"
+license = "AGPL-3.0-or-later"
 
 dependencies = [
     "cartopy>=0.23",
