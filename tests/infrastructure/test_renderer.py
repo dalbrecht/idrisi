@@ -89,7 +89,7 @@ class TestRenderRegionMap:
                 regions=[],
                 output_path=str(out),
                 output_format=OutputFormat.PNG,
-                config={"center_lat": 50.0, "center_lon": 5.0, "extent": 15},
+                config={"center_lat": 47.0, "center_lon": 3.0, "extent": 8},
             )
             assert result == str(out)
             assert out.exists()
@@ -108,9 +108,9 @@ class TestRenderRouteMap:
             id=uuid4(),
             name="Europe Trip",
             stops=[
-                TripStop(place_id=places[0].id, position=1),
-                TripStop(place_id=places[1].id, position=2),
-                TripStop(place_id=places[2].id, position=3),
+                TripStop(place_id=places[0].id, position=0),
+                TripStop(place_id=places[1].id, position=1),
+                TripStop(place_id=places[2].id, position=2),
             ],
         )
 
