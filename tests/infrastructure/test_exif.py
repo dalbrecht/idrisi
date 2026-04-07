@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -66,6 +67,81 @@ class TestPillowExifExtraction:
         photo = service.extract_from_file(Path("/photos/no_gps.jpg"))
 
         assert photo is None
+
+
+class TestPillowExifEdgeCases:
+    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    def test_corrupt_image_returns_none(self, mock_open: MagicMock) -> None:
+        mock_open.side_effect = OSError("corrupt image")
+        service = PillowExifService()
+        result = service.extract_from_file(Path("/photos/corrupt.jpg"))
+        assert result is None
+
+    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    def test_no_exif_data_returns_none(self, mock_open: MagicMock) -> None:
+        mock_img = MagicMock()
+        exif = MagicMock()
+        exif.__bool__ = lambda self: False
+        mock_img.getexif.return_value = exif
+        mock_open.return_value = mock_img
+        service = PillowExifService()
+        result = service.extract_from_file(Path("/photos/no_exif.jpg"))
+        assert result is None
+
+    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    def test_missing_lat_lon_returns_none(self, mock_open: MagicMock) -> None:
+        mock_img = MagicMock()
+        exif = MagicMock()
+        # GPS tag present but IFD has no lat/lon
+        exif.get.side_effect = lambda tag, default=None: True if tag == 34853 else default
+        exif.__bool__ = lambda self: True
+        exif.get_ifd.return_value = {}  # empty GPS IFD
+        mock_img.getexif.return_value = exif
+        mock_open.return_value = mock_img
+        service = PillowExifService()
+        result = service.extract_from_file(Path("/photos/no_latlon.jpg"))
+        assert result is None
+
+    def test_parse_gps_coord_south_ref_negative(self) -> None:
+        result = PillowExifService._parse_gps_coord((33.0, 52.0, 0.0), "S")
+        assert result is not None
+        assert result < 0
+        assert abs(result - (-33.8667)) < 0.001
+
+    def test_parse_gps_coord_west_ref_negative(self) -> None:
+        result = PillowExifService._parse_gps_coord((118.0, 15.0, 0.0), "W")
+        assert result is not None
+        assert result < 0
+        assert abs(result - (-118.25)) < 0.001
+
+    def test_parse_gps_coord_none_data_returns_none(self) -> None:
+        result = PillowExifService._parse_gps_coord(None, "N")
+        assert result is None
+
+    def test_parse_gps_coord_none_ref_returns_none(self) -> None:
+        result = PillowExifService._parse_gps_coord((48.0, 51.0, 24.0), None)
+        assert result is None
+
+    def test_parse_gps_coord_short_tuple_returns_none(self) -> None:
+        result = PillowExifService._parse_gps_coord((48.0, 51.0), "N")
+        assert result is None
+
+    def test_parse_gps_coord_non_numeric_returns_none(self) -> None:
+        result = PillowExifService._parse_gps_coord(("bad", "data", "here"), "N")
+        assert result is None
+
+    def test_parse_datetime_none_returns_none(self) -> None:
+        result = PillowExifService._parse_datetime(None)
+        assert result is None
+
+    def test_parse_datetime_invalid_format_returns_none(self) -> None:
+        result = PillowExifService._parse_datetime("not-a-date")
+        assert result is None
+
+    def test_parse_datetime_valid_format(self) -> None:
+        result = PillowExifService._parse_datetime("2024:07:04 18:30:00")
+        assert result is not None
+        assert result == datetime(2024, 7, 4, 18, 30, 0, tzinfo=UTC)
 
 
 class TestPillowExifDirectory:
