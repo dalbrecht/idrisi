@@ -66,8 +66,13 @@ def create_trips_router() -> APIRouter:
 
     @router.delete("/trips/{trip_id}", status_code=204)
     def delete_trip(request: Request, trip_id: str) -> Response:
+        from voyages.domain.errors import TripNotFoundError  # noqa: PLC0415
+
         service = _get_service(request)
-        service.delete(uuid.UUID(trip_id))
+        entity_id = uuid.UUID(trip_id)
+        if service.get(entity_id) is None:
+            raise TripNotFoundError(entity_id)
+        service.delete(entity_id)
         return Response(status_code=204)
 
     return router
