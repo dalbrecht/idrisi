@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import uuid
 from datetime import UTC, date, datetime
 from uuid import uuid4
 
 import pytest
+from sqlalchemy.orm import Session
 
 from voyages.domain.entities import Photo, Place, Project, Region, Trip, TripStop
 from voyages.domain.value_objects import MapType
@@ -82,6 +84,38 @@ class TestSqlPlaceRepository:
         assert loaded is not None
         assert loaded.name == "V2"
         assert len(repo.list_all()) == 1
+
+    def test_save_and_get_all_fields(self, session: Session) -> None:
+        repo = SqlPlaceRepository(session)
+        now = datetime.now(tz=UTC)
+        place = Place(
+            id=uuid.uuid4(),
+            name="Tokyo",
+            latitude=35.6762,
+            longitude=139.6503,
+            source="manual",
+            country="Japan",
+            admin1="Tokyo",
+            category="city",
+            notes="Capital city",
+            created_at=now,
+            updated_at=now,
+        )
+        repo.save(place)
+
+        loaded = repo.get(place.id)
+        assert loaded is not None
+        assert loaded.id == place.id
+        assert loaded.name == "Tokyo"
+        assert loaded.latitude == pytest.approx(35.6762)
+        assert loaded.longitude == pytest.approx(139.6503)
+        assert loaded.source == "manual"
+        assert loaded.country == "Japan"
+        assert loaded.admin1 == "Tokyo"
+        assert loaded.category == "city"
+        assert loaded.notes == "Capital city"
+        assert loaded.created_at is not None
+        assert loaded.updated_at is not None
 
 
 # ---- Trip ----
@@ -228,6 +262,41 @@ class TestSqlProjectRepository:
         repo.save(Project(id=pid, name="Delete", map_type=MapType.TRAVEL))
         repo.delete(pid)
         assert repo.get(pid) is None
+
+    def test_config_json_round_trip(self, session: Session) -> None:
+        repo = SqlProjectRepository(session)
+        config = {
+            "dpi": 300,
+            "nested": {"key": "value"},
+            "unicode": "\u00e9",
+            "special": 'quotes "and" more',
+        }
+        project = Project(
+            id=uuid.uuid4(),
+            name="Config Test",
+            map_type=MapType.TRAVEL,
+            config=config,
+        )
+        repo.save(project)
+
+        loaded = repo.get(project.id)
+        assert loaded is not None
+        assert loaded.config == config
+        assert loaded.config["nested"]["key"] == "value"
+        assert loaded.config["unicode"] == "\u00e9"
+
+    def test_duplicate_project_name_raises(self, session: Session) -> None:
+        repo = SqlProjectRepository(session)
+        project1 = Project(
+            id=uuid.uuid4(), name="Duplicate", map_type=MapType.TRAVEL
+        )
+        project2 = Project(
+            id=uuid.uuid4(), name="Duplicate", map_type=MapType.REGION
+        )
+        repo.save(project1)
+        with pytest.raises(Exception):
+            repo.save(project2)
+            session.flush()
 
 
 # ---- Photo ----
