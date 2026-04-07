@@ -1,7 +1,5 @@
 """SQLAlchemy ORM models for all Voyages domain entities."""
 
-from __future__ import annotations
-
 from uuid import uuid4
 
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, Text
@@ -10,8 +8,6 @@ from sqlalchemy.orm import DeclarativeBase, relationship
 
 class Base(DeclarativeBase):
     """Base class for all SQLAlchemy models."""
-
-    __allow_unmapped__ = True
 
 
 class PlaceModel(Base):
@@ -39,7 +35,7 @@ class TripModel(Base):
     start_date = Column(String, nullable=True)
     end_date = Column(String, nullable=True)
 
-    stops: list[TripStopModel] = relationship(
+    stops = relationship(
         "TripStopModel",
         back_populates="trip",
         cascade="all, delete-orphan",
@@ -57,7 +53,7 @@ class TripStopModel(Base):
     arrived_at = Column(String, nullable=True)
     departed_at = Column(String, nullable=True)
 
-    trip: TripModel = relationship("TripModel", back_populates="stops")
+    trip = relationship("TripModel", back_populates="stops")
 
 
 class RegionModel(Base):
