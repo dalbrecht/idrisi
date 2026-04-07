@@ -71,15 +71,11 @@ def test_place_search_no_results(mock_get_svc: MagicMock) -> None:
 @patch("voyages.cli.place_commands.get_place_service")
 def test_place_add(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
-    place = Place(
-        id=uuid.uuid4(), name="Test", latitude=1.0, longitude=2.0, source="cli"
-    )
+    place = Place(id=uuid.uuid4(), name="Test", latitude=1.0, longitude=2.0, source="cli")
     svc.create.return_value = place
     mock_get_svc.return_value = svc
 
-    result = runner.invoke(
-        app, ["place", "add", "--name", "Test", "--lat", "1.0", "--lon", "2.0"]
-    )
+    result = runner.invoke(app, ["place", "add", "--name", "Test", "--lat", "1.0", "--lon", "2.0"])
     assert result.exit_code == 0
     assert "Created place" in result.output
 
@@ -234,13 +230,9 @@ class TestCliErrorPaths:
     def test_place_add_invalid_coordinates(self, mock_get_svc: MagicMock) -> None:
         """Document behavior when lat > 90 — CLI has no validation."""
         svc = MagicMock()
-        place = Place(
-            id=uuid.uuid4(), name="Bad", latitude=999.0, longitude=0.0, source="cli"
-        )
+        place = Place(id=uuid.uuid4(), name="Bad", latitude=999.0, longitude=0.0, source="cli")
         svc.create.return_value = place
         mock_get_svc.return_value = svc
-        result = runner.invoke(
-            app, ["place", "add", "--name", "Bad", "--lat", "999", "--lon", "0"]
-        )
+        result = runner.invoke(app, ["place", "add", "--name", "Bad", "--lat", "999", "--lon", "0"])
         # CLI currently accepts any float — no coordinate validation
         assert result.exit_code == 0

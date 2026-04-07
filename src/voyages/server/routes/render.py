@@ -9,6 +9,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
+
 from voyages.domain.errors import ProjectNotFoundError
 
 
@@ -43,8 +44,8 @@ def create_render_router() -> APIRouter:
     def render_project(request: Request, project_id: str) -> FileResponse:
         from voyages.domain.value_objects import MapType, OutputFormat  # noqa: PLC0415
 
-        project_service, place_repo, trip_repo, region_repo, render_engine = (
-            _get_dependencies(request)
+        project_service, place_repo, trip_repo, region_repo, render_engine = _get_dependencies(
+            request
         )
 
         entity_id = uuid.UUID(project_id)
@@ -68,11 +69,19 @@ def create_render_router() -> APIRouter:
 
         if project.map_type == MapType.TRAVEL:
             render_engine.render_travel_map(
-                filtered_places, filtered_regions, output_path, fmt, config,
+                filtered_places,
+                filtered_regions,
+                output_path,
+                fmt,
+                config,
             )
         elif project.map_type == MapType.REGION:
             render_engine.render_region_map(
-                filtered_places, filtered_regions, output_path, fmt, config,
+                filtered_places,
+                filtered_regions,
+                output_path,
+                fmt,
+                config,
             )
         elif project.map_type == MapType.ROUTE:
             trips = [trip_repo.get(tid) for tid in project.trip_ids]
