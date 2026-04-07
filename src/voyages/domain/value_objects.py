@@ -10,20 +10,22 @@ _LON_MIN: float = -180.0
 _LON_MAX: float = 180.0
 
 
+def _validate_finite(name: str, value: float) -> None:
+    """Raise ValueError if value is NaN or infinite."""
+    if not math.isfinite(value):
+        kind = "NaN" if math.isnan(value) else "infinite"
+        msg = f"{name} must be a finite number, got {kind}"
+        raise ValueError(msg)
+
+
 @dataclass(frozen=True)
 class Coordinates:
     latitude: float
     longitude: float
 
     def __post_init__(self) -> None:
-        if math.isnan(self.latitude) or math.isinf(self.latitude):
-            kind = "NaN" if math.isnan(self.latitude) else "infinite"
-            msg = f"Latitude must be a finite number, got {kind}"
-            raise ValueError(msg)
-        if math.isnan(self.longitude) or math.isinf(self.longitude):
-            kind = "NaN" if math.isnan(self.longitude) else "infinite"
-            msg = f"Longitude must be a finite number, got {kind}"
-            raise ValueError(msg)
+        _validate_finite("Latitude", self.latitude)
+        _validate_finite("Longitude", self.longitude)
         if not _LAT_MIN <= self.latitude <= _LAT_MAX:
             msg = f"Latitude must be between -90 and 90, got {self.latitude}"
             raise ValueError(msg)
