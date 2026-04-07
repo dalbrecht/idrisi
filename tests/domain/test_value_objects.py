@@ -55,6 +55,31 @@ class TestCoordinates:
         with pytest.raises(AttributeError):
             coord.latitude = 10.0  # type: ignore[misc]
 
+    def test_nan_latitude_raises(self) -> None:
+        with pytest.raises(ValueError, match="Latitude"):
+            Coordinates(latitude=float("nan"), longitude=0.0)
+
+    def test_nan_longitude_raises(self) -> None:
+        with pytest.raises(ValueError, match="Longitude"):
+            Coordinates(latitude=0.0, longitude=float("nan"))
+
+    def test_inf_latitude_raises(self) -> None:
+        with pytest.raises(ValueError, match="Latitude"):
+            Coordinates(latitude=float("inf"), longitude=0.0)
+
+    def test_neg_inf_latitude_raises(self) -> None:
+        with pytest.raises(ValueError, match="Latitude"):
+            Coordinates(latitude=float("-inf"), longitude=0.0)
+
+    def test_inf_longitude_raises(self) -> None:
+        with pytest.raises(ValueError, match="Longitude"):
+            Coordinates(latitude=0.0, longitude=float("inf"))
+
+    def test_negative_zero_is_valid(self) -> None:
+        coords = Coordinates(latitude=-0.0, longitude=-0.0)
+        assert coords.latitude == 0.0
+        assert coords.longitude == 0.0
+
 
 class TestBoundingBox:
     def test_valid_bounding_box(self) -> None:
@@ -102,6 +127,22 @@ class TestBoundingBox:
         ne = Coordinates(latitude=50.0, longitude=30.0)
         bbox = BoundingBox(southwest=sw, northeast=ne)
         point = Coordinates(latitude=10.0, longitude=-20.0)
+        assert bbox.contains(point) is True
+
+    def test_contains_point_on_ne_corner(self) -> None:
+        bbox = BoundingBox(
+            southwest=Coordinates(40.0, -5.0),
+            northeast=Coordinates(50.0, 5.0),
+        )
+        point = Coordinates(50.0, 5.0)
+        assert bbox.contains(point) is True
+
+    def test_contains_point_on_edge_latitude(self) -> None:
+        bbox = BoundingBox(
+            southwest=Coordinates(40.0, -5.0),
+            northeast=Coordinates(50.0, 5.0),
+        )
+        point = Coordinates(50.0, 0.0)
         assert bbox.contains(point) is True
 
 
