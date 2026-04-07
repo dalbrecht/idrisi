@@ -14,10 +14,10 @@ The Voyages API is a REST API built with FastAPI. It serves as the backend for t
 When running `voyages serve` with default settings:
 
 ```
-http://127.0.0.1:8080/api
+http://127.0.0.1:8080
 ```
 
-All endpoints are prefixed with `/api`. The host and port can be changed with `--host` and `--port` flags.
+All API endpoints are prefixed with `/api` (e.g., `/api/places`, `/api/trips`). The host and port can be changed with `--host` and `--port` flags.
 
 ## Interactive Documentation
 
@@ -35,6 +35,8 @@ Swagger UI lets you try requests directly from the browser. ReDoc provides a cle
 All request bodies and responses use `application/json`.
 
 **Exception:** The `POST /api/render/{project_id}` endpoint returns a PNG image (`image/png`) rather than JSON.
+
+All request examples in the [API Endpoints](api-endpoints.md) reference use full URLs such as `http://127.0.0.1:8080/api/places`.
 
 ## Identifiers
 

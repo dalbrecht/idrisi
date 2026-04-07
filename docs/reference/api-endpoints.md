@@ -7,7 +7,7 @@ order: 3
 
 # API Endpoints
 
-All endpoints are relative to `http://127.0.0.1:8080/api`. See [API Overview](api-overview.md) for base URL, content type, and error format.
+All endpoints are relative to `http://127.0.0.1:8080`. See [API Overview](api-overview.md) for base URL, content type, and error format.
 
 ---
 

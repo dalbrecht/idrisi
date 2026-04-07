@@ -49,11 +49,11 @@ Screenshot: [Dashboard with navigation tabs and quick-action buttons visible]
 
 Navigate to the **Places** tab.
 
-Use the **Nominatim search bar** at the top of the page to find locations by name. Type a place name (e.g., "Colosseum, Rome") and press Enter or click Search. Voyages queries the Nominatim geocoding service and returns matching results. Click a result to add it to your places database.
+Use the **search bar** at the top of the page to filter your saved places by name. Type part of a place name to narrow the list — this searches over places already in your database, not an external geocoding service.
 
 For locations not found by search, use the **manual add form**: enter a name, latitude, longitude, and optional category, then click Add Place.
 
-Screenshot: [Places tab showing the Nominatim search bar with results displayed, and the manual add form below]
+Screenshot: [Places tab showing the search bar filtering the saved places list, and the manual add form below]
 
 Your added places appear in the places list with their name, coordinates, and category.
 
@@ -68,7 +68,7 @@ Click **New Trip** to create a trip. Enter:
 
 Click Save. The trip appears in the trips list.
 
-To associate places with a trip, use the trip detail view to link existing places. Note that trip stop ordering — the sequence in which places appear on a route map — is managed through the API or CLI currently. The web UI supports creating trips and viewing associated places, but reordering stops requires using `voyages trip` commands or direct API calls.
+To associate places with a trip, use the trip detail view to link existing places. Note that trip stop ordering — the sequence in which places appear on a route map — is not currently configurable through the web UI, CLI, or API. Stops are rendered in the order they were added.
 
 Screenshot: [Trips tab with a trip detail view showing linked places]
 

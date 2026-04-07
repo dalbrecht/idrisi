@@ -26,7 +26,7 @@ voyages import photos ~/Photos/europe-2025 --trip "Europe 2025"
 ```
 
 **What happens during import:**
-Voyages reads EXIF metadata from each photo. If a photo contains GPS coordinates in its EXIF data, Voyages extracts the latitude and longitude and creates a place entry. Photos without GPS data are still imported but won't have location information attached.
+Voyages reads EXIF metadata from each photo in the top-level of the directory (subdirectories are not scanned). Photos with GPS coordinates are saved as `Photo` records. Photos without GPS data are skipped entirely — no record is created for them. No `Place` records are created automatically during import.
 
 **Options:**
 
@@ -107,6 +107,8 @@ Map type controls the visual organization of the output:
 - `travel` — General travel map with place markers.
 - `region` — Regional overview showing geographic extent.
 - `route` — Sequential path connecting places in order.
+
+> **Note:** There is no CLI command to associate places or trips with a project. After creating a project, use the web UI or the REST API to add `place_ids` and `trip_ids` to the project before rendering. A project with no associated places will render an empty map.
 
 ## 7. Render
 

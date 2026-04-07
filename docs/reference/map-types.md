@@ -16,9 +16,7 @@ Voyages supports three map types, each optimized for a different visualization g
 A world or large-area view designed to show everywhere you have been at a glance.
 
 - **Projection:** EqualEarth — an equal-area projection well-suited for world maps that minimizes size distortion across continents.
-- **Visited regions** are shaded using the `visited` color from the active style.
-- **Places** are rendered as circular markers.
-- A **legend** is included on the output.
+- **Places** are rendered as circular markers on a base map.
 
 Best for: showing all countries and places you have visited across a large geographic area.
 
@@ -29,7 +27,6 @@ A zoomed view of a specific country, state, or area with detailed administrative
 - **Projection:** PlateCarree — a simple equirectangular projection appropriate for regional extents.
 - **Boundaries** are drawn from the `admin_1_states_provinces_lines` dataset (50 m resolution) from Natural Earth shapefiles, showing states and provinces.
 - **Place markers** are rendered with text labels.
-- A **scale bar** is included on the output.
 - The viewport is controlled by `center_lat`, `center_lon`, and `extent` in the project config.
 
 Best for: a detailed view of a country, state, or other bounded area.

@@ -53,11 +53,19 @@ make build-web     # Build the Svelte frontend
 ### CLI
 
 ```bash
+# Add places to the database
 voyages place add --name "Paris" --lat 48.8566 --lon 2.3522
-voyages trip create "Europe 2025"
+voyages place add --name "Rome" --lat 41.9028 --lon 12.4964
+
+# Create a project
 voyages project create "My Map" --map-type travel
+
+# Associate places with the project via the API, then render
 voyages render "My Map" --style vintage --format png
 ```
+
+> **Note:** There is no CLI command to associate places with a project. Use the web UI or
+> the REST API (`POST /api/projects/{id}`) to add `place_ids` to a project before rendering.
 
 ### Web UI
 

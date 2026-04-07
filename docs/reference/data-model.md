@@ -23,7 +23,7 @@ A geographic location that can appear on a map.
 | `name` | str | Display name |
 | `latitude` | float | Decimal degrees |
 | `longitude` | float | Decimal degrees |
-| `source` | str | `"manual"`, `"exif"`, or `"geocoded"` |
+| `source` | str | Free-form string. Common values: `"manual"`, `"exif"`, `"geocoded"`, `"cli"`, `"nominatim"` |
 | `country` | str | Optional |
 | `admin1` | str | State/province; optional |
 | `category` | str | Optional |

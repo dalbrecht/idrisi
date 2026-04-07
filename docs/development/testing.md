@@ -121,7 +121,7 @@ from fastapi.testclient import TestClient
 from voyages.server import create_app
 
 client = TestClient(create_app())
-response = client.get("/places")
+response = client.get("/api/places")
 assert response.status_code == 200
 ```
 
