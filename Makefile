@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
 
-.PHONY: help bootstrap dev test lint lint-fix fmt build serve build-web run ls sync-standards
+.PHONY: help bootstrap dev test lint lint-fix fmt fmt-check build serve build-web run ls sync-standards ci clean repo-setup pr
 
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -31,10 +31,10 @@ build: ## Build wheel
 	uv run python -m build
 
 serve: ## Start the FastAPI dev server
-	uv run uvicorn voyages.server.app:create_app --factory --reload
+	uv run uvicorn voyages.server:create_app --factory --reload
 
 build-web: ## Build the Svelte front-end
-	cd web && npm run build
+	cd web && npm ci && npm run build
 
 run: ## Run the CLI
 	uv run voyages
@@ -44,3 +44,24 @@ ls: ## List all make targets
 
 sync-standards: ## Sync coding-standards submodule to latest
 	git submodule update --init --remote .standards
+
+fmt-check: ## Check code formatting without modifying
+	uv run ruff format --check src tests
+
+ci: ## Run full CI pipeline (lint + format check + test)
+	$(MAKE) lint
+	$(MAKE) fmt-check
+	$(MAKE) test
+
+clean: ## Remove build artifacts, caches, and venv
+	rm -rf .venv .ruff_cache .mypy_cache .pytest_cache
+	rm -rf dist build *.egg-info src/*.egg-info
+	rm -rf src/voyages/server/static
+	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+
+repo-setup: ## Initialize git submodules
+	git submodule update --init
+	@echo "Repo setup complete."
+
+pr: ## Create GitHub PR from current branch
+	gh pr create --fill
