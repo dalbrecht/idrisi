@@ -4,6 +4,7 @@ import tempfile
 from typing import TYPE_CHECKING
 
 import pytest
+import yaml
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -81,8 +82,6 @@ label_size: 12
 
     def test_invalid_yaml_syntax_raises(self, tmp_path: Path) -> None:
         """Malformed YAML should raise an error."""
-        import yaml
-
         style_file = tmp_path / "bad.yml"
         style_file.write_text("name: bad\nocean: [invalid\n")
         with pytest.raises(yaml.YAMLError):

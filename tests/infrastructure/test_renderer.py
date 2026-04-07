@@ -186,10 +186,10 @@ class TestRenderOutputValidation:
         places = [Place(id=uuid.uuid4(), name="Test", latitude=0.0, longitude=0.0, source="test")]
         out = tmp_path / "test.png"
         engine.render_travel_map(places, [], str(out), OutputFormat.PNG, config={"width": 800})
-        img = Image.open(out)
-        # Width may differ from requested due to bbox_inches="tight" cropping;
-        # assert it is a plausible non-trivial render (not zero, not enormous).
-        assert 100 < img.width < 1600
+        with Image.open(out) as img:
+            # Width may differ from requested due to bbox_inches="tight" cropping;
+            # assert it is a plausible non-trivial render (not zero, not enormous).
+            assert 100 < img.width < 1600
 
     def test_marker_visible_on_rendered_map(self, tmp_path: Path) -> None:
         """A rendered map with one place should not be a single solid color."""
@@ -200,10 +200,10 @@ class TestRenderOutputValidation:
         engine.render_travel_map(
             places, [], str(out), OutputFormat.PNG, config={"width": 400, "dpi": 72}
         )
-        img = Image.open(out)
-        pixels = list(img.getdata())
-        unique_colors = set(pixels)
-        assert len(unique_colors) > 10  # A real map has many colors
+        with Image.open(out) as img:
+            pixels = list(img.getdata())
+            unique_colors = set(pixels)
+            assert len(unique_colors) > 10  # A real map has many colors
 
     def test_empty_places_renders_without_error(self, tmp_path: Path) -> None:
         style = load_style("default")

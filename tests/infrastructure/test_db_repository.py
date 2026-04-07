@@ -4,10 +4,14 @@ from __future__ import annotations
 
 import uuid
 from datetime import UTC, date, datetime
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 import pytest
-from sqlalchemy.orm import Session
+import sqlalchemy.exc
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
 
 from voyages.domain.entities import Photo, Place, Project, Region, Trip, TripStop
 from voyages.domain.value_objects import MapType
@@ -294,9 +298,8 @@ class TestSqlProjectRepository:
             id=uuid.uuid4(), name="Duplicate", map_type=MapType.REGION
         )
         repo.save(project1)
-        with pytest.raises(Exception):
+        with pytest.raises(sqlalchemy.exc.IntegrityError):
             repo.save(project2)
-            session.flush()
 
 
 # ---- Photo ----
