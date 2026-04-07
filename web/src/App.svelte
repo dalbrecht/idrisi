@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Places from './routes/Places.svelte'
+
   type View = 'dashboard' | 'places' | 'trips' | 'projects'
 
   let currentView: View = $state('dashboard')
@@ -28,8 +30,7 @@
       <h2>Dashboard</h2>
       <p>Welcome to Voyages.</p>
     {:else if currentView === 'places'}
-      <h2>Places</h2>
-      <p>Places view coming soon.</p>
+      <Places />
     {:else if currentView === 'trips'}
       <h2>Trips</h2>
       <p>Trips view coming soon.</p>

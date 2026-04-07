@@ -108,6 +108,7 @@ venv.bak/
 
 # Node / web front-end
 node_modules/
+!web/src/lib/
 
 # Voyages-specific
 src/voyages/server/static/
