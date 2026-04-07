@@ -4,15 +4,12 @@ from __future__ import annotations
 
 import os
 import tempfile
-import uuid
 from typing import TYPE_CHECKING
 
-import pytest
 from fastapi.testclient import TestClient
 
 from voyages.application.place_service import PlaceService
 from voyages.application.project_service import ProjectService
-from voyages.domain.entities import Place
 from voyages.domain.value_objects import MapType, OutputFormat
 from voyages.infrastructure.db.repository import SqlPlaceRepository, SqlProjectRepository
 from voyages.infrastructure.db.session import create_engine_and_tables, get_session
@@ -21,6 +18,7 @@ from voyages.infrastructure.renderer.styles import load_style
 from voyages.server import create_app
 
 if TYPE_CHECKING:
+    from voyages.domain.entities import Place
     from voyages.domain.value_objects import Coordinates
 
 TOKYO_LAT = 35.6762
@@ -34,10 +32,10 @@ MIN_FILE_SIZE = 1000
 class FakeGeocoding:
     """No-network geocoding stub for testing."""
 
-    def search(self, query: str) -> list[Place]:  # noqa: ARG002
+    def search(self, query: str) -> list[Place]:
         return []
 
-    def reverse_geocode(self, coords: Coordinates) -> Place | None:  # noqa: ARG002
+    def reverse_geocode(self, coords: Coordinates) -> Place | None:
         return None
 
 
