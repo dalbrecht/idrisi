@@ -11,25 +11,27 @@ This guide walks through the same end-to-end workflow as the CLI guide — impor
 
 ## 1. Start the Server
 
-Start the development server with hot-reload using Make:
-
-```bash
-make serve
-```
-
-This runs:
-
-```bash
-uv run uvicorn voyages.server:create_app --factory --reload
-```
-
-Alternatively, start without hot-reload:
+Start the server:
 
 ```bash
 voyages serve
 ```
 
 Open your browser to `http://127.0.0.1:8080`.
+
+For development with hot-reload, use Make instead:
+
+```bash
+make serve
+```
+
+This runs uvicorn directly:
+
+```bash
+uv run uvicorn voyages.server:create_app --factory --reload
+```
+
+> **Note:** `make serve` runs uvicorn directly and defaults to port **8000**, not 8080. Use `http://127.0.0.1:8000` when starting with `make serve`. `voyages serve` defaults to port **8080**.
 
 Screenshot: [Browser showing the Voyages dashboard at http://127.0.0.1:8080]
 

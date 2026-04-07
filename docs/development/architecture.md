@@ -80,12 +80,12 @@ Orchestrates domain objects through service classes. Depends only on the domain 
 - `PhotoService` — photo ingestion and EXIF metadata handling
 
 **Repository Protocols** (defined here, implemented in infrastructure):
-- `PlaceRepository`, `TripRepository`, `ProjectRepository`, `RegionRepository`
+- `PlaceRepository`, `TripRepository`, `ProjectRepository`, `RegionRepository`, `PhotoRepository`
 
 **External Service Protocols:**
 - `GeocodingService` — geocode a place name to coordinates
 - `ExifService` — extract metadata from photo files
-- `RenderService` — render a project to an output format
+- `MapRenderer` — render a project to an output format
 
 ## Infrastructure Layer
 
@@ -133,35 +133,51 @@ Neither entry point contains business logic. They are responsible only for parsi
 
 ```
 src/voyages/
-├── domain/             # Layer 1: entities, value objects, enums, exceptions
-│   ├── entities.py
-│   ├── value_objects.py
-│   ├── enums.py
-│   └── exceptions.py
-├── application/        # Layer 2: services and protocols
-│   ├── services/
-│   │   ├── place_service.py
-│   │   ├── trip_service.py
-│   │   ├── project_service.py
-│   │   ├── region_service.py
-│   │   └── photo_service.py
-│   └── protocols/
-│       ├── repositories.py
-│       └── external.py
-├── infrastructure/     # Layer 3: concrete implementations
+├── __init__.py
+├── domain/                    # Domain Layer
+│   ├── __init__.py
+│   ├── entities.py            # Place, Trip, TripStop, Region, Project, Photo
+│   ├── value_objects.py       # Coordinates, BoundingBox, MapType, OutputFormat
+│   └── errors.py              # VoyagesError, EntityNotFoundError, etc.
+├── application/               # Application Layer
+│   ├── __init__.py
+│   ├── interfaces.py          # All protocols: PlaceRepository, TripRepository, etc., MapRenderer, GeocodingService, ExifService
+│   ├── place_service.py
+│   ├── trip_service.py
+│   ├── project_service.py
+│   ├── region_service.py
+│   └── photo_service.py
+├── infrastructure/            # Infrastructure Layer
+│   ├── __init__.py
 │   ├── db/
-│   │   ├── models.py
-│   │   └── repositories/
+│   │   ├── __init__.py
+│   │   ├── models.py          # SQLAlchemy ORM models
+│   │   └── repository.py      # Repository implementations
 │   ├── renderer/
-│   │   ├── engine.py
-│   │   ├── style.py
-│   │   └── styles/
+│   │   ├── __init__.py
+│   │   ├── engine.py          # RenderEngine (Cartopy + Matplotlib)
+│   │   └── styles.py          # MapStyle, load_style(), get_builtin_styles()
 │   ├── geocoding/
-│   │   └── nominatim.py
+│   │   ├── __init__.py
+│   │   └── nominatim.py       # Nominatim client (httpx)
 │   └── exif/
-│       └── pillow.py
-├── cli/                # Layer 4a: Typer entry point
-│   └── commands/
-└── server/             # Layer 4b: FastAPI entry point
+│       ├── __init__.py
+│       └── extractor.py       # EXIF GPS/timestamp extraction (Pillow)
+├── cli/                       # Entry Point: CLI
+│   ├── __init__.py            # Typer app with sub-apps
+│   ├── place_commands.py
+│   ├── trip_commands.py
+│   ├── project_commands.py
+│   ├── import_commands.py
+│   ├── render_commands.py
+│   └── serve_command.py
+└── server/                    # Entry Point: API Server
+    ├── __init__.py            # FastAPI factory (create_app)
     └── routes/
+        ├── __init__.py
+        ├── places.py
+        ├── trips.py
+        ├── projects.py
+        ├── regions.py
+        └── render.py
 ```

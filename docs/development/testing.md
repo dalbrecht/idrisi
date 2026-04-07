@@ -46,7 +46,8 @@ tests/
 ├── application/        # Service tests — mock repository protocols
 ├── infrastructure/     # Integration tests — real in-memory SQLite
 ├── cli/                # Command tests — Typer CliRunner
-└── server/             # Endpoint tests — FastAPI TestClient
+├── server/             # Endpoint tests — FastAPI TestClient
+└── e2e/                # End-to-end tests — full stack
 ```
 
 ## Coverage Targets
@@ -117,9 +118,9 @@ Endpoint tests use FastAPI's `TestClient` with an in-memory database injected vi
 
 ```python
 from fastapi.testclient import TestClient
-from voyages.server import app
+from voyages.server import create_app
 
-client = TestClient(app)
+client = TestClient(create_app())
 response = client.get("/places")
 assert response.status_code == 200
 ```

@@ -14,7 +14,7 @@ Voyages uses SQLite by default. The database file is created at `voyages.db` in 
 The server factory accepts a `database_url` parameter if you need a different location or database:
 
 ```python
-from voyages.app import create_app
+from voyages.server import create_app
 
 app = create_app(database_url="sqlite:////absolute/path/to/voyages.db")
 ```
@@ -55,7 +55,7 @@ voyages serve --host 127.0.0.1 --port 8080
 |------------|-----------|----------------------------------------|
 | `--dpi`    | `200`     | Output resolution in dots per inch     |
 | `--width`  | `1200`    | Output width in pixels                 |
-| `--format` | `png`     | Output format (`png`, `pdf`, `svg`)    |
+| `--format` | `png`     | Output format (`png`, `pdf`, `svg`, `eps`) |
 | `--style`  | `default` | Map style name or path to YAML file    |
 | `--output` | `.`       | Directory to write the rendered file   |
 

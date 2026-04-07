@@ -80,5 +80,5 @@ Click **Render**. When the render completes, click **Download** to save the PNG.
 
 ## Next Steps
 
-- [CLI Workflow](cli-workflow.md) — full reference for all CLI subcommands
-- [Web Workflow](web-workflow.md) — walkthrough of the web UI features
+- [CLI Workflow](../guides/cli-workflow.md) — full reference for all CLI subcommands
+- [Web Workflow](../guides/web-workflow.md) — walkthrough of the web UI features

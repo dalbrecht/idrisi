@@ -58,4 +58,4 @@ label_size: 8           # Label font size
 voyages render "My Map" --style ./my-styles/ocean-blue.yml
 ```
 
-The style loader (`load_style()`) accepts either a built-in style name or a path to a YAML file. Any path containing `/` or ending in `.yml` is treated as a file path; otherwise it resolves against the built-in `styles/` directory.
+The style loader (`load_style()`) accepts either a built-in style name or a path to a YAML file. If the name matches one of the four built-in names (`default`, `vintage`, `minimal`, `dark`), it loads from the `styles/` directory; otherwise it treats the value as a file path.
