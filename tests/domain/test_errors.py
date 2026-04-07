@@ -5,7 +5,9 @@ import uuid
 import pytest
 
 from voyages.domain.errors import (
+    BadRequestError,
     EntityNotFoundError,
+    PhotoNotFoundError,
     PlaceNotFoundError,
     ProjectNotFoundError,
     RegionNotFoundError,
@@ -127,6 +129,31 @@ class TestRegionNotFoundError:
         entity_id = uuid.uuid4()
         err = RegionNotFoundError(entity_id=entity_id)
         assert "Region" in str(err)
+        assert str(entity_id) in str(err)
+
+
+class TestBadRequestError:
+    def test_inherits_voyages_error(self) -> None:
+        assert issubclass(BadRequestError, VoyagesError)
+
+    def test_message(self) -> None:
+        err = BadRequestError("Invalid UUID: abc")
+        assert "Invalid UUID" in str(err)
+
+
+class TestPhotoNotFoundError:
+    def test_inherits_entity_not_found(self) -> None:
+        assert issubclass(PhotoNotFoundError, EntityNotFoundError)
+
+    def test_entity_type_is_photo(self) -> None:
+        entity_id = uuid.uuid4()
+        err = PhotoNotFoundError(entity_id=entity_id)
+        assert err.entity_type == "Photo"
+
+    def test_message_contains_photo_and_id(self) -> None:
+        entity_id = uuid.uuid4()
+        err = PhotoNotFoundError(entity_id=entity_id)
+        assert "Photo" in str(err)
         assert str(entity_id) in str(err)
 
 
