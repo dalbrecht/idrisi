@@ -41,8 +41,12 @@ class FakePlaceRepository:
 class FakeGeocodingService:
     def __init__(self, results: list[Place] | None = None) -> None:
         self._results = results or []
+        self.search_called = False
+        self.last_query: str | None = None
 
     def search(self, query: str) -> list[Place]:
+        self.search_called = True
+        self.last_query = query
         return list(self._results)
 
     def reverse_geocode(self, coords: Coordinates) -> Place | None:
@@ -108,10 +112,13 @@ class TestPlaceService:
             id=uuid.uuid4(), name="Paris, France", latitude=PARIS_LAT, longitude=PARIS_LON,
             source="nominatim",
         )
-        self.geocoding = FakeGeocodingService(results=[geocoding_place])
-        self.service = PlaceService(place_repo=self.repo, geocoding=self.geocoding)
+        tracking_geocoding = FakeGeocodingService(results=[geocoding_place])
+        service = PlaceService(place_repo=self.repo, geocoding=tracking_geocoding)
 
-        results = self.service.search("Paris")
+        results = service.search("Paris")
+
+        assert tracking_geocoding.search_called is True
+        assert tracking_geocoding.last_query == "Paris"
         assert len(results) == 1
         assert results[0].name == "Paris, France"
 

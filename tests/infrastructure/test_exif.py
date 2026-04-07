@@ -70,6 +70,14 @@ class TestPillowExifExtraction:
         assert photo is None
 
 
+class TestPillowExifRealFiles:
+    def test_extract_no_gps_photo_returns_none(self) -> None:
+        fixture = Path(__file__).parent.parent / "fixtures" / "no_gps_photo.jpg"
+        service = PillowExifService()
+        result = service.extract_from_file(fixture)
+        assert result is None
+
+
 class TestPillowExifDirectory:
     @patch("voyages.infrastructure.exif.extractor.Image.open")
     def test_extract_from_directory(self, mock_open: MagicMock) -> None:

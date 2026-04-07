@@ -104,3 +104,41 @@ class TestNominatimReverseGeocode:
         result = service.reverse_geocode(coords)
 
         assert result is None
+
+
+class TestNominatimErrorHandling:
+    @patch("voyages.infrastructure.geocoding.nominatim.httpx.get")
+    def test_search_empty_results(self, mock_get: MagicMock) -> None:
+        mock_response = MagicMock()
+        mock_response.json.return_value = []
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        service = NominatimGeocodingService()
+        results = service.search("zzznonexistent")
+
+        assert results == []
+
+    @patch("voyages.infrastructure.geocoding.nominatim.httpx.get")
+    def test_reverse_missing_address_field(self, mock_get: MagicMock) -> None:
+        # _parse_search_result uses data.get("address", {}) so a missing
+        # "address" key is handled gracefully — no KeyError is raised and
+        # country/admin1 are simply None.
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "display_name": "Some Place",
+            "lat": "10.0",
+            "lon": "20.0",
+            # "address" key intentionally absent
+        }
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        service = NominatimGeocodingService()
+        coords = Coordinates(latitude=10.0, longitude=20.0)
+        result = service.reverse_geocode(coords)
+
+        assert result is not None
+        assert result.name == "Some Place"
+        assert result.country is None
+        assert result.admin1 is None
