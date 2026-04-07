@@ -1,9 +1,16 @@
 <script lang="ts">
+  import Dashboard from './routes/Dashboard.svelte'
   import Places from './routes/Places.svelte'
+  import Trips from './routes/Trips.svelte'
+  import MapComposer from './routes/MapComposer.svelte'
 
   type View = 'dashboard' | 'places' | 'trips' | 'projects'
 
   let currentView: View = $state('dashboard')
+
+  function navigate(view: string) {
+    currentView = view as View
+  }
 </script>
 
 <main>
@@ -27,16 +34,13 @@
 
   <section class="content">
     {#if currentView === 'dashboard'}
-      <h2>Dashboard</h2>
-      <p>Welcome to Voyages.</p>
+      <Dashboard {navigate} />
     {:else if currentView === 'places'}
       <Places />
     {:else if currentView === 'trips'}
-      <h2>Trips</h2>
-      <p>Trips view coming soon.</p>
+      <Trips />
     {:else if currentView === 'projects'}
-      <h2>Map Composer</h2>
-      <p>Map Composer view coming soon.</p>
+      <MapComposer />
     {/if}
   </section>
 </main>
