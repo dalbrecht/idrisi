@@ -128,6 +128,40 @@ class TestSqlTripRepository:
         repo.delete(tid)
         assert repo.get(tid) is None
 
+    def test_stop_upsert_replaces_stops(self, session) -> None:
+        place_repo = SqlPlaceRepository(session)
+        p1 = Place(id=uuid4(), name="A", latitude=0, longitude=0, source="test")
+        p2 = Place(id=uuid4(), name="B", latitude=1, longitude=1, source="test")
+        p3 = Place(id=uuid4(), name="C", latitude=2, longitude=2, source="test")
+        place_repo.save(p1)
+        place_repo.save(p2)
+        place_repo.save(p3)
+
+        repo = SqlTripRepository(session)
+        tid = uuid4()
+        trip = Trip(
+            id=tid,
+            name="Upsert Trip",
+            stops=[
+                TripStop(place_id=p1.id, position=0),
+                TripStop(place_id=p2.id, position=1),
+            ],
+        )
+        repo.save(trip)
+
+        # Save again with different stops (same trip ID)
+        updated_trip = Trip(
+            id=tid,
+            name="Upsert Trip",
+            stops=[TripStop(place_id=p3.id, position=0)],
+        )
+        repo.save(updated_trip)
+
+        loaded = repo.get(tid)
+        assert loaded is not None
+        assert len(loaded.stops) == 1
+        assert loaded.stops[0].place_id == p3.id
+
 
 # ---- Region ----
 
@@ -159,6 +193,16 @@ class TestSqlRegionRepository:
         repo.save(Region(id=rid, name="Gone", region_type="country"))
         repo.delete(rid)
         assert repo.get(rid) is None
+
+    def test_region_upsert_updates_name(self, session) -> None:
+        repo = SqlRegionRepository(session)
+        rid = uuid4()
+        repo.save(Region(id=rid, name="OldName", region_type="country"))
+        repo.save(Region(id=rid, name="NewName", region_type="country"))
+        loaded = repo.get(rid)
+        assert loaded is not None
+        assert loaded.name == "NewName"
+        assert len(repo.list_all()) == 1
 
 
 # ---- Project ----
@@ -269,3 +313,8 @@ class TestSqlPhotoRepository:
         repo.save(Photo(id=pid, file_path="/gone.jpg"))
         repo.delete(pid)
         assert repo.get(pid) is None
+
+    def test_list_by_trip_empty(self, session) -> None:
+        repo = SqlPhotoRepository(session)
+        results = repo.list_by_trip(uuid4())
+        assert results == []
