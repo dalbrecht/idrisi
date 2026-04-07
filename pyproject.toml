@@ -102,3 +102,6 @@ disable_error_code = ["assignment", "unused-ignore"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "--strict-markers -q"
+markers = [
+    "e2e: end-to-end tests that invoke CLI as subprocess (deselect with '-m not e2e')",
+]

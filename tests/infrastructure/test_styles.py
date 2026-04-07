@@ -1,8 +1,13 @@
 from __future__ import annotations
 
 import tempfile
+from typing import TYPE_CHECKING
 
 import pytest
+import yaml
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 from voyages.infrastructure.renderer.styles import MapStyle, get_builtin_styles, load_style
 
@@ -50,9 +55,7 @@ marker_size: 10
 title_size: 20
 label_size: 12
 """
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yml", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as f:
             f.write(custom_yaml)
             f.flush()
             style = load_style(f.name)
@@ -69,6 +72,36 @@ label_size: 12
         style = load_style("default")
         with pytest.raises(AttributeError):
             style.name = "changed"  # type: ignore[misc]
+
+    def test_missing_yaml_field_raises(self, tmp_path: Path) -> None:
+        """Style YAML missing a required field should raise an error."""
+        style_file = tmp_path / "incomplete.yml"
+        style_file.write_text("name: incomplete\nocean: '#000'\n")
+        with pytest.raises((KeyError, TypeError)):
+            load_style(str(style_file))
+
+    def test_invalid_yaml_syntax_raises(self, tmp_path: Path) -> None:
+        """Malformed YAML should raise an error."""
+        style_file = tmp_path / "bad.yml"
+        style_file.write_text("name: bad\nocean: [invalid\n")
+        with pytest.raises(yaml.YAMLError):
+            load_style(str(style_file))
+
+    def test_all_builtin_styles_have_all_fields(self) -> None:
+        """Every built-in style should have all MapStyle fields populated."""
+        for style in get_builtin_styles():
+            assert style.name is not None
+            assert style.ocean is not None
+            assert style.land is not None
+            assert style.visited is not None
+            assert style.visited_light is not None
+            assert style.route is not None
+            assert style.font is not None
+            assert style.borders is not None
+            assert style.marker is not None
+            assert style.marker_size > 0
+            assert style.title_size > 0
+            assert style.label_size > 0
 
 
 class TestGetBuiltinStyles:

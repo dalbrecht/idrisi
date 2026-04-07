@@ -67,6 +67,11 @@ class TestPlace:
         assert place.created_at == now
         assert place.updated_at == now
 
+    def test_empty_string_name(self) -> None:
+        """Empty string name is accepted — no validation at entity level."""
+        place = Place(id=uuid.uuid4(), name="", latitude=0.0, longitude=0.0, source="test")
+        assert place.name == ""
+
 
 class TestTripStop:
     def test_basic_creation(self) -> None:
