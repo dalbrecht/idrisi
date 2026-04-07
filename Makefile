@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
 
-.PHONY: help bootstrap dev test lint lint-fix fmt fmt-check build serve build-web run ls sync-standards ci clean repo-setup pr
+.PHONY: help bootstrap dev test test-e2e test-all lint lint-fix fmt fmt-check build serve build-web run ls sync-standards ci clean repo-setup pr
 
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -14,7 +14,13 @@ bootstrap: ## Create venv and install all deps
 dev: ## Install in editable mode with dev extras
 	uv pip install -e ".[dev]"
 
-test: ## Run pytest
+test: ## Run tests (excludes e2e)
+	uv run pytest -m "not e2e"
+
+test-e2e: ## Run end-to-end tests only
+	uv run pytest -m e2e
+
+test-all: ## Run all tests including e2e
 	uv run pytest
 
 lint: ## Run ruff check and mypy
