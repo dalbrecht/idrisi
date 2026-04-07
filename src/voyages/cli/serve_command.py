@@ -12,7 +12,7 @@ def serve(
     """Start the Voyages web server."""
     import uvicorn  # noqa: PLC0415
 
-    from voyages.server import create_app  # type: ignore[import-not-found]  # noqa: PLC0415
+    from voyages.server import create_app  # noqa: PLC0415
 
     application = create_app()
     uvicorn.run(application, host=host, port=port)
