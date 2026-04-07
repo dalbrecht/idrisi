@@ -1,0 +1,12 @@
+name: dark
+ocean: "#1A1A2E"
+land: "#16213E"
+visited: "#E94560"
+visited_light: "#533483"
+route: "#0F3460"
+font: "DejaVu Sans"
+borders: "#2A2A4A"
+marker: "#E94560"
+marker_size: 4
+title_size: 16
+label_size: 8

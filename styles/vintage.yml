@@ -1,0 +1,12 @@
+name: vintage
+ocean: "#D4E4ED"
+land: "#F5F0E8"
+visited: "#A01D26"
+visited_light: "#C4686F"
+route: "#2C5F7C"
+font: "Playfair Display"
+borders: "#C4B9A8"
+marker: "#8B2500"
+marker_size: 5
+title_size: 18
+label_size: 9
