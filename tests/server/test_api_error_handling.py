@@ -90,3 +90,65 @@ class TestEntityNotFound:
         response = client.post(f"/api/render/{fake_id}")
         assert response.status_code == EXPECTED_NOT_FOUND
         assert "detail" in response.json()
+
+
+EXPECTED_UNPROCESSABLE = 422
+
+
+class TestValidationErrors:
+    """POST with invalid request bodies should return 422."""
+
+    def test_create_place_missing_name(self) -> None:
+        client = _make_client()
+        response = client.post(
+            "/api/places",
+            json={"lat": 48.85, "lon": 2.35, "source": "manual"},
+        )
+        assert response.status_code == EXPECTED_UNPROCESSABLE
+
+    def test_create_place_invalid_lat_type(self) -> None:
+        client = _make_client()
+        response = client.post(
+            "/api/places",
+            json={"name": "Paris", "lat": "not-a-number", "lon": 2.35, "source": "manual"},
+        )
+        assert response.status_code == EXPECTED_UNPROCESSABLE
+
+    def test_create_trip_missing_name(self) -> None:
+        client = _make_client()
+        response = client.post("/api/trips", json={})
+        assert response.status_code == EXPECTED_UNPROCESSABLE
+
+    def test_create_project_missing_name(self) -> None:
+        client = _make_client()
+        response = client.post(
+            "/api/projects",
+            json={"map_type": "travel"},
+        )
+        assert response.status_code == EXPECTED_UNPROCESSABLE
+
+    def test_create_project_invalid_map_type(self) -> None:
+        client = _make_client()
+        response = client.post(
+            "/api/projects",
+            json={"name": "Test", "map_type": "invalid_type"},
+        )
+        # MapType("invalid_type") raises ValueError → caught by handler → 400
+        # OR Pydantic validates → 422. Either way, NOT 500.
+        assert response.status_code in (EXPECTED_BAD_REQUEST, EXPECTED_UNPROCESSABLE)
+
+    def test_create_region_missing_name(self) -> None:
+        client = _make_client()
+        response = client.post(
+            "/api/regions",
+            json={"region_type": "country"},
+        )
+        assert response.status_code == EXPECTED_UNPROCESSABLE
+
+    def test_create_region_missing_region_type(self) -> None:
+        client = _make_client()
+        response = client.post(
+            "/api/regions",
+            json={"name": "France"},
+        )
+        assert response.status_code == EXPECTED_UNPROCESSABLE
