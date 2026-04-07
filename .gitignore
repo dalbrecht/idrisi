@@ -102,6 +102,16 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# ruff
+.ruff_cache/
+
+# Node / web front-end
+node_modules/
+
+# Voyages-specific
+src/voyages/server/static/
+.superpowers/
 geodata/data/*
 *.iml
 MapBuilder/package-lock.json
@@ -113,3 +123,7 @@ geodata
 geodata
 geodata
 MapBuilder/.idea/workspace.xml
+
+# Standards
+.standards_tmp/
+coverage/
