@@ -128,3 +128,4 @@ MapBuilder/.idea/workspace.xml
 # Standards
 .standards_tmp/
 coverage/
+voyages.db
