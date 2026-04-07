@@ -102,3 +102,13 @@ disable_error_code = ["assignment", "unused-ignore"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "--strict-markers -q"
+
+[tool.coverage.run]
+source = ["voyages"]
+omit = ["*/application/interfaces.py"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_also = [
+    "if TYPE_CHECKING:",  # Type-checking-only imports
+]

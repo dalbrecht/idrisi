@@ -21,9 +21,9 @@ from voyages.infrastructure.renderer.styles import load_style
 _DB_URL = "sqlite:///voyages.db"
 
 
-def get_render_dependencies() -> (
-    tuple[ProjectService, SqlPlaceRepository, SqlTripRepository, SqlRegionRepository, RenderEngine]
-):
+def get_render_dependencies() -> tuple[
+    ProjectService, SqlPlaceRepository, SqlTripRepository, SqlRegionRepository, RenderEngine
+]:
     """Create all dependencies needed for the render command."""
     engine = create_engine_and_tables(_DB_URL)
     session = get_session(engine)

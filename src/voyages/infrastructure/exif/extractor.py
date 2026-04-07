@@ -140,8 +140,6 @@ class PillowExifService:
         if dt_string is None:
             return None
         try:
-            return datetime.strptime(str(dt_string), "%Y:%m:%d %H:%M:%S").replace(
-                tzinfo=UTC
-            )
+            return datetime.strptime(str(dt_string), "%Y:%m:%d %H:%M:%S").replace(tzinfo=UTC)
         except (ValueError, TypeError):
             return None

@@ -144,9 +144,7 @@ class TestRegion:
         assert region.region_code is None
 
     def test_region_code_provided(self) -> None:
-        region = Region(
-            id=uuid.uuid4(), name="France", region_type="country", region_code="FR"
-        )
+        region = Region(id=uuid.uuid4(), name="France", region_type="country", region_code="FR")
         assert region.region_code == "FR"
 
 

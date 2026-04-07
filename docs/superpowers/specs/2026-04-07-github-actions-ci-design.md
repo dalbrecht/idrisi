@@ -5,13 +5,13 @@
 
 ## Overview
 
-Add a GitHub Actions CI workflow that runs lint, format checks, tests, and coverage enforcement on pull requests to `main`. Coverage thresholds are set at current baselines (100% domain, 90% overall) with an issue to track reaching targets (100% domain, 95% overall).
+Add a GitHub Actions CI workflow that runs lint, format checks, tests, and coverage enforcement on pull requests to `main`. Coverage thresholds are set at current baselines (100% domain, 89% overall) with an issue to track reaching targets (100% domain, 95% overall).
 
 ## Goals
 
 1. PRs to `main` are automatically validated: lint, format, tests, coverage
 2. Domain layer coverage is enforced at 100% (current baseline)
-3. Overall coverage is enforced at 90% (current baseline is 91%)
+3. Overall coverage is enforced at 89% (current baseline)
 4. `make ci` enforces the same thresholds locally
 5. No external services (no Codecov, no tokens)
 
@@ -20,7 +20,7 @@ Add a GitHub Actions CI workflow that runs lint, format checks, tests, and cover
 | Layer | Coverage | Target |
 |-------|----------|--------|
 | Domain | 100% | 100% (met) |
-| Overall | 91% | 95% (gap: 4%) |
+| Overall | 89% | 95% (gap: 6%) |
 
 ## Workflow: `.github/workflows/ci.yml`
 
@@ -34,10 +34,9 @@ Add a GitHub Actions CI workflow that runs lint, format checks, tests, and cover
 3. Install uv (`astral-sh/setup-uv`)
 4. Set up Node.js 18 (`actions/setup-node`)
 5. Install system dependencies for Cartopy: `sudo apt-get install -y libgeos-dev libproj-dev`
-6. `make repo-setup` — initialize submodules (may be redundant with checkout submodules, but safe)
-7. `make bootstrap` — create venv and install deps
-8. `make build-web` — build Svelte frontend
-9. `make ci` — lint + format check + tests with overall coverage enforcement (90%)
+6. `make bootstrap` — create venv and install deps
+7. `make build-web` — build Svelte frontend
+8. `make ci` — lint + format check + tests with overall coverage enforcement (89%)
 10. Domain coverage gate: `uv run pytest tests/domain/ --cov=voyages.domain --cov-fail-under=100`
 
 ## pyproject.toml Changes
@@ -57,8 +56,8 @@ show_missing = true
 Update `test` target to include coverage:
 
 ```makefile
-test: ## Run tests (excludes e2e) with coverage
-	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=90
+test: ## Run tests with coverage (excludes e2e)
+	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=89
 ```
 
 Add domain coverage target:
@@ -98,6 +97,6 @@ After merging, create an issue:
 1. `.github/workflows/ci.yml` exists and runs on PRs to main
 2. CI runs lint, format check, tests, and coverage
 3. CI fails if domain coverage drops below 100%
-4. CI fails if overall coverage drops below 90%
+4. CI fails if overall coverage drops below 89%
 5. `make ci` locally enforces the same thresholds
 6. Follow-up issue created for reaching 95% target

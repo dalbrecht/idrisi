@@ -105,7 +105,10 @@ class TestPlaceService:
 
     def test_search_delegates_to_geocoding(self) -> None:
         geocoding_place = Place(
-            id=uuid.uuid4(), name="Paris, France", latitude=PARIS_LAT, longitude=PARIS_LON,
+            id=uuid.uuid4(),
+            name="Paris, France",
+            latitude=PARIS_LAT,
+            longitude=PARIS_LON,
             source="nominatim",
         )
         self.geocoding = FakeGeocodingService(results=[geocoding_place])

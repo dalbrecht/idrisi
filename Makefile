@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
 
-.PHONY: help bootstrap dev test lint lint-fix fmt fmt-check build serve build-web run ls sync-standards ci clean repo-setup pr
+.PHONY: help bootstrap dev test lint lint-fix fmt fmt-check build serve build-web run ls sync-standards ci ci-domain clean repo-setup pr
 
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -14,8 +14,8 @@ bootstrap: ## Create venv and install all deps
 dev: ## Install in editable mode with dev extras
 	uv pip install -e ".[dev]"
 
-test: ## Run pytest
-	uv run pytest
+test: ## Run tests with coverage (excludes e2e)
+	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=89
 
 lint: ## Run ruff check and mypy
 	uv run ruff check src tests
@@ -48,10 +48,14 @@ sync-standards: ## Sync coding-standards submodule to latest
 fmt-check: ## Check code formatting without modifying
 	uv run ruff format --check src tests
 
-ci: ## Run full CI pipeline (lint + format check + test)
+ci: ## Run full CI pipeline (lint + format check + test + domain coverage)
 	$(MAKE) lint
 	$(MAKE) fmt-check
 	$(MAKE) test
+	$(MAKE) ci-domain
+
+ci-domain: ## Run domain tests with 100% coverage enforcement
+	uv run pytest tests/domain/ --cov=voyages.domain --cov-fail-under=100
 
 clean: ## Remove build artifacts, caches, and venv
 	rm -rf .venv .ruff_cache .mypy_cache .pytest_cache

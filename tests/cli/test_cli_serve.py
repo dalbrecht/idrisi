@@ -2,21 +2,30 @@
 
 from __future__ import annotations
 
+import re
+
 from typer.testing import CliRunner
 
 from voyages.cli import app
 
 runner = CliRunner()
 
+_ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+
+
+def _strip_ansi(text: str) -> str:
+    return _ANSI_RE.sub("", text)
+
 
 def test_help_shows_voyages_description() -> None:
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
-    assert "travel cartography" in result.output
+    assert "travel cartography" in _strip_ansi(result.output)
 
 
 def test_serve_help_shows_port_option() -> None:
     result = runner.invoke(app, ["serve", "--help"])
     assert result.exit_code == 0
-    assert "--port" in result.output
-    assert "--host" in result.output
+    output = _strip_ansi(result.output)
+    assert "--port" in output
+    assert "--host" in output
