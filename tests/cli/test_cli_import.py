@@ -71,3 +71,15 @@ def test_import_photos_invalid_dir() -> None:
     result = runner.invoke(app, ["import", "photos", "/nonexistent/path/xyz"])
     assert result.exit_code == 1
     assert "Not a directory" in result.output
+
+
+@patch("voyages.cli.import_commands.get_import_dependencies")
+def test_import_photos_with_trip_option(mock_deps: MagicMock, tmp_path: object) -> None:
+    """Covers import_commands.py line 55 (the --trip option message)."""
+    svc = MagicMock()
+    svc.import_from_directory.return_value = []
+    mock_deps.return_value = svc
+
+    result = runner.invoke(app, ["import", "photos", str(tmp_path), "--trip", "my-trip-id"])
+    assert result.exit_code == 0
+    assert "Trip assignment" in result.output

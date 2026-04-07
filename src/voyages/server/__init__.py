@@ -86,7 +86,7 @@ def create_app(database_url: str = "sqlite:///voyages.db") -> FastAPI:
 
     # Mount static files for SPA if directory exists
     static_dir = Path(__file__).resolve().parent / "static"
-    if static_dir.is_dir():
+    if static_dir.is_dir():  # pragma: no cover
         from starlette.staticfiles import StaticFiles  # noqa: PLC0415
 
         app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")

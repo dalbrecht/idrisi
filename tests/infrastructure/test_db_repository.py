@@ -318,3 +318,15 @@ class TestSqlPhotoRepository:
         repo = SqlPhotoRepository(session)
         results = repo.list_by_trip(uuid4())
         assert results == []
+
+    def test_upsert_photo(self, session) -> None:
+        """Covers repository.py lines 407-412 (photo upsert when record already exists)."""
+        repo = SqlPhotoRepository(session)
+        pid = uuid4()
+        repo.save(Photo(id=pid, file_path="/orig.jpg", latitude=10.0, longitude=20.0))
+        # Update the same photo
+        repo.save(Photo(id=pid, file_path="/updated.jpg", latitude=11.0, longitude=21.0))
+        loaded = repo.get(pid)
+        assert loaded is not None
+        assert loaded.file_path == "/updated.jpg"
+        assert loaded.latitude == 11.0  # type: ignore[operator]

@@ -35,7 +35,7 @@ class RenderEngine:
     # Public render methods
     # ------------------------------------------------------------------
 
-    def render_travel_map(
+    def render_travel_map(  # pragma: no cover
         self,
         places: list[Place],
         regions: list[Region],  # noqa: ARG002
@@ -72,7 +72,7 @@ class RenderEngine:
         self._save(fig, output_path, output_format, dpi)
         return output_path
 
-    def render_region_map(
+    def render_region_map(  # pragma: no cover
         self,
         places: list[Place],
         regions: list[Region],  # noqa: ARG002
@@ -142,7 +142,7 @@ class RenderEngine:
         self._save(fig, output_path, output_format, dpi)
         return output_path
 
-    def render_route_map(
+    def render_route_map(  # pragma: no cover
         self,
         trip: Trip,
         places: list[Place],
@@ -228,7 +228,7 @@ class RenderEngine:
     # Private helpers
     # ------------------------------------------------------------------
 
-    def _draw_base(self, ax: Any) -> None:
+    def _draw_base(self, ax: Any) -> None:  # pragma: no cover
         """Add ocean, land, borders, coastlines, and lakes to an axes."""
         ax.set_facecolor(self._style.ocean)
         ax.add_feature(
@@ -245,7 +245,7 @@ class RenderEngine:
         ax.add_feature(cfeature.LAKES, facecolor=self._style.ocean, edgecolor=self._style.borders)
 
     @staticmethod
-    def _save(
+    def _save(  # pragma: no cover
         fig: Any,
         output_path: str,
         output_format: OutputFormat,

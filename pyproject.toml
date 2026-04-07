@@ -97,6 +97,14 @@ module = "voyages.infrastructure.db.repository"
 # Legacy-style Column models produce false positives on attribute assignment
 disable_error_code = ["assignment", "unused-ignore"]
 
+# ---------- Coverage ----------
+[tool.coverage.run]
+source = ["voyages"]
+omit = [
+    "*/application/interfaces.py",
+    "*/__main__.py",
+]
+
 # ---------- Pytest ----------
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -173,3 +173,60 @@ class TestPillowExifDirectory:
         assert len(photos) == 2
         # Image.open should be called twice (once for .jpg, once for .png)
         assert mock_open.call_count == 2
+
+    def test_extract_from_non_directory_returns_empty(self) -> None:
+        """Covers the early-return branch when directory.is_dir() is False."""
+        mock_dir = MagicMock(spec=Path)
+        mock_dir.is_dir.return_value = False
+
+        service = PillowExifService()
+        photos = service.extract_from_directory(mock_dir)
+
+        assert photos == []
+
+    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    def test_gps_info_as_dict_branch(self, mock_open: MagicMock) -> None:
+        """Covers line 50: gps_data = gps_info when gps_info is already a dict."""
+        mock_img = MagicMock()
+        exif = MagicMock()
+        # Return a plain dict for GPS info tag so isinstance(gps_info, dict) is True
+        gps_dict = {
+            "GPSLatitude": (48.0, 51.0, 24.0),
+            "GPSLatitudeRef": "N",
+            "GPSLongitude": (2.0, 17.0, 40.0),
+            "GPSLongitudeRef": "E",
+        }
+        exif.get.side_effect = lambda tag, default=None: (
+            gps_dict if tag == 34853 else ("2024:07:04 18:30:00" if tag == 36867 else default)
+        )
+        exif.__bool__ = lambda self: True
+        mock_img.getexif.return_value = exif
+        mock_open.return_value = mock_img
+
+        service = PillowExifService()
+        photo = service.extract_from_file(Path("/photos/dict_gps.jpg"))
+
+        assert photo is not None
+        assert abs(photo.latitude - 48.8567) < 0.001  # type: ignore[operator]
+
+    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    def test_invalid_gps_coords_returns_none(self, mock_open: MagicMock) -> None:
+        """Covers line 68: return None when lat/lon parsing fails."""
+        mock_img = MagicMock()
+        exif = MagicMock()
+        # GPS info is a dict but coords are invalid (not tuples)
+        gps_dict = {
+            "GPSLatitude": "invalid",
+            "GPSLatitudeRef": "N",
+            "GPSLongitude": "invalid",
+            "GPSLongitudeRef": "E",
+        }
+        exif.get.side_effect = lambda tag, default=None: gps_dict if tag == 34853 else default
+        exif.__bool__ = lambda self: True
+        mock_img.getexif.return_value = exif
+        mock_open.return_value = mock_img
+
+        service = PillowExifService()
+        photo = service.extract_from_file(Path("/photos/bad_coords.jpg"))
+
+        assert photo is None

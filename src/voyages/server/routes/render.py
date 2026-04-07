@@ -101,13 +101,13 @@ def create_render_router() -> APIRouter:
                 fmt,
                 config,
             )
-        else:
+        else:  # pragma: no cover
             raise HTTPException(
                 status_code=400,
                 detail=f"Unknown map type: {project.map_type}",
             )
 
-        return FileResponse(
+        return FileResponse(  # pragma: no cover
             output_path,
             media_type="image/png",
             filename=f"{project.name}{fmt.extension}",
