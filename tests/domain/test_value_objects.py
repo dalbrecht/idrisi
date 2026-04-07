@@ -55,6 +55,22 @@ class TestCoordinates:
         with pytest.raises(AttributeError):
             coord.latitude = 10.0  # type: ignore[misc]
 
+    def test_nan_latitude_error_message_is_explicit(self) -> None:
+        with pytest.raises(ValueError, match="NaN"):
+            Coordinates(latitude=float("nan"), longitude=0.0)
+
+    def test_inf_latitude_error_message_is_explicit(self) -> None:
+        with pytest.raises(ValueError, match="infinite"):
+            Coordinates(latitude=float("inf"), longitude=0.0)
+
+    def test_nan_longitude_error_message_is_explicit(self) -> None:
+        with pytest.raises(ValueError, match="NaN"):
+            Coordinates(latitude=0.0, longitude=float("nan"))
+
+    def test_inf_longitude_error_message_is_explicit(self) -> None:
+        with pytest.raises(ValueError, match="infinite"):
+            Coordinates(latitude=0.0, longitude=float("inf"))
+
 
 class TestBoundingBox:
     def test_valid_bounding_box(self) -> None:
