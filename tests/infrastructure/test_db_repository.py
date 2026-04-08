@@ -320,7 +320,7 @@ class TestSqlPhotoRepository:
         assert results == []
 
     def test_upsert_photo(self, session) -> None:
-        """Covers repository.py lines 407-412 (photo upsert when record already exists)."""
+        """Verifies that saving a photo with an existing ID updates the record in place."""
         repo = SqlPhotoRepository(session)
         pid = uuid4()
         repo.save(Photo(id=pid, file_path="/orig.jpg", latitude=10.0, longitude=20.0))

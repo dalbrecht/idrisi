@@ -143,7 +143,7 @@ def test_render_route_map(mock_deps: MagicMock) -> None:
 
 @patch("voyages.cli.render_commands.get_render_dependencies")
 def test_render_route_map_no_trips(mock_deps: MagicMock) -> None:
-    """Covers lines 84-85: no trips found for route rendering."""
+    """Verifies that render exits with error when no trips are found for a route map."""
     project_service = MagicMock()
     place_repo = MagicMock()
     trip_repo = MagicMock()
@@ -178,7 +178,7 @@ def test_render_route_map_no_trips(mock_deps: MagicMock) -> None:
 
 @patch("voyages.cli.render_commands.get_render_dependencies")
 def test_render_with_custom_style(mock_deps: MagicMock) -> None:
-    """Covers lines 53-54: custom style override branch."""
+    """Verifies that passing --style overrides the default map style during rendering."""
     project_service = MagicMock()
     place_repo = MagicMock()
     trip_repo = MagicMock()
@@ -210,9 +210,18 @@ def test_render_with_custom_style(mock_deps: MagicMock) -> None:
 
 
 def test_get_render_dependencies_creates_real_dependencies() -> None:
-    """Covers render_commands.py lines 28-37 (get_render_dependencies factory body)."""
+    """Verifies that the render dependencies factory returns five real dependency objects."""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = f"{tmpdir}/render_test.db"
         with patch("voyages.cli.render_commands._DB_URL", f"sqlite:///{db_path}"):
             result = get_render_dependencies()
-            assert len(result) == 5  # (project_service, place_repo, trip_repo, region_repo, engine)
+            try:
+                assert len(result) == 5
+            finally:
+                for dep in result:
+                    close = getattr(dep, "close", None)
+                    if callable(close):
+                        close()
+                    dispose = getattr(dep, "dispose", None)
+                    if callable(dispose):
+                        dispose()

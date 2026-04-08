@@ -75,7 +75,7 @@ def test_import_photos_invalid_dir() -> None:
 
 @patch("voyages.cli.import_commands.get_import_dependencies")
 def test_import_photos_with_trip_option(mock_deps: MagicMock, tmp_path: object) -> None:
-    """Covers import_commands.py line 55 (the --trip option message)."""
+    """Verifies that the --trip option triggers the trip-association message during import."""
     svc = MagicMock()
     svc.import_from_directory.return_value = []
     mock_deps.return_value = svc

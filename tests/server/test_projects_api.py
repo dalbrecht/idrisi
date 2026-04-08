@@ -32,7 +32,7 @@ class TestAppFactory:
     """Tests for the application factory (server/__init__.py)."""
 
     def test_create_app_with_file_database(self) -> None:
-        """Covers the non-memory SQLite branch in _create_engine_for_url (line 31)."""
+        """Verifies the app factory creates a database file when given a file-based SQLite URL."""
         with tempfile.TemporaryDirectory() as tmpdir:
             db_path = os.path.join(tmpdir, "test.db")
             app = create_app(database_url=f"sqlite:///{db_path}")
@@ -100,7 +100,7 @@ class TestProjectsAPI:
         assert "trip" in detail.lower()
 
     def test_delete_project(self) -> None:
-        """Covers routes/projects.py lines 76-78 (delete handler)."""
+        """Verifies that deleting a project removes it from the project list."""
         client = _make_client()
         create_resp = client.post(
             "/api/projects",
@@ -119,7 +119,7 @@ class TestProjectsAPI:
         assert project_id not in ids
 
     def test_render_travel_map_returns_png(self) -> None:
-        """Covers routes/render.py line 68 (TRAVEL map type branch)."""
+        """Verifies that rendering a travel map project returns a valid PNG image."""
         client = _make_client()
         create_resp = client.post(
             "/api/projects",
@@ -134,7 +134,7 @@ class TestProjectsAPI:
         assert render_resp.content[:8] == b"\x89PNG\r\n\x1a\n"
 
     def test_render_route_map_with_trip_returns_png(self) -> None:
-        """Covers routes/render.py lines 83-96 (ROUTE branch with trips)."""
+        """Verifies that rendering a route map project with trips returns a valid PNG image."""
         with tempfile.TemporaryDirectory() as tmpdir:
             db_path = os.path.join(tmpdir, "route_test.db")
             db_url = f"sqlite:///{db_path}"

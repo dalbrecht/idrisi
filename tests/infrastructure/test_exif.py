@@ -186,7 +186,7 @@ class TestPillowExifDirectory:
 
     @patch("voyages.infrastructure.exif.extractor.Image.open")
     def test_gps_info_as_dict_branch(self, mock_open: MagicMock) -> None:
-        """Covers line 50: gps_data = gps_info when gps_info is already a dict."""
+        """Verifies GPS extraction when gps_info is already a dict rather than an IFD object."""
         mock_img = MagicMock()
         exif = MagicMock()
         # Return a plain dict for GPS info tag so isinstance(gps_info, dict) is True
@@ -211,7 +211,7 @@ class TestPillowExifDirectory:
 
     @patch("voyages.infrastructure.exif.extractor.Image.open")
     def test_invalid_gps_coords_returns_none(self, mock_open: MagicMock) -> None:
-        """Covers line 68: return None when lat/lon parsing fails."""
+        """Verifies that invalid GPS coordinate values cause extraction to return None."""
         mock_img = MagicMock()
         exif = MagicMock()
         # GPS info is a dict but coords are invalid (not tuples)
