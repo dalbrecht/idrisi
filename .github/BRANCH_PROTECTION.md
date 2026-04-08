@@ -14,7 +14,7 @@ These settings should be enabled manually in **GitHub → Settings → Branches 
 ### Status Checks
 
 - [x] **Require status checks to pass before merging**
-  - Required checks: `ci` (the GitHub Actions workflow)
+  - Add the required check by name as it appears after the first CI run (typically `ci` or `CI / ci` — select the exact name shown in the status checks dropdown)
 - [x] **Require branches to be up to date before merging**
 
 ### Push Restrictions
