@@ -14,8 +14,8 @@ bootstrap: ## Create venv and install all deps
 dev: ## Install in editable mode with dev extras
 	uv pip install -e ".[dev]"
 
-test: ## Run tests with coverage (excludes e2e)
-	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=89
+test: ## Run tests with coverage (excludes e2e, ≥95% required)
+	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=95 -q
 
 lint: ## Run ruff check and mypy
 	uv run ruff check src tests

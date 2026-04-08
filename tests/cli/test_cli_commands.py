@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import tempfile
 import uuid
 from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
 from voyages.cli import app
+from voyages.cli.place_commands import get_place_service
+from voyages.cli.project_commands import get_project_service
+from voyages.cli.trip_commands import get_trip_service
 from voyages.domain.entities import Place, Project, Trip
 from voyages.domain.value_objects import MapType
 
@@ -236,3 +240,41 @@ class TestCliErrorPaths:
         result = runner.invoke(app, ["place", "add", "--name", "Bad", "--lat", "999", "--lon", "0"])
         # CLI currently accepts any float — no coordinate validation
         assert result.exit_code == 0
+
+
+# ---------------------------------------------------------------------------
+# Factory function coverage tests
+# ---------------------------------------------------------------------------
+
+
+def test_get_place_service_creates_real_service() -> None:
+    """Verify get_place_service wires up a real PlaceService."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = f"{tmpdir}/test.db"
+        with patch("voyages.cli.place_commands._DB_URL", f"sqlite:///{db_path}"):
+            svc = get_place_service()
+            assert svc is not None
+            result = svc.list_all()
+            assert result == []
+
+
+def test_get_project_service_creates_real_service() -> None:
+    """Verify get_project_service wires up a real ProjectService."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = f"{tmpdir}/test.db"
+        with patch("voyages.cli.project_commands._DB_URL", f"sqlite:///{db_path}"):
+            svc = get_project_service()
+            assert svc is not None
+            result = svc.list_all()
+            assert result == []
+
+
+def test_get_trip_service_creates_real_service() -> None:
+    """Verify get_trip_service wires up a real TripService."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = f"{tmpdir}/test.db"
+        with patch("voyages.cli.trip_commands._DB_URL", f"sqlite:///{db_path}"):
+            svc = get_trip_service()
+            assert svc is not None
+            result = svc.list_all()
+            assert result == []

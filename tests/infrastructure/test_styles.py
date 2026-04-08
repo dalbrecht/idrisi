@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import tempfile
+from typing import TYPE_CHECKING
 
 import pytest
 
 from voyages.infrastructure.renderer.styles import MapStyle, get_builtin_styles, load_style
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class TestLoadStyle:
@@ -67,6 +71,12 @@ label_size: 12
         style = load_style("default")
         with pytest.raises(AttributeError):
             style.name = "changed"  # type: ignore[misc]
+
+    def test_non_dict_yaml_raises_type_error(self, tmp_path: Path) -> None:
+        style_file = tmp_path / "list.yml"
+        style_file.write_text("- item1\n- item2\n")
+        with pytest.raises(TypeError, match="Expected a YAML mapping"):
+            load_style(str(style_file))
 
 
 class TestGetBuiltinStyles:

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import re
+import sys
+from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
@@ -29,3 +31,13 @@ def test_serve_help_shows_port_option() -> None:
     output = _strip_ansi(result.output)
     assert "--port" in output
     assert "--host" in output
+
+
+def test_serve_invokes_uvicorn() -> None:
+    """Verify serve command calls uvicorn.run with correct arguments."""
+    mock_uvicorn = MagicMock()
+    mock_uvicorn.run = MagicMock()
+    with patch.dict(sys.modules, {"uvicorn": mock_uvicorn}):
+        result = runner.invoke(app, ["serve", "--port", "8099"])
+    assert result.exit_code == 0
+    mock_uvicorn.run.assert_called_once()

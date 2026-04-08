@@ -86,7 +86,7 @@ def render(
         result = render_engine.render_route_map(
             filtered_trips[0], filtered_places, output_path, fmt, config
         )
-    else:
+    else:  # pragma: no cover
         typer.echo(f"Unknown map type: {project.map_type}")
         raise typer.Exit(code=1)
 
