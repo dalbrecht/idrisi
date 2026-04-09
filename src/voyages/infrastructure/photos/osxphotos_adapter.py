@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from datetime import UTC
-
-import osxphotos
+from typing import TYPE_CHECKING, Any
 
 from voyages.domain.value_objects import AlbumSummary, GeotaggedPhoto
+
+if TYPE_CHECKING:
+    import osxphotos
 
 
 class OsxPhotosAdapter:
@@ -15,9 +17,11 @@ class OsxPhotosAdapter:
     def __init__(self) -> None:
         self._db: osxphotos.PhotosDB | None = None
 
-    def _get_db(self) -> osxphotos.PhotosDB:
+    def _get_db(self) -> Any:
         if self._db is None:
-            self._db = osxphotos.PhotosDB()
+            import osxphotos as _osxphotos  # noqa: PLC0415
+
+            self._db = _osxphotos.PhotosDB()
         return self._db
 
     def list_albums(self) -> list[AlbumSummary]:

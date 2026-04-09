@@ -1,6 +1,6 @@
 """Integration tests for OsxPhotosAdapter.
 
-These tests require macOS with a Photos library and are skipped in CI.
+These tests require macOS with a Photos library and are marked with the macos marker.
 """
 
 from __future__ import annotations
@@ -9,12 +9,13 @@ import sys
 
 import pytest
 
-from voyages.infrastructure.photos.osxphotos_adapter import OsxPhotosAdapter
+pytestmark = [
+    pytest.mark.skipif(sys.platform != "darwin", reason="macOS Photos.app required"),
+    pytest.mark.macos,
+]
 
-pytestmark = pytest.mark.skipif(
-    sys.platform != "darwin",
-    reason="macOS Photos.app required",
-)
+if sys.platform == "darwin":
+    from voyages.infrastructure.photos.osxphotos_adapter import OsxPhotosAdapter
 
 
 class TestOsxPhotosAdapter:

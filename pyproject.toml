@@ -124,4 +124,5 @@ pythonpath = ["src"]
 addopts = "--strict-markers -q"
 markers = [
     "e2e: end-to-end tests that invoke the CLI as a subprocess",
+    "macos: tests that require macOS (Photos.app, osxphotos)",
 ]

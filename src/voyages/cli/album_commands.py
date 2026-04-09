@@ -17,7 +17,6 @@ from voyages.infrastructure.db.repository import (
 )
 from voyages.infrastructure.db.session import create_engine_and_tables, get_session
 from voyages.infrastructure.geocoding.nominatim import NominatimGeocodingService
-from voyages.infrastructure.photos.osxphotos_adapter import OsxPhotosAdapter
 
 album_app = typer.Typer(name="album", help="Import from macOS Photos albums.", no_args_is_help=True)
 
@@ -33,6 +32,8 @@ def get_album_dependencies() -> AlbumService:
     place_repo = SqlPlaceRepository(session)
     trip_repo = SqlTripRepository(session)
     project_repo = SqlProjectRepository(session)
+    from voyages.infrastructure.photos.osxphotos_adapter import OsxPhotosAdapter  # noqa: PLC0415
+
     geocoding = NominatimGeocodingService()
     photos_library = OsxPhotosAdapter()
 
