@@ -7,6 +7,9 @@ from typing import TYPE_CHECKING
 import pytest
 
 from voyages.application.album_service import AlbumImportResult, AlbumService
+from voyages.application.place_service import PlaceService
+from voyages.application.project_service import ProjectService
+from voyages.application.trip_service import TripService
 from voyages.domain.entities import Place, Trip
 from voyages.domain.value_objects import AlbumSummary, GeotaggedPhoto, MapType
 
@@ -19,7 +22,6 @@ OSAKA_LAT = 34.6937
 OSAKA_LON = 135.5023
 EXPECTED_TWO = 2
 EXPECTED_THREE = 3
-EXPECTED_FOURTEEN = 14
 
 
 class FakePhotosLibrary:
@@ -137,10 +139,6 @@ def _make_service(
     geo = geocoding or FakeGeocodingService()
     lib = photos_lib or FakePhotosLibrary()
 
-    from voyages.application.place_service import PlaceService
-    from voyages.application.project_service import ProjectService
-    from voyages.application.trip_service import TripService
-
     place_svc = PlaceService(place_repo=place_repo, geocoding=geo)
     trip_svc = TripService(trip_repo=trip_repo)
     project_svc = ProjectService(project_repo=project_repo)
@@ -199,17 +197,38 @@ class TestAlbumServiceListAlbums:
         assert result == []
 
 
+class TestAlbumServicePreview:
+    def test_preview_does_not_persist(self) -> None:
+        lib, album_id = _sample_photos()
+        svc, place_repo, trip_repo, project_repo = _make_service(photos_lib=lib)
+        result = svc.preview_album(
+            album_id=album_id, project_name="Japan 2024", total_album_photos=5,
+        )
+        assert isinstance(result, AlbumImportResult)
+        assert result.cluster_count == EXPECTED_TWO
+        assert result.total_photos == 5
+        assert result.geotagged_photos == EXPECTED_THREE
+        # Nothing should be persisted
+        assert place_repo.list_all() == []
+        assert trip_repo.list_all() == []
+        assert project_repo.list_all() == []
+
+
 class TestAlbumServiceImport:
     def test_import_creates_places_for_each_cluster(self) -> None:
         lib, album_id = _sample_photos()
         svc, place_repo, _, _ = _make_service(photos_lib=lib)
-        result = svc.import_album(album_id=album_id, project_name="Japan 2024")
+        svc.import_album(
+            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+        )
         assert len(place_repo.list_all()) == EXPECTED_TWO  # Tokyo cluster + Osaka
 
     def test_import_creates_trip_with_ordered_stops(self) -> None:
         lib, album_id = _sample_photos()
         svc, _, trip_repo, _ = _make_service(photos_lib=lib)
-        result = svc.import_album(album_id=album_id, project_name="Japan 2024")
+        svc.import_album(
+            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+        )
         trips = trip_repo.list_all()
         assert len(trips) == 1
         trip = trips[0]
@@ -221,7 +240,9 @@ class TestAlbumServiceImport:
     def test_import_creates_route_project(self) -> None:
         lib, album_id = _sample_photos()
         svc, _, _, project_repo = _make_service(photos_lib=lib)
-        result = svc.import_album(album_id=album_id, project_name="Japan 2024")
+        svc.import_album(
+            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+        )
         projects = project_repo.list_all()
         assert len(projects) == 1
         project = projects[0]
@@ -231,7 +252,9 @@ class TestAlbumServiceImport:
     def test_import_returns_result(self) -> None:
         lib, album_id = _sample_photos()
         svc, *_ = _make_service(photos_lib=lib)
-        result = svc.import_album(album_id=album_id, project_name="Japan 2024")
+        result = svc.import_album(
+            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+        )
         assert isinstance(result, AlbumImportResult)
         assert result.total_photos == EXPECTED_THREE
         assert result.geotagged_photos == EXPECTED_THREE
@@ -242,7 +265,10 @@ class TestAlbumServiceImport:
         lib, album_id = _sample_photos()
         svc, place_repo, _, _ = _make_service(photos_lib=lib)
         result = svc.import_album(
-            album_id=album_id, project_name="Japan 2024", eps_km=500.0,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=3,
+            eps_km=500.0,
         )
         assert result.cluster_count == 1
         assert len(place_repo.list_all()) == 1
@@ -254,21 +280,26 @@ class TestAlbumServiceImport:
         )
         svc, *_ = _make_service(photos_lib=lib)
         with pytest.raises(ValueError, match="No geotagged photos"):
-            svc.import_album(album_id="empty", project_name="Empty")
+            svc.import_album(album_id="empty", project_name="Empty", total_album_photos=0)
 
     def test_import_geocoding_failure_uses_coordinate_label(self) -> None:
         lib, album_id = _sample_photos()
         svc, place_repo, _, _ = _make_service(
-            photos_lib=lib, geocoding=FailingGeocodingService(),
+            photos_lib=lib,
+            geocoding=FailingGeocodingService(),
         )
-        result = svc.import_album(album_id=album_id, project_name="Japan 2024")
+        svc.import_album(
+            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+        )
         places = place_repo.list_all()
         assert all("\u00b0N" in p.name or "\u00b0S" in p.name for p in places)
 
     def test_import_project_has_trip_and_place_ids(self) -> None:
         lib, album_id = _sample_photos()
-        svc, place_repo, trip_repo, project_repo = _make_service(photos_lib=lib)
-        result = svc.import_album(album_id=album_id, project_name="Japan 2024")
+        svc, _, trip_repo, project_repo = _make_service(photos_lib=lib)
+        svc.import_album(
+            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+        )
         projects = project_repo.list_all()
         project = projects[0]
         assert len(project.trip_ids) == 1

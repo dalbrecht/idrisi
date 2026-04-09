@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import questionary
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -97,6 +96,8 @@ def import_album(
             raise typer.Exit(code=1)
         selected = matched[0]
     else:
+        import questionary  # noqa: PLC0415
+
         choices = [
             questionary.Choice(
                 title=f"{a.title} ({a.photo_count} photos)",
@@ -114,9 +115,20 @@ def import_album(
 
     project_name = name or selected.title
 
+    if dry_run:
+        result = svc.preview_album(
+            album_id=selected.id,
+            project_name=project_name,
+            total_album_photos=selected.photo_count,
+            eps_km=eps,
+            min_samples=min_samples,
+        )
+        _print_result(result, dry_run=True)
+        return
+
     # Check for duplicate project name
     existing = svc.get_project_by_name(project_name)
-    if existing is not None and not dry_run:
+    if existing is not None:
         overwrite = typer.confirm(
             f"Project '{project_name}' already exists. Overwrite?", default=False
         )
@@ -124,27 +136,10 @@ def import_album(
             raise typer.Exit(code=0)
         svc.delete_project(existing.id)
 
-    if dry_run:
-        console.print(
-            f"[Dry run] Would import album '{selected.title}' as project '{project_name}'"
-        )
-        console.print(f"  Album photos: {selected.photo_count}")
-        console.print(f"  Cluster radius: {eps} km")
-        console.print(f"  Min samples: {min_samples}")
-
-        result = svc.import_album(
-            album_id=selected.id,
-            project_name=project_name,
-            eps_km=eps,
-            min_samples=min_samples,
-            style=style,
-        )
-        _print_result(result, dry_run=True)
-        return
-
     result = svc.import_album(
         album_id=selected.id,
         project_name=project_name,
+        total_album_photos=selected.photo_count,
         eps_km=eps,
         min_samples=min_samples,
         style=style,
@@ -155,10 +150,17 @@ def import_album(
 def _print_result(result: AlbumImportResult, *, dry_run: bool = False) -> None:
     """Print the import result summary."""
     prefix = "[Dry run] " if dry_run else ""
+    skipped = result.total_photos - result.geotagged_photos
 
     console.print()
     console.print(f"{prefix}Importing {result.total_photos} photos...")
-    console.print(f"  Geotagged: {result.geotagged_photos} / {result.total_photos}")
+    if skipped > 0:
+        console.print(
+            f"  Geotagged: {result.geotagged_photos} / {result.total_photos}"
+            f" ({skipped} skipped \u2014 no GPS data)"
+        )
+    else:
+        console.print(f"  Geotagged: {result.geotagged_photos} / {result.total_photos}")
     console.print(f"  Clusters: {result.cluster_count} stops identified")
 
     if not dry_run:

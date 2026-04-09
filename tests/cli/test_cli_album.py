@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import uuid
 from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
@@ -86,7 +85,7 @@ def test_album_import_dry_run(mock_deps: MagicMock) -> None:
     svc.list_albums.return_value = [
         AlbumSummary(id="a1", title="Japan 2024", photo_count=347),
     ]
-    svc.import_album.return_value = AlbumImportResult(
+    svc.preview_album.return_value = AlbumImportResult(
         project_name="Japan 2024",
         total_photos=347,
         geotagged_photos=312,
@@ -98,6 +97,8 @@ def test_album_import_dry_run(mock_deps: MagicMock) -> None:
     result = runner.invoke(app, ["album", "import", "Japan 2024", "--dry-run"])
     assert result.exit_code == 0
     assert "dry-run" in result.output.lower() or "Dry run" in result.output
+    svc.preview_album.assert_called_once()
+    svc.import_album.assert_not_called()
 
 
 @patch("voyages.cli.album_commands.get_album_dependencies")

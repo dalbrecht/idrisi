@@ -59,10 +59,51 @@ class AlbumService:
         """Delete a project by ID."""
         self._project_service.delete(project_id)
 
+    def preview_album(
+        self,
+        album_id: str,
+        project_name: str,
+        total_album_photos: int,
+        eps_km: float = 0.5,
+        min_samples: int = 1,
+    ) -> AlbumImportResult:
+        """Preview what an album import would produce, without persisting anything.
+
+        Args:
+            album_id: The album identifier to preview.
+            project_name: Name that would be used for the project.
+            total_album_photos: Total photo count in the album (including non-geotagged).
+            eps_km: DBSCAN cluster radius in kilometers.
+            min_samples: Minimum photos per cluster.
+
+        Returns:
+            AlbumImportResult with preview statistics.
+
+        Raises:
+            ValueError: If the album has no geotagged photos.
+        """
+        photos = self._photos_library.get_album_photos(album_id)
+
+        if not photos:
+            msg = "No geotagged photos found in album. Nothing to import."
+            raise ValueError(msg)
+
+        clusters = cluster_photos(photos, eps_km=eps_km, min_samples=min_samples)
+        place_names = [self._name_cluster(c, i + 1) for i, c in enumerate(clusters)]
+
+        return AlbumImportResult(
+            project_name=project_name,
+            total_photos=total_album_photos,
+            geotagged_photos=len(photos),
+            cluster_count=len(clusters),
+            place_names=place_names,
+        )
+
     def import_album(
         self,
         album_id: str,
         project_name: str,
+        total_album_photos: int,
         eps_km: float = 0.5,
         min_samples: int = 1,
         style: str = "default",
@@ -75,6 +116,7 @@ class AlbumService:
         Args:
             album_id: The album identifier to import.
             project_name: Name for the created project.
+            total_album_photos: Total photo count in the album (including non-geotagged).
             eps_km: DBSCAN cluster radius in kilometers.
             min_samples: Minimum photos per cluster.
             style: Map style name to store in project config.
@@ -86,7 +128,7 @@ class AlbumService:
             ValueError: If the album has no geotagged photos.
         """
         photos = self._photos_library.get_album_photos(album_id)
-        total_photos = len(photos)
+        geotagged_count = len(photos)
 
         if not photos:
             msg = "No geotagged photos found in album. Nothing to import."
@@ -126,7 +168,8 @@ class AlbumService:
             name=project_name,
             map_type=MapType.ROUTE,
             description=(
-                f"Imported from Photos album ({total_photos} photos, {len(clusters)} stops)"
+                f"Imported from Photos album"
+                f" ({geotagged_count} photos, {len(clusters)} stops)"
             ),
             config={"style": style},
         )
@@ -137,8 +180,8 @@ class AlbumService:
 
         return AlbumImportResult(
             project_name=project_name,
-            total_photos=total_photos,
-            geotagged_photos=total_photos,
+            total_photos=total_album_photos,
+            geotagged_photos=geotagged_count,
             cluster_count=len(clusters),
             place_names=place_names,
         )
