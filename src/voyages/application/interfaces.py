@@ -7,7 +7,12 @@ if TYPE_CHECKING:
     from uuid import UUID
 
     from voyages.domain.entities import Photo, Place, Project, Region, Trip
-    from voyages.domain.value_objects import Coordinates, OutputFormat
+    from voyages.domain.value_objects import (
+        AlbumSummary,
+        Coordinates,
+        GeotaggedPhoto,
+        OutputFormat,
+    )
 
 
 class PlaceRepository(Protocol):
@@ -100,3 +105,11 @@ class MapRenderer(Protocol):
         output_path: Path,
         **kwargs: Any,
     ) -> None: ...
+
+
+class PhotosLibraryPort(Protocol):
+    """Protocol for accessing a photo library (e.g., macOS Photos.app)."""
+
+    def list_albums(self) -> list[AlbumSummary]: ...
+
+    def get_album_photos(self, album_id: str) -> list[GeotaggedPhoto]: ...
