@@ -94,6 +94,7 @@ module = [
     "matplotlib.*",
     "osxphotos.*",
     "questionary.*",
+    "sklearn.*",
 ]
 ignore_missing_imports = true
 
