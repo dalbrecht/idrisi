@@ -1,8 +1,18 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
+
 import pytest
 
-from voyages.domain.value_objects import BoundingBox, Coordinates, MapType, OutputFormat
+from voyages.domain.value_objects import (
+    AlbumSummary,
+    BoundingBox,
+    Coordinates,
+    GeotaggedPhoto,
+    MapType,
+    OutputFormat,
+    PhotoCluster,
+)
 
 LAT_VALID = 45.0
 LON_VALID = 90.0
@@ -165,3 +175,76 @@ class TestOutputFormat:
 
     def test_eps_extension(self) -> None:
         assert OutputFormat.EPS.extension == ".eps"
+
+
+TOKYO_LAT = 35.6762
+TOKYO_LON = 139.6503
+OSAKA_LAT = 34.6937
+OSAKA_LON = 135.5023
+
+
+class TestAlbumSummary:
+    def test_create(self) -> None:
+        album = AlbumSummary(id="abc123", title="Japan 2024", photo_count=347)
+        assert album.id == "abc123"
+        assert album.title == "Japan 2024"
+        assert album.photo_count == 347
+
+    def test_frozen(self) -> None:
+        album = AlbumSummary(id="abc123", title="Japan 2024", photo_count=347)
+        try:
+            album.title = "Changed"  # type: ignore[misc]
+            msg = "Should have raised"
+            raise AssertionError(msg)
+        except AttributeError:
+            pass
+
+
+class TestGeotaggedPhoto:
+    def test_create(self) -> None:
+        ts = datetime(2024, 3, 15, 10, 30, 0, tzinfo=UTC)
+        photo = GeotaggedPhoto(
+            latitude=TOKYO_LAT,
+            longitude=TOKYO_LON,
+            timestamp=ts,
+            path="/photos/img1.jpg",
+        )
+        assert photo.latitude == TOKYO_LAT
+        assert photo.longitude == TOKYO_LON
+        assert photo.timestamp == ts
+        assert photo.path == "/photos/img1.jpg"
+
+    def test_frozen(self) -> None:
+        ts = datetime(2024, 3, 15, 10, 30, 0, tzinfo=UTC)
+        photo = GeotaggedPhoto(
+            latitude=TOKYO_LAT,
+            longitude=TOKYO_LON,
+            timestamp=ts,
+            path="/p.jpg",
+        )
+        try:
+            photo.latitude = 0.0  # type: ignore[misc]
+            msg = "Should have raised"
+            raise AssertionError(msg)
+        except AttributeError:
+            pass
+
+
+class TestPhotoCluster:
+    def test_create(self) -> None:
+        early = datetime(2024, 3, 15, 9, 0, 0, tzinfo=UTC)
+        late = datetime(2024, 3, 15, 17, 0, 0, tzinfo=UTC)
+        cluster = PhotoCluster(
+            centroid_lat=TOKYO_LAT,
+            centroid_lon=TOKYO_LON,
+            photo_count=47,
+            earliest=early,
+            latest=late,
+            representative_path="/photos/best.jpg",
+        )
+        assert cluster.centroid_lat == TOKYO_LAT
+        assert cluster.centroid_lon == TOKYO_LON
+        assert cluster.photo_count == 47
+        assert cluster.earliest == early
+        assert cluster.latest == late
+        assert cluster.representative_path == "/photos/best.jpg"
