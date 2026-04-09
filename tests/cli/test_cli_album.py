@@ -169,3 +169,20 @@ def test_album_import_style_flag(mock_deps: MagicMock) -> None:
     assert result.exit_code == 0
     call_kwargs = svc.import_album.call_args
     assert call_kwargs.kwargs.get("style") == "dark" or call_kwargs[1].get("style") == "dark"
+
+
+@patch("voyages.cli.album_commands.get_album_dependencies")
+def test_album_import_no_geotagged_photos(mock_deps: MagicMock) -> None:
+    svc = MagicMock()
+    svc.list_albums.return_value = [
+        AlbumSummary(id="a1", title="Family Reunion", photo_count=89),
+    ]
+    svc.get_project_by_name.return_value = None
+    svc.import_album.side_effect = ValueError(
+        "No geotagged photos found in album. Nothing to import."
+    )
+    mock_deps.return_value = svc
+
+    result = runner.invoke(app, ["album", "import", "Family Reunion"])
+    assert result.exit_code == 1
+    assert "No geotagged photos" in result.output

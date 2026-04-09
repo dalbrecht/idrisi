@@ -146,3 +146,18 @@ class TestClusterPhotos:
         # With large eps, they should be together
         result_large = cluster_photos(photos, eps_km=10.0)
         assert len(result_large) == 1
+
+    def test_negative_eps_raises(self) -> None:
+        photos = [_photo(TOKYO_LAT, TOKYO_LON)]
+        with pytest.raises(ValueError, match="eps_km must be positive"):
+            cluster_photos(photos, eps_km=-1.0)
+
+    def test_zero_eps_raises(self) -> None:
+        photos = [_photo(TOKYO_LAT, TOKYO_LON)]
+        with pytest.raises(ValueError, match="eps_km must be positive"):
+            cluster_photos(photos, eps_km=0.0)
+
+    def test_min_samples_zero_raises(self) -> None:
+        photos = [_photo(TOKYO_LAT, TOKYO_LON)]
+        with pytest.raises(ValueError, match="min_samples must be >= 1"):
+            cluster_photos(photos, min_samples=0)

@@ -14,7 +14,7 @@ dependencies = [
     "fastapi>=0.115",
     "httpx>=0.27",
     "matplotlib>=3.9",
-    "osxphotos>=0.68",
+    "osxphotos>=0.68; sys_platform == 'darwin'",
     "pillow>=10",
     "pydantic>=2.9",
     "pyyaml>=6",

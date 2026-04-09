@@ -23,9 +23,8 @@ class OsxPhotosAdapter:
     def list_albums(self) -> list[AlbumSummary]:
         """Return all user-created albums with photo counts."""
         db = self._get_db()
-        album_names: list[str] = db.album_info
         results: list[AlbumSummary] = []
-        for album in album_names:
+        for album in db.album_info:
             results.append(
                 AlbumSummary(
                     id=album.uuid,

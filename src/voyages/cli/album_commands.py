@@ -115,36 +115,41 @@ def import_album(
 
     project_name = name or selected.title
 
-    if dry_run:
-        result = svc.preview_album(
+    try:
+        if dry_run:
+            result = svc.preview_album(
+                album_id=selected.id,
+                project_name=project_name,
+                total_album_photos=selected.photo_count,
+                eps_km=eps,
+                min_samples=min_samples,
+            )
+            _print_result(result, dry_run=True)
+            return
+
+        # Check for duplicate project name
+        existing = svc.get_project_by_name(project_name)
+        if existing is not None:
+            overwrite = typer.confirm(
+                f"Project '{project_name}' already exists. Overwrite?",
+                default=False,
+            )
+            if not overwrite:
+                raise typer.Exit(code=0)
+            svc.delete_project(existing.id)
+
+        result = svc.import_album(
             album_id=selected.id,
             project_name=project_name,
             total_album_photos=selected.photo_count,
             eps_km=eps,
             min_samples=min_samples,
+            style=style,
         )
-        _print_result(result, dry_run=True)
-        return
-
-    # Check for duplicate project name
-    existing = svc.get_project_by_name(project_name)
-    if existing is not None:
-        overwrite = typer.confirm(
-            f"Project '{project_name}' already exists. Overwrite?", default=False
-        )
-        if not overwrite:
-            raise typer.Exit(code=0)
-        svc.delete_project(existing.id)
-
-    result = svc.import_album(
-        album_id=selected.id,
-        project_name=project_name,
-        total_album_photos=selected.photo_count,
-        eps_km=eps,
-        min_samples=min_samples,
-        style=style,
-    )
-    _print_result(result)
+        _print_result(result)
+    except ValueError as exc:
+        console.print(f"Error: {exc}")
+        raise typer.Exit(code=1) from None
 
 
 def _print_result(result: AlbumImportResult, *, dry_run: bool = False) -> None:

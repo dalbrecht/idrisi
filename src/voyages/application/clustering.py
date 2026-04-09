@@ -40,6 +40,13 @@ def cluster_photos(
     if not photos:
         return []
 
+    if eps_km <= 0:
+        msg = f"eps_km must be positive, got {eps_km}"
+        raise ValueError(msg)
+    if min_samples < 1:
+        msg = f"min_samples must be >= 1, got {min_samples}"
+        raise ValueError(msg)
+
     sorted_photos = sorted(photos, key=lambda p: p.timestamp)
 
     coords_rad = np.array(
