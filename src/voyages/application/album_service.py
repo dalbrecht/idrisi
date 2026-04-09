@@ -168,8 +168,7 @@ class AlbumService:
             name=project_name,
             map_type=MapType.ROUTE,
             description=(
-                f"Imported from Photos album"
-                f" ({geotagged_count} photos, {len(clusters)} stops)"
+                f"Imported from Photos album ({geotagged_count} photos, {len(clusters)} stops)"
             ),
             config={"style": style},
         )

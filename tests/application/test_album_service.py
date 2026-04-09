@@ -202,7 +202,9 @@ class TestAlbumServicePreview:
         lib, album_id = _sample_photos()
         svc, place_repo, trip_repo, project_repo = _make_service(photos_lib=lib)
         result = svc.preview_album(
-            album_id=album_id, project_name="Japan 2024", total_album_photos=5,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=5,
         )
         assert isinstance(result, AlbumImportResult)
         assert result.cluster_count == EXPECTED_TWO
@@ -219,7 +221,9 @@ class TestAlbumServiceImport:
         lib, album_id = _sample_photos()
         svc, place_repo, _, _ = _make_service(photos_lib=lib)
         svc.import_album(
-            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=3,
         )
         assert len(place_repo.list_all()) == EXPECTED_TWO  # Tokyo cluster + Osaka
 
@@ -227,7 +231,9 @@ class TestAlbumServiceImport:
         lib, album_id = _sample_photos()
         svc, _, trip_repo, _ = _make_service(photos_lib=lib)
         svc.import_album(
-            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=3,
         )
         trips = trip_repo.list_all()
         assert len(trips) == 1
@@ -241,7 +247,9 @@ class TestAlbumServiceImport:
         lib, album_id = _sample_photos()
         svc, _, _, project_repo = _make_service(photos_lib=lib)
         svc.import_album(
-            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=3,
         )
         projects = project_repo.list_all()
         assert len(projects) == 1
@@ -253,7 +261,9 @@ class TestAlbumServiceImport:
         lib, album_id = _sample_photos()
         svc, *_ = _make_service(photos_lib=lib)
         result = svc.import_album(
-            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=3,
         )
         assert isinstance(result, AlbumImportResult)
         assert result.total_photos == EXPECTED_THREE
@@ -289,7 +299,9 @@ class TestAlbumServiceImport:
             geocoding=FailingGeocodingService(),
         )
         svc.import_album(
-            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=3,
         )
         places = place_repo.list_all()
         assert all("\u00b0N" in p.name or "\u00b0S" in p.name for p in places)
@@ -298,7 +310,9 @@ class TestAlbumServiceImport:
         lib, album_id = _sample_photos()
         svc, _, trip_repo, project_repo = _make_service(photos_lib=lib)
         svc.import_album(
-            album_id=album_id, project_name="Japan 2024", total_album_photos=3,
+            album_id=album_id,
+            project_name="Japan 2024",
+            total_album_photos=3,
         )
         projects = project_repo.list_all()
         project = projects[0]
