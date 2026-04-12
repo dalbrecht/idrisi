@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import typer
 
+from voyages.cli.album_commands import album_app
 from voyages.cli.import_commands import import_app
 from voyages.cli.place_commands import place_app
 from voyages.cli.project_commands import project_app
@@ -17,7 +18,7 @@ app = typer.Typer(
     no_args_is_help=True,
 )
 
-# Register sub-apps
+app.add_typer(album_app)
 app.add_typer(place_app)
 app.add_typer(project_app)
 app.add_typer(trip_app)

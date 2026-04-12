@@ -14,9 +14,12 @@ dependencies = [
     "fastapi>=0.115",
     "httpx>=0.27",
     "matplotlib>=3.9",
+    "osxphotos>=0.68; sys_platform == 'darwin'",
     "pillow>=10",
     "pydantic>=2.9",
     "pyyaml>=6",
+    "questionary>=2.0",
+    "scikit-learn>=1.5",
     "sqlalchemy>=2.0",
     "typer>=0.12",
     "uvicorn>=0.30",
@@ -89,6 +92,9 @@ plugins = ["pydantic.mypy"]
 module = [
     "cartopy.*",
     "matplotlib.*",
+    "osxphotos.*",
+    "questionary.*",
+    "sklearn.*",
 ]
 ignore_missing_imports = true
 
@@ -118,4 +124,5 @@ pythonpath = ["src"]
 addopts = "--strict-markers -q"
 markers = [
     "e2e: end-to-end tests that invoke the CLI as a subprocess",
+    "macos: tests that require macOS (Photos.app, osxphotos)",
 ]

@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
 
-.PHONY: help bootstrap dev test lint lint-fix fmt fmt-check build serve build-web run ls sync-standards ci ci-domain clean repo-setup pr
+.PHONY: help bootstrap dev test test-macos lint lint-fix fmt fmt-check build serve build-web run ls sync-standards ci ci-domain clean repo-setup pr
 
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -14,8 +14,11 @@ bootstrap: ## Create venv and install all deps
 dev: ## Install in editable mode with dev extras
 	uv pip install -e ".[dev]"
 
-test: ## Run tests with coverage (excludes e2e, ≥95% required)
-	uv run pytest -m "not e2e" --cov=voyages --cov-fail-under=95 -q
+test: ## Run tests with coverage (excludes e2e and macos, ≥95% required)
+	uv run pytest -m "not e2e and not macos" --cov=voyages --cov-fail-under=95 -q
+
+test-macos: ## Run macOS-only tests (requires Photos.app)
+	uv run pytest -m "macos" -q
 
 lint: ## Run ruff check and mypy
 	uv run ruff check src tests

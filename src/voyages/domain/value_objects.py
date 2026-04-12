@@ -3,6 +3,10 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 from enum import Enum
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 _LAT_MIN: float = -90.0
 _LAT_MAX: float = 90.0
@@ -70,3 +74,34 @@ class OutputFormat(Enum):
     @property
     def extension(self) -> str:
         return f".{self.value}"
+
+
+@dataclass(frozen=True)
+class AlbumSummary:
+    """Lightweight album metadata for the picker."""
+
+    id: str
+    title: str
+    photo_count: int
+
+
+@dataclass(frozen=True)
+class GeotaggedPhoto:
+    """A photo with location and time — intermediate type, not persisted."""
+
+    latitude: float
+    longitude: float
+    timestamp: datetime
+    path: str
+
+
+@dataclass(frozen=True)
+class PhotoCluster:
+    """Result of clustering — a group of photos collapsed to one point."""
+
+    centroid_lat: float
+    centroid_lon: float
+    photo_count: int
+    earliest: datetime
+    latest: datetime
+    representative_path: str

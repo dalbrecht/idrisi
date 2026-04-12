@@ -7,9 +7,11 @@ import tempfile
 from typing import TYPE_CHECKING
 
 from fastapi.testclient import TestClient
+from typer.testing import CliRunner
 
 from voyages.application.place_service import PlaceService
 from voyages.application.project_service import ProjectService
+from voyages.cli import app
 from voyages.domain.value_objects import MapType, OutputFormat
 from voyages.infrastructure.db.repository import SqlPlaceRepository, SqlProjectRepository
 from voyages.infrastructure.db.session import create_engine_and_tables, get_session
@@ -20,6 +22,8 @@ from voyages.server import create_app
 if TYPE_CHECKING:
     from voyages.domain.entities import Place
     from voyages.domain.value_objects import Coordinates
+
+runner = CliRunner(env={"COLUMNS": "200", "NO_COLOR": "1"})
 
 TOKYO_LAT = 35.6762
 TOKYO_LON = 139.6503
@@ -168,3 +172,20 @@ class TestAPIWorkflow:
         assert len(projects) == 1
         assert projects[0]["name"] == "Asia Trip"
         assert projects[0]["id"] == project_id
+
+
+def test_album_help() -> None:
+    result = runner.invoke(app, ["album", "--help"])
+    assert result.exit_code == 0
+    assert "album" in result.output.lower()
+
+
+def test_album_list_help() -> None:
+    result = runner.invoke(app, ["album", "list", "--help"])
+    assert result.exit_code == 0
+
+
+def test_album_import_help() -> None:
+    result = runner.invoke(app, ["album", "import", "--help"])
+    assert result.exit_code == 0
+    assert "import" in result.output.lower()
