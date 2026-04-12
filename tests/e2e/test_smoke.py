@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     from voyages.domain.entities import Place
     from voyages.domain.value_objects import Coordinates
 
-runner = CliRunner()
+runner = CliRunner(env={"COLUMNS": "200", "NO_COLOR": "1"})
 
 TOKYO_LAT = 35.6762
 TOKYO_LON = 139.6503
