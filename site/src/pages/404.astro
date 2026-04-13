@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+import Compass from "../components/Compass.astro";
+---
+<Base title="Not found — Idrisi" description="The page you were looking for doesn't exist." path="/404">
+  <main class="container">
+    <div class="section" style="text-align:center">
+      <p class="eyebrow" style="display:inline-flex;align-items:center;gap:0.5em">
+        <Compass size={14} /> idrisi
+      </p>
+      <h1 style="margin-top:var(--space-2)">Off the map.</h1>
+      <p class="muted" style="margin:var(--space-3) auto 0">
+        That page doesn't exist. Try the <a href="/">landing page</a>.
+      </p>
+    </div>
+  </main>
+</Base>

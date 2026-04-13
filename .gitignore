@@ -98,7 +98,10 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
+/site/_build
+
+# site build artifacts (kept in src control per site/.gitignore)
+!/site/
 
 # mypy
 .mypy_cache/

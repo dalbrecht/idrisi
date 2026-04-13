@@ -1,0 +1,50 @@
+---
+const features = [
+  {
+    title: "CLI-first",
+    body: "A Typer-based command line for managing places, trips, projects, and renders.",
+  },
+  {
+    title: "macOS Photos import",
+    body: "Read a Photos.app album and cluster geotagged shots into logical stops with DBSCAN.",
+  },
+  {
+    title: "Multiple map types",
+    body: "Travel maps, region maps, and route maps — each tuned for a different story.",
+  },
+  {
+    title: "Pluggable styles",
+    body: "YAML-defined styles change colors, fonts, and decorations without touching code.",
+  },
+  {
+    title: "Python library",
+    body: "Hack on the primitives. Every CLI command is thin glue over documented services.",
+  },
+  {
+    title: "Local web preview",
+    body: "`idrisi serve` spins up a FastAPI + Svelte UI for editing projects interactively.",
+  },
+];
+---
+<section class="features section">
+  <h2>What you get.</h2>
+  <div class="grid">
+    {features.map((f) => (
+      <article class="feature">
+        <h3>{f.title}</h3>
+        <p class="muted">{f.body}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .features h2 { max-width: 20ch; margin-bottom: var(--space-4); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-4) var(--space-3);
+  }
+  .feature h3 { margin-bottom: var(--space-1); }
+  .feature p { font-size: 0.95rem; }
+</style>
