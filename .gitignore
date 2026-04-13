@@ -110,8 +110,8 @@ venv.bak/
 node_modules/
 !web/src/lib/
 
-# Voyages-specific
-src/voyages/server/static/
+# Idrisi-specific
+src/idrisi/server/static/
 .superpowers/
 geodata/data/*
 *.iml
@@ -128,4 +128,4 @@ MapBuilder/.idea/workspace.xml
 # Standards
 .standards_tmp/
 coverage/
-voyages.db
+idrisi.db
