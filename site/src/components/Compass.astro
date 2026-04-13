@@ -1,0 +1,24 @@
+---
+interface Props {
+  size?: number;
+  title?: string;
+}
+const { size = 16, title = "compass" } = Astro.props;
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  role="img"
+  aria-label={title}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.25"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="9" />
+  <polygon points="12,4 14,12 12,20 10,12" fill="currentColor" stroke="none" />
+  <polygon points="4,12 12,10 20,12 12,14" fill="currentColor" stroke="none" opacity="0.45" />
+</svg>

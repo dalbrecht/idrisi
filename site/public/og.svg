@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <g transform="translate(100 265)" stroke="#8b6b2e" stroke-width="2" fill="none">
+    <circle cx="50" cy="50" r="46"/>
+    <polygon points="50,12 60,50 50,88 40,50" fill="#8b6b2e" stroke="none"/>
+    <polygon points="12,50 50,40 88,50 50,60" fill="#8b6b2e" stroke="none" opacity="0.45"/>
+  </g>
+  <text x="220" y="290" font-family="EB Garamond, Georgia, serif" font-size="72" fill="#111217" font-weight="500">Idrisi</text>
+  <text x="220" y="355" font-family="Inter, -apple-system, sans-serif" font-size="28" fill="#5a5d66">Travel cartography for modern trips.</text>
+  <text x="220" y="400" font-family="Inter, -apple-system, sans-serif" font-size="20" fill="#8b6b2e" letter-spacing="2">A PYTHON TOOLBOX · CLI-FIRST · OPEN SOURCE</text>
+</svg>
