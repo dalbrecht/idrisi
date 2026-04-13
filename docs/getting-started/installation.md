@@ -34,7 +34,7 @@ sudo apt install libgeos-dev libproj-dev
 
 ```bash
 git clone https://github.com/dalbrecht/idrisi.git
-cd Idrisi
+cd idrisi
 ```
 
 Initialize git submodules:

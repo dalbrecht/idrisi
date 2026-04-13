@@ -44,7 +44,7 @@ sudo apt install libgeos-dev libproj-dev
 
 ```bash
 git clone https://github.com/dalbrecht/idrisi.git
-cd Idrisi
+cd idrisi
 make repo-setup    # Initialize git submodules
 make bootstrap     # Create venv and install dependencies
 make build-web     # Build the Svelte frontend

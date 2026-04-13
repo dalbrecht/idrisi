@@ -9,11 +9,11 @@ order: 1
 
 ## Getting Started
 
-Fork the repository on GitHub at [https://github.com/dalbrecht/Idrisi](https://github.com/dalbrecht/Idrisi), then clone your fork locally:
+Fork the repository on GitHub at [https://github.com/dalbrecht/idrisi](https://github.com/dalbrecht/idrisi), then clone your fork locally:
 
 ```bash
 git clone https://github.com/<your-username>/idrisi.git
-cd Idrisi
+cd idrisi
 ```
 
 Initialize submodules and set up the development environment:
