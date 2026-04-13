@@ -10,6 +10,8 @@ data and render publication-quality cartographic maps. Import geotagged photos,
 organize trips, choose from multiple styles and projections, and export to
 SVG, PDF, PNG, WebP, or EPS.
 
+The name comes from the 12th-century geographer Muhammad al-Idrisi — see [About the name](docs/about/naming.md).
+
 ## Features
 
 - **Map rendering** — Generate travel, region, and route maps with Cartopy and Matplotlib
