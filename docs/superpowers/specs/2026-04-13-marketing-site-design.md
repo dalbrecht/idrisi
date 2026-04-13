@@ -54,7 +54,7 @@ Top to bottom, single long scroll:
 
 1. **Hero.** Eyebrow "idrisi" with a small compass glyph; serif h1 tagline ("Travel cartography for modern trips."); sans sub-tagline ("A Python toolbox that renders maps from your photos and itineraries."); a primary action row with an install snippet (`pip install idrisi`, with click-to-copy) and a secondary "Read the docs" link to the GitHub repo.
 2. **What is it.** Two or three sentences positioning the tool — what it produces, where inputs come from (Photos albums, manual CLI entry, etc.), and what makes it distinctive.
-3. **Features grid.** Four to six small cards. Candidates: CLI-first, macOS Photos import (DBSCAN clustering), multiple map types (travel / coverage / route), pluggable styles, Python library for hacking, web preview server. Each card is an icon (simple SVG glyph, sepia), a short heading, and one sentence.
+3. **Features grid.** Four to six small cards. Candidates: CLI-first, macOS Photos import (DBSCAN clustering), multiple map types (travel / region / route), pluggable styles, Python library for hacking, web preview server. Each card is an icon (simple SVG glyph, sepia), a short heading, and one sentence.
 4. **Install & quickstart.** One `bash` block with install + a minimal end-to-end example showing `idrisi place add`, `idrisi project add`, adding a place to the project, then `idrisi render`. Reads as a script a person could paste and run.
 5. **Example gallery.** Three or four rendered map images in a simple grid, each with a one-line caption identifying map type and style.
 6. **Footer.** GitHub link, "Docs" link to the GitHub `docs/` tree, "About the name" link to `/about/naming`, license badge (AGPL-3.0).
@@ -103,7 +103,7 @@ site/
     og.svg
     gallery/
       travel-default.png
-      coverage-default.png
+      region-default.png
       route-styled.png
       travel-styled.png
   scripts/
