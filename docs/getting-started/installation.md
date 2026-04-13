@@ -33,7 +33,7 @@ sudo apt install libgeos-dev libproj-dev
 ## Install from Source
 
 ```bash
-git clone https://github.com/dalbrecht/Idrisi.git
+git clone https://github.com/dalbrecht/idrisi.git
 cd Idrisi
 ```
 

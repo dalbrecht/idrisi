@@ -12,7 +12,7 @@ order: 1
 Fork the repository on GitHub at [https://github.com/dalbrecht/Idrisi](https://github.com/dalbrecht/Idrisi), then clone your fork locally:
 
 ```bash
-git clone https://github.com/<your-username>/Idrisi.git
+git clone https://github.com/<your-username>/idrisi.git
 cd Idrisi
 ```
 
