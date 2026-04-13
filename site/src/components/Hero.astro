@@ -1,0 +1,93 @@
+---
+import Compass from "./Compass.astro";
+---
+<section class="hero section">
+  <p class="eyebrow" aria-label="idrisi">
+    <Compass size={14} />
+    <span>idrisi</span>
+  </p>
+  <h1>Travel cartography for modern trips.</h1>
+  <p class="sub muted">A Python toolbox that renders maps from your photos and itineraries.</p>
+
+  <div class="cta-row">
+    <div class="install" role="group" aria-label="Install command">
+      <code id="install-cmd">pip install idrisi</code>
+      <button class="copy" type="button" aria-label="Copy install command" data-copy-target="install-cmd">Copy</button>
+    </div>
+    <a class="docs-link" href="https://github.com/dalbrecht/idrisi">Read the docs →</a>
+  </div>
+</section>
+
+<style>
+  .hero { padding-top: var(--space-6); padding-bottom: var(--space-5); }
+  .hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: var(--space-3);
+  }
+  .hero h1 { max-width: 22ch; }
+  .hero .sub { margin-top: var(--space-2); font-size: 1.125rem; max-width: 52ch; }
+  .cta-row {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .install {
+    display: inline-flex;
+    align-items: stretch;
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .install code {
+    padding: 0.5rem 0.9rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+  }
+  .copy {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0 0.9rem;
+    border: none;
+    border-left: 1px solid var(--color-border);
+    background: #fff;
+    color: var(--color-accent);
+    cursor: pointer;
+  }
+  .copy:hover { background: var(--color-code-bg); }
+  .copy.copied { color: var(--color-text); }
+  .docs-link {
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-accent);
+    padding-bottom: 2px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("button[data-copy-target]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.dataset.copyTarget!;
+      const el = document.getElementById(id);
+      if (!el) return;
+      try {
+        await navigator.clipboard.writeText(el.textContent ?? "");
+        const original = btn.textContent;
+        btn.textContent = "Copied";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove("copied");
+        }, 1400);
+      } catch {
+        /* clipboard blocked — fall through silently */
+      }
+    });
+  });
+</script>

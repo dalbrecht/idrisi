@@ -1,12 +1,31 @@
 ---
 import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Features from "../components/Features.astro";
+import Quickstart from "../components/Quickstart.astro";
+import Footer from "../components/Footer.astro";
 ---
-<Base title="Idrisi — Travel cartography for modern trips." path="/">
+<Base
+  title="Idrisi — Travel cartography for modern trips."
+  description="A Python toolbox that renders maps from your photos and itineraries."
+  path="/"
+>
   <main class="container">
-    <div class="section">
-      <p class="eyebrow">idrisi</p>
-      <h1>Travel cartography for modern trips.</h1>
-      <p class="muted">More content coming in the next tasks.</p>
-    </div>
+    <Hero />
+    <section class="intro section">
+      <h2>A small toolbox for making maps of journeys.</h2>
+      <p class="muted">
+        Idrisi turns a list of places — typed in, imported from a Photos album, or assembled
+        interactively — into a rendered map you can print, share, or keep for yourself.
+        It's a CLI, a Python library, and a local web UI, in that order of emphasis.
+      </p>
+    </section>
+    <Features />
+    <Quickstart />
   </main>
+  <Footer />
 </Base>
+
+<style>
+  .intro h2 { max-width: 28ch; margin-bottom: var(--space-2); }
+</style>

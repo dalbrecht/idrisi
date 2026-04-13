@@ -1,0 +1,31 @@
+---
+---
+<section class="quickstart section">
+  <h2>Install and run.</h2>
+  <p class="muted">Two common entry points — a full programmatic path and an interactive path.</p>
+
+  <pre aria-label="Shell session"><code><span class="c"># 1. Install</span>
+pip install idrisi
+
+<span class="c"># 2a. Import a macOS Photos album and render it (macOS only)</span>
+idrisi album import "Japan 2024"
+idrisi render "Japan 2024" --style default
+
+<span class="c"># 2b. Or launch the interactive web UI</span>
+idrisi serve
+<span class="c"># → http://localhost:8080</span>
+</code></pre>
+
+  <p class="muted small">
+    See the <a href="https://github.com/dalbrecht/idrisi/tree/main/docs">full docs on GitHub</a>
+    for the CLI reference, map types, and style options.
+  </p>
+</section>
+
+<style>
+  .quickstart h2 { margin-bottom: var(--space-2); }
+  .quickstart .muted { margin-bottom: var(--space-3); }
+  .quickstart pre { margin: 0 0 var(--space-3) 0; }
+  .quickstart .c { color: var(--color-accent); }
+  .small { font-size: 0.875rem; }
+</style>
