@@ -129,3 +129,7 @@ MapBuilder/.idea/workspace.xml
 .standards_tmp/
 coverage/
 idrisi.db
+
+# Render test artifacts
+/styled.png
+/*.png
