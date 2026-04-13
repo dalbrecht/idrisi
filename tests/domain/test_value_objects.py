@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from voyages.domain.value_objects import (
+from idrisi.domain.value_objects import (
     AlbumSummary,
     BoundingBox,
     Coordinates,

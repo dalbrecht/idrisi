@@ -9,17 +9,17 @@ order: 3
 
 ## Database
 
-Voyages uses SQLite by default. The database file is created at `voyages.db` in the current working directory when the server starts.
+Idrisi uses SQLite by default. The database file is created at `idrisi.db` in the current working directory when the server starts.
 
 The server factory accepts a `database_url` parameter if you need a different location or database:
 
 ```python
-from voyages.server import create_app
+from idrisi.server import create_app
 
-app = create_app(database_url="sqlite:////absolute/path/to/voyages.db")
+app = create_app(database_url="sqlite:////absolute/path/to/idrisi.db")
 ```
 
-Default: `sqlite:///voyages.db`
+Default: `sqlite:///idrisi.db`
 
 ## Map Styles
 
@@ -35,13 +35,13 @@ Built-in styles are in the `styles/` directory:
 Pass any YAML file path to `--style` to use a custom style:
 
 ```bash
-voyages render "My Map" --style /path/to/my-style.yaml
+idrisi render "My Map" --style /path/to/my-style.yaml
 ```
 
 ## Server
 
 ```bash
-voyages serve --host 127.0.0.1 --port 8080
+idrisi serve --host 127.0.0.1 --port 8080
 ```
 
 | Flag     | Default       | Description                   |
@@ -62,5 +62,5 @@ voyages serve --host 127.0.0.1 --port 8080
 Override any default at render time:
 
 ```bash
-voyages render "My Map" --dpi 300 --width 2400 --format pdf --output ~/Desktop
+idrisi render "My Map" --dpi 300 --width 2400 --format pdf --output ~/Desktop
 ```

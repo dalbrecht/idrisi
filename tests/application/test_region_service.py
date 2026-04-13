@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import uuid
 
-from voyages.application.region_service import RegionService
-from voyages.domain.entities import Place, Region
+from idrisi.application.region_service import RegionService
+from idrisi.domain.entities import Place, Region
 
 EXPECTED_ONE = 1
 EXPECTED_TWO = 2

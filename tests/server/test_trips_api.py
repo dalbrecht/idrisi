@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from voyages.server import create_app
+from idrisi.server import create_app
 
 EXPECTED_CREATED = 201
 EXPECTED_OK = 200

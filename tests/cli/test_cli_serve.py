@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
-from voyages.cli import app
+from idrisi.cli import app
 
 runner = CliRunner()
 
@@ -19,7 +19,7 @@ def _strip_ansi(text: str) -> str:
     return _ANSI_RE.sub("", text)
 
 
-def test_help_shows_voyages_description() -> None:
+def test_help_shows_idrisi_description() -> None:
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "travel cartography" in _strip_ansi(result.output)

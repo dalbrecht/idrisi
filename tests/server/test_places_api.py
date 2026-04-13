@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from voyages.server import create_app
+from idrisi.server import create_app
 
 PARIS_LAT = 48.8566
 PARIS_LON = 2.3522

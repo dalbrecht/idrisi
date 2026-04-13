@@ -6,15 +6,15 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from voyages.application.album_service import AlbumImportResult, AlbumService
-from voyages.application.place_service import PlaceService
-from voyages.application.project_service import ProjectService
-from voyages.application.trip_service import TripService
-from voyages.domain.entities import Place, Trip
-from voyages.domain.value_objects import AlbumSummary, GeotaggedPhoto, MapType
+from idrisi.application.album_service import AlbumImportResult, AlbumService
+from idrisi.application.place_service import PlaceService
+from idrisi.application.project_service import ProjectService
+from idrisi.application.trip_service import TripService
+from idrisi.domain.entities import Place, Trip
+from idrisi.domain.value_objects import AlbumSummary, GeotaggedPhoto, MapType
 
 if TYPE_CHECKING:
-    from voyages.domain.value_objects import Coordinates
+    from idrisi.domain.value_objects import Coordinates
 
 TOKYO_LAT = 35.6762
 TOKYO_LON = 139.6503

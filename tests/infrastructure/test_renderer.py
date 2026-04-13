@@ -4,10 +4,10 @@ import tempfile
 from pathlib import Path
 from uuid import uuid4
 
-from voyages.domain.entities import Place, Trip, TripStop
-from voyages.domain.value_objects import OutputFormat
-from voyages.infrastructure.renderer.engine import RenderEngine
-from voyages.infrastructure.renderer.styles import load_style
+from idrisi.domain.entities import Place, Trip, TripStop
+from idrisi.domain.value_objects import OutputFormat
+from idrisi.infrastructure.renderer.engine import RenderEngine
+from idrisi.infrastructure.renderer.styles import load_style
 
 
 def _sample_places() -> list[Place]:

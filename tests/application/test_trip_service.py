@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from voyages.application.trip_service import TripService
-from voyages.domain.errors import TripNotFoundError
+from idrisi.application.trip_service import TripService
+from idrisi.domain.errors import TripNotFoundError
 
 if TYPE_CHECKING:
-    from voyages.domain.entities import Trip
+    from idrisi.domain.entities import Trip
 
 PARIS_ID = uuid.UUID("00000000-0000-0000-0000-000000000001")
 LONDON_ID = uuid.UUID("00000000-0000-0000-0000-000000000002")

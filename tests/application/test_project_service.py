@@ -5,12 +5,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from voyages.application.project_service import ProjectService
-from voyages.domain.errors import ProjectNotFoundError
-from voyages.domain.value_objects import MapType
+from idrisi.application.project_service import ProjectService
+from idrisi.domain.errors import ProjectNotFoundError
+from idrisi.domain.value_objects import MapType
 
 if TYPE_CHECKING:
-    from voyages.domain.entities import Project
+    from idrisi.domain.entities import Project
 
 PLACE_ID = uuid.UUID("00000000-0000-0000-0000-000000000001")
 TRIP_ID = uuid.UUID("00000000-0000-0000-0000-000000000002")

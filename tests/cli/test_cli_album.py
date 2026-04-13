@@ -6,16 +6,16 @@ from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
-from voyages.application.album_service import AlbumImportResult
-from voyages.cli import app
-from voyages.domain.value_objects import AlbumSummary
+from idrisi.application.album_service import AlbumImportResult
+from idrisi.cli import app
+from idrisi.domain.value_objects import AlbumSummary
 
 runner = CliRunner()
 
 EXPECTED_TWO = 2
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_list(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [
@@ -32,7 +32,7 @@ def test_album_list(mock_deps: MagicMock) -> None:
     assert "128" in result.output
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_list_empty(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = []
@@ -43,7 +43,7 @@ def test_album_list_empty(mock_deps: MagicMock) -> None:
     assert "No albums" in result.output
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_import_by_name(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [
@@ -66,7 +66,7 @@ def test_album_import_by_name(mock_deps: MagicMock) -> None:
     svc.import_album.assert_called_once()
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_import_not_found(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [
@@ -79,7 +79,7 @@ def test_album_import_not_found(mock_deps: MagicMock) -> None:
     assert "not found" in result.output.lower()
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_import_dry_run(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [
@@ -101,7 +101,7 @@ def test_album_import_dry_run(mock_deps: MagicMock) -> None:
     svc.import_album.assert_not_called()
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_import_custom_eps(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [
@@ -124,7 +124,7 @@ def test_album_import_custom_eps(mock_deps: MagicMock) -> None:
     assert call_kwargs.kwargs.get("eps_km") == 2.0 or call_kwargs[1].get("eps_km") == 2.0
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_import_custom_name(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [
@@ -149,7 +149,7 @@ def test_album_import_custom_name(mock_deps: MagicMock) -> None:
     )
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_import_style_flag(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [
@@ -171,7 +171,7 @@ def test_album_import_style_flag(mock_deps: MagicMock) -> None:
     assert call_kwargs.kwargs.get("style") == "dark" or call_kwargs[1].get("style") == "dark"
 
 
-@patch("voyages.cli.album_commands.get_album_dependencies")
+@patch("idrisi.cli.album_commands.get_album_dependencies")
 def test_album_import_no_geotagged_photos(mock_deps: MagicMock) -> None:
     svc = MagicMock()
     svc.list_albums.return_value = [

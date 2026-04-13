@@ -4,35 +4,35 @@ import uuid
 
 import pytest
 
-from voyages.domain.errors import (
+from idrisi.domain.errors import (
     BadRequestError,
     EntityNotFoundError,
+    IdrisiError,
     PhotoNotFoundError,
     PlaceNotFoundError,
     ProjectNotFoundError,
     RegionNotFoundError,
     RenderError,
     TripNotFoundError,
-    VoyagesError,
 )
 
 
-class TestVoyagesError:
+class TestIdrisiError:
     def test_is_exception(self) -> None:
-        assert issubclass(VoyagesError, Exception)
+        assert issubclass(IdrisiError, Exception)
 
     def test_can_be_raised(self) -> None:
-        with pytest.raises(VoyagesError):
-            raise VoyagesError("something went wrong")
+        with pytest.raises(IdrisiError):
+            raise IdrisiError("something went wrong")
 
     def test_message(self) -> None:
-        err = VoyagesError("test message")
+        err = IdrisiError("test message")
         assert str(err) == "test message"
 
 
 class TestEntityNotFoundError:
-    def test_inherits_voyages_error(self) -> None:
-        assert issubclass(EntityNotFoundError, VoyagesError)
+    def test_inherits_idrisi_error(self) -> None:
+        assert issubclass(EntityNotFoundError, IdrisiError)
 
     def test_message_contains_entity_type(self) -> None:
         entity_id = uuid.uuid4()
@@ -59,8 +59,8 @@ class TestPlaceNotFoundError:
     def test_inherits_entity_not_found(self) -> None:
         assert issubclass(PlaceNotFoundError, EntityNotFoundError)
 
-    def test_inherits_voyages_error(self) -> None:
-        assert issubclass(PlaceNotFoundError, VoyagesError)
+    def test_inherits_idrisi_error(self) -> None:
+        assert issubclass(PlaceNotFoundError, IdrisiError)
 
     def test_entity_type_is_place(self) -> None:
         entity_id = uuid.uuid4()
@@ -78,9 +78,9 @@ class TestPlaceNotFoundError:
         with pytest.raises(EntityNotFoundError):
             raise PlaceNotFoundError(entity_id=entity_id)
 
-    def test_can_be_caught_as_voyages_error(self) -> None:
+    def test_can_be_caught_as_idrisi_error(self) -> None:
         entity_id = uuid.uuid4()
-        with pytest.raises(VoyagesError):
+        with pytest.raises(IdrisiError):
             raise PlaceNotFoundError(entity_id=entity_id)
 
 
@@ -133,8 +133,8 @@ class TestRegionNotFoundError:
 
 
 class TestBadRequestError:
-    def test_inherits_voyages_error(self) -> None:
-        assert issubclass(BadRequestError, VoyagesError)
+    def test_inherits_idrisi_error(self) -> None:
+        assert issubclass(BadRequestError, IdrisiError)
 
     def test_message(self) -> None:
         err = BadRequestError("Invalid UUID: abc")
@@ -158,8 +158,8 @@ class TestPhotoNotFoundError:
 
 
 class TestRenderError:
-    def test_inherits_voyages_error(self) -> None:
-        assert issubclass(RenderError, VoyagesError)
+    def test_inherits_idrisi_error(self) -> None:
+        assert issubclass(RenderError, IdrisiError)
 
     def test_can_be_raised(self) -> None:
         with pytest.raises(RenderError):

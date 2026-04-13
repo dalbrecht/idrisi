@@ -3,8 +3,8 @@ from __future__ import annotations
 import uuid
 from datetime import UTC, date, datetime
 
-from voyages.domain.entities import Photo, Place, Project, Region, Trip, TripStop
-from voyages.domain.value_objects import MapType
+from idrisi.domain.entities import Photo, Place, Project, Region, Trip, TripStop
+from idrisi.domain.value_objects import MapType
 
 EIFFEL_LAT = 48.8584
 EIFFEL_LON = 2.2945

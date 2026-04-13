@@ -15,7 +15,7 @@ dev: ## Install in editable mode with dev extras
 	uv pip install -e ".[dev]"
 
 test: ## Run tests with coverage (excludes e2e and macos, ≥95% required)
-	uv run pytest -m "not e2e and not macos" --cov=voyages --cov-fail-under=95 -q
+	uv run pytest -m "not e2e and not macos" --cov=idrisi --cov-fail-under=95 -q
 
 test-macos: ## Run macOS-only tests (requires Photos.app)
 	uv run pytest -m "macos" -q
@@ -34,13 +34,13 @@ build: ## Build wheel
 	uv run python -m build
 
 serve: ## Start the FastAPI dev server
-	uv run uvicorn voyages.server:create_app --factory --reload
+	uv run uvicorn idrisi.server:create_app --factory --reload
 
 build-web: ## Build the Svelte front-end
 	cd web && npm ci && npm run build
 
 run: ## Run the CLI
-	uv run voyages
+	uv run idrisi
 
 ls: ## List all make targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sed 's/:.*//' | sort
@@ -58,12 +58,12 @@ ci: ## Run full CI pipeline (lint + format check + test + domain coverage)
 	$(MAKE) ci-domain
 
 ci-domain: ## Run domain tests with 100% coverage enforcement
-	uv run pytest tests/domain/ --cov=voyages.domain --cov-fail-under=100
+	uv run pytest tests/domain/ --cov=idrisi.domain --cov-fail-under=100
 
 clean: ## Remove build artifacts, caches, and venv
 	rm -rf .venv .ruff_cache .mypy_cache .pytest_cache
 	rm -rf dist build *.egg-info src/*.egg-info
-	rm -rf src/voyages/server/static
+	rm -rf src/idrisi/server/static
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 
 repo-setup: ## Initialize git submodules

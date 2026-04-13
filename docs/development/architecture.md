@@ -1,6 +1,6 @@
 ---
 title: "Architecture"
-description: "Clean architecture layers, design decisions, and directory structure for Voyages"
+description: "Clean architecture layers, design decisions, and directory structure for Idrisi"
 section: "development"
 order: 2
 ---
@@ -9,7 +9,7 @@ order: 2
 
 ## Overview
 
-Voyages follows clean architecture with four concentric layers. The fundamental rule is that **inner layers never import from outer layers** — dependencies flow inward only. This keeps the domain and application logic independent of infrastructure choices and delivery mechanisms.
+Idrisi follows clean architecture with four concentric layers. The fundamental rule is that **inner layers never import from outer layers** — dependencies flow inward only. This keeps the domain and application logic independent of infrastructure choices and delivery mechanisms.
 
 ## Layer Diagram
 
@@ -37,7 +37,7 @@ Dependencies flow inward: Entry Points → Infrastructure → Application → Do
 
 ## Domain Layer
 
-**Location:** `src/voyages/domain/`
+**Location:** `src/idrisi/domain/`
 
 Pure Python with zero external dependencies. The domain layer defines the core concepts of the application.
 
@@ -58,7 +58,7 @@ Pure Python with zero external dependencies. The domain layer defines the core c
 - `OutputFormat` — `svg | pdf | png | webp | eps`
 
 **Domain Exceptions:**
-- `VoyagesError` — base exception for all domain errors
+- `IdrisiError` — base exception for all domain errors
 - `EntityNotFoundError` — base for not-found errors
 - `PlaceNotFoundError`
 - `TripNotFoundError`
@@ -68,7 +68,7 @@ Pure Python with zero external dependencies. The domain layer defines the core c
 
 ## Application Layer
 
-**Location:** `src/voyages/application/`
+**Location:** `src/idrisi/application/`
 
 Orchestrates domain objects through service classes. Depends only on the domain layer — infrastructure is accessed exclusively through protocols (interfaces).
 
@@ -89,7 +89,7 @@ Orchestrates domain objects through service classes. Depends only on the domain 
 
 ## Infrastructure Layer
 
-**Location:** `src/voyages/infrastructure/`
+**Location:** `src/idrisi/infrastructure/`
 
 Concrete implementations of the protocols defined in the application layer.
 
@@ -110,9 +110,9 @@ Concrete implementations of the protocols defined in the application layer.
 
 ## Entry Points
 
-**CLI:** `src/voyages/cli/` — built with [Typer](https://typer.tiangolo.com/). Each command creates the necessary infrastructure instances, injects them into application services, and delegates.
+**CLI:** `src/idrisi/cli/` — built with [Typer](https://typer.tiangolo.com/). Each command creates the necessary infrastructure instances, injects them into application services, and delegates.
 
-**Server:** `src/voyages/server/` — built with [FastAPI](https://fastapi.tiangolo.com/). Route handlers are thin wrappers: create infrastructure instances, inject into services, return results.
+**Server:** `src/idrisi/server/` — built with [FastAPI](https://fastapi.tiangolo.com/). Route handlers are thin wrappers: create infrastructure instances, inject into services, return results.
 
 Neither entry point contains business logic. They are responsible only for parsing inputs, wiring dependencies, and formatting outputs.
 
@@ -132,13 +132,13 @@ Neither entry point contains business logic. They are responsible only for parsi
 ## Directory Map
 
 ```
-src/voyages/
+src/idrisi/
 ├── __init__.py
 ├── domain/                    # Domain Layer
 │   ├── __init__.py
 │   ├── entities.py            # Place, Trip, TripStop, Region, Project, Photo
 │   ├── value_objects.py       # Coordinates, BoundingBox, MapType, OutputFormat
-│   └── errors.py              # VoyagesError, EntityNotFoundError, etc.
+│   └── errors.py              # IdrisiError, EntityNotFoundError, etc.
 ├── application/               # Application Layer
 │   ├── __init__.py
 │   ├── interfaces.py          # All protocols: PlaceRepository, TripRepository, etc., MapRenderer, GeocodingService, ExifService

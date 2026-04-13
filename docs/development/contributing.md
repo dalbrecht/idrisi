@@ -1,6 +1,6 @@
 ---
 title: "Contributing"
-description: "How to set up, develop, and submit changes to Voyages"
+description: "How to set up, develop, and submit changes to Idrisi"
 section: "development"
 order: 1
 ---
@@ -9,11 +9,11 @@ order: 1
 
 ## Getting Started
 
-Fork the repository on GitHub at [https://github.com/dalbrecht/Voyages](https://github.com/dalbrecht/Voyages), then clone your fork locally:
+Fork the repository on GitHub at [https://github.com/dalbrecht/idrisi](https://github.com/dalbrecht/idrisi), then clone your fork locally:
 
 ```bash
-git clone https://github.com/<your-username>/Voyages.git
-cd Voyages
+git clone https://github.com/<your-username>/idrisi.git
+cd idrisi
 ```
 
 Initialize submodules and set up the development environment:

@@ -7,13 +7,13 @@ from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
-from voyages.cli import app
-from voyages.domain.entities import Photo
+from idrisi.cli import app
+from idrisi.domain.entities import Photo
 
 runner = CliRunner()
 
 
-@patch("voyages.cli.import_commands.get_import_dependencies")
+@patch("idrisi.cli.import_commands.get_import_dependencies")
 def test_import_photos_dry_run(mock_deps: MagicMock, tmp_path: object) -> None:
     svc = MagicMock()
     svc.import_from_directory.return_value = [
@@ -32,7 +32,7 @@ def test_import_photos_dry_run(mock_deps: MagicMock, tmp_path: object) -> None:
     assert "1 geotagged" in result.output
 
 
-@patch("voyages.cli.import_commands.get_import_dependencies")
+@patch("idrisi.cli.import_commands.get_import_dependencies")
 def test_import_photos(mock_deps: MagicMock, tmp_path: object) -> None:
     svc = MagicMock()
     svc.import_from_directory.return_value = [
@@ -56,7 +56,7 @@ def test_import_photos(mock_deps: MagicMock, tmp_path: object) -> None:
     assert "Imported 2 geotagged photos" in result.output
 
 
-@patch("voyages.cli.import_commands.get_import_dependencies")
+@patch("idrisi.cli.import_commands.get_import_dependencies")
 def test_import_photos_no_results(mock_deps: MagicMock, tmp_path: object) -> None:
     svc = MagicMock()
     svc.import_from_directory.return_value = []
@@ -73,7 +73,7 @@ def test_import_photos_invalid_dir() -> None:
     assert "Not a directory" in result.output
 
 
-@patch("voyages.cli.import_commands.get_import_dependencies")
+@patch("idrisi.cli.import_commands.get_import_dependencies")
 def test_import_photos_with_trip_option(mock_deps: MagicMock, tmp_path: object) -> None:
     """Verifies that the --trip option triggers the trip-association message during import."""
     svc = MagicMock()

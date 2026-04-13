@@ -9,7 +9,7 @@ order: 4
 
 ## Built-in Styles
 
-Voyages ships with four styles in the `styles/` directory:
+Idrisi ships with four styles in the `styles/` directory:
 
 | Name | Description |
 |---|---|
@@ -23,7 +23,7 @@ Voyages ships with four styles in the `styles/` directory:
 **CLI:**
 
 ```bash
-voyages render "My Map" --style vintage
+idrisi render "My Map" --style vintage
 ```
 
 **Web:** Select from the style dropdown in Map Composer before rendering.
@@ -55,7 +55,7 @@ label_size: 8           # Label font size
 4. Reference it by file path when rendering:
 
 ```bash
-voyages render "My Map" --style ./my-styles/ocean-blue.yml
+idrisi render "My Map" --style ./my-styles/ocean-blue.yml
 ```
 
 The style loader (`load_style()`) accepts either a built-in style name or a path to a YAML file. If the name matches one of the four built-in names (`default`, `vintage`, `minimal`, `dark`), it loads from the `styles/` directory; otherwise it treats the value as a file path.

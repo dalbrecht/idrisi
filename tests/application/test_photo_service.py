@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from voyages.application.photo_service import PhotoService
-from voyages.domain.entities import Photo
-from voyages.domain.errors import PhotoNotFoundError
+from idrisi.application.photo_service import PhotoService
+from idrisi.domain.entities import Photo
+from idrisi.domain.errors import PhotoNotFoundError
 
 if TYPE_CHECKING:
-    from voyages.domain.value_objects import Coordinates
+    from idrisi.domain.value_objects import Coordinates
 
 PHOTO_WITH_GPS = Photo(
     id=uuid.UUID("00000000-0000-0000-0000-000000000001"),

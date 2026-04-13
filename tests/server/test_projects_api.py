@@ -8,15 +8,15 @@ from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
-from voyages.domain.entities import Place, Trip, TripStop
-from voyages.domain.value_objects import MapType
-from voyages.infrastructure.db.repository import (
+from idrisi.domain.entities import Place, Trip, TripStop
+from idrisi.domain.value_objects import MapType
+from idrisi.infrastructure.db.repository import (
     SqlPlaceRepository,
     SqlProjectRepository,
     SqlTripRepository,
 )
-from voyages.infrastructure.db.session import create_engine_and_tables, get_session
-from voyages.server import create_app
+from idrisi.infrastructure.db.session import create_engine_and_tables, get_session
+from idrisi.server import create_app
 
 EXPECTED_CREATED = 201
 EXPECTED_OK = 200
@@ -160,7 +160,7 @@ class TestProjectsAPI:
             trip_repo = SqlTripRepository(session)
             project_repo = SqlProjectRepository(session)
 
-            from voyages.application.project_service import ProjectService  # noqa: PLC0415
+            from idrisi.application.project_service import ProjectService  # noqa: PLC0415
 
             place_repo.save(place1)
             place_repo.save(place2)

@@ -9,11 +9,11 @@ order: 3
 
 ## Overview
 
-Voyages extracts GPS coordinates and timestamps from photo EXIF data and saves them as Photo records. Only photos with valid GPS data are imported — photos without GPS coordinates are silently skipped.
+Idrisi extracts GPS coordinates and timestamps from photo EXIF data and saves them as Photo records. Only photos with valid GPS data are imported — photos without GPS coordinates are silently skipped.
 
 ## Supported Data
 
-Voyages reads the following EXIF fields from each photo:
+Idrisi reads the following EXIF fields from each photo:
 
 | Field | EXIF Source | Stored As |
 |---|---|---|
@@ -25,27 +25,27 @@ Photos without GPS data are skipped entirely. No warning or count is reported fo
 ## Basic Import
 
 ```bash
-voyages import photos ~/Photos/trip-2025
+idrisi import photos ~/Photos/trip-2025
 ```
 
-Voyages scans the **top-level** of the directory (non-recursive), reads EXIF metadata from each image file, and creates a `Photo` record for each file that contains GPS coordinates. No `Place` records are created automatically.
+Idrisi scans the **top-level** of the directory (non-recursive), reads EXIF metadata from each image file, and creates a `Photo` record for each file that contains GPS coordinates. No `Place` records are created automatically.
 
 ## Dry Run
 
 Preview what will be imported without writing anything to the database:
 
 ```bash
-voyages import photos ~/Photos/trip-2025 --dry-run
+idrisi import photos ~/Photos/trip-2025 --dry-run
 ```
 
-The dry run reports the number of geotagged photos found. Use this to verify Voyages is reading the right files before committing.
+The dry run reports the number of geotagged photos found. Use this to verify Idrisi is reading the right files before committing.
 
 ## Link to a Trip
 
 The `--trip` option is accepted but **not yet implemented**:
 
 ```bash
-voyages import photos ~/Photos/trip-2025 --trip "Europe 2025"
+idrisi import photos ~/Photos/trip-2025 --trip "Europe 2025"
 ```
 
 Passing `--trip` prints a message that trip assignment is not yet implemented. Photo records are still imported normally; the `trip_id` field will not be set.
@@ -59,7 +59,7 @@ Each geotagged photo produces one record:
 - `latitude`, `longitude` — from GPS EXIF fields
 - `taken_at` — from `DateTimeOriginal` EXIF field (see timezone note below)
 
-No `Place` records are created during photo import. To associate imported photos with places, use `voyages place add` or the web UI to create places manually.
+No `Place` records are created during photo import. To associate imported photos with places, use `idrisi place add` or the web UI to create places manually.
 
 ## Common Issues
 
@@ -69,11 +69,11 @@ Phone cameras often omit GPS when location access is disabled. Photos without GP
 
 **Timezone handling**
 
-EXIF `DateTimeOriginal` does not include timezone information. Voyages parses the timestamp and stores it labeled as UTC. If the photo was taken in a timezone other than UTC, `taken_at` will not reflect the actual moment of capture in UTC — it will reflect the camera's local clock reading, incorrectly labeled as UTC.
+EXIF `DateTimeOriginal` does not include timezone information. Idrisi parses the timestamp and stores it labeled as UTC. If the photo was taken in a timezone other than UTC, `taken_at` will not reflect the actual moment of capture in UTC — it will reflect the camera's local clock reading, incorrectly labeled as UTC.
 
 **Duplicate photos**
 
-Voyages does not detect duplicate imports. Running the same import command twice will create duplicate `Photo` records for the same file. Check the database before re-importing from the same directory.
+Idrisi does not detect duplicate imports. Running the same import command twice will create duplicate `Photo` records for the same file. Check the database before re-importing from the same directory.
 
 **Subdirectories**
 

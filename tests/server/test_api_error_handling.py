@@ -6,7 +6,7 @@ import uuid
 
 from starlette.testclient import TestClient
 
-from voyages.server import create_app
+from idrisi.server import create_app
 
 EXPECTED_BAD_REQUEST = 400
 EXPECTED_NOT_FOUND = 404

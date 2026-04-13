@@ -1,6 +1,6 @@
 # Album Import
 
-Import photo albums from macOS Photos.app into Voyages as route map projects.
+Import photo albums from macOS Photos.app into Idrisi as route map projects.
 
 **Requires macOS.** The `album` command group is only available on macOS where Photos.app is installed.
 
@@ -8,19 +8,19 @@ Import photo albums from macOS Photos.app into Voyages as route map projects.
 
 ```bash
 # List your Photos albums
-voyages album list
+idrisi album list
 
 # Import an album by name
-voyages album import "Japan 2024"
+idrisi album import "Japan 2024"
 
 # Or use the interactive picker
-voyages album import
+idrisi album import
 ```
 
 After import, render the map:
 
 ```bash
-voyages render "Japan 2024" --format svg
+idrisi render "Japan 2024" --format svg
 ```
 
 ## How It Works
@@ -36,12 +36,12 @@ Photos without GPS data are silently skipped and reported in the summary.
 
 ## Commands
 
-### `voyages album list`
+### `idrisi album list`
 
 Lists all user-created albums in your Photos library with photo counts.
 
 ```
-$ voyages album list
+$ idrisi album list
 
          Photos Albums
   ┏━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
@@ -53,9 +53,9 @@ $ voyages album list
   └───┴────────────────────┴────────┘
 ```
 
-### `voyages album import [ALBUM_NAME]`
+### `idrisi album import [ALBUM_NAME]`
 
-Import a Photos album as a Voyages route project.
+Import a Photos album as a Idrisi route project.
 
 **Arguments:**
 
@@ -76,7 +76,7 @@ Import a Photos album as a Voyages route project.
 **Example:**
 
 ```
-$ voyages album import "Japan 2024"
+$ idrisi album import "Japan 2024"
 
 Importing 347 photos...
   Geotagged: 312 / 347 (35 skipped — no GPS data)
@@ -85,7 +85,7 @@ Importing 347 photos...
   Trip created: "Japan 2024"
   Project created: "Japan 2024" (ROUTE)
 
-Done. Render with: voyages render "Japan 2024"
+Done. Render with: idrisi render "Japan 2024"
 ```
 
 ## Clustering
@@ -102,13 +102,13 @@ The `--eps` flag controls how close photos must be to belong to the same cluster
 
 ```bash
 # Tight clusters — walking-distance stops (500m)
-voyages album import "City Walk" --eps 0.5
+idrisi album import "City Walk" --eps 0.5
 
 # Loose clusters — neighborhood-level grouping (5km)
-voyages album import "Road Trip" --eps 5.0
+idrisi album import "Road Trip" --eps 5.0
 
 # Very loose — city-level grouping (50km)
-voyages album import "Cross Country" --eps 50.0
+idrisi album import "Cross Country" --eps 50.0
 ```
 
 ### Preview with dry-run
@@ -116,7 +116,7 @@ voyages album import "Cross Country" --eps 50.0
 Use `--dry-run` to see what clusters would be created without writing to the database:
 
 ```
-$ voyages album import "Japan 2024" --dry-run --eps 2.0
+$ idrisi album import "Japan 2024" --dry-run --eps 2.0
 
 [Dry run] Importing 347 photos...
   Geotagged: 312 / 347 (35 skipped — no GPS data)
@@ -138,19 +138,19 @@ $ voyages album import "Japan 2024" --dry-run --eps 2.0
 If a project with the same name already exists, the CLI prompts before overwriting:
 
 ```
-$ voyages album import "Japan 2024"
+$ idrisi album import "Japan 2024"
 Project 'Japan 2024' already exists. Overwrite? [y/N]:
 ```
 
 Use `--name` to import under a different name:
 
 ```bash
-voyages album import "Japan 2024" --name "Japan Trip v2"
+idrisi album import "Japan 2024" --name "Japan Trip v2"
 ```
 
 ## Architecture
 
-The feature follows the Voyages clean architecture:
+The feature follows the Idrisi clean architecture:
 
 ```
 CLI (album_commands.py)
