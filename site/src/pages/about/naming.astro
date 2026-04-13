@@ -1,0 +1,52 @@
+---
+import Base from "../../layouts/Base.astro";
+import Footer from "../../components/Footer.astro";
+import Compass from "../../components/Compass.astro";
+
+// Astro glob-imports markdown at build time. No runtime fetching.
+// The file is kept in sync with docs/about/naming.md by the prebuild hook.
+const mod = await import("../../content/naming.md");
+const { Content } = mod;
+---
+<Base
+  title="Why Idrisi? — About the name"
+  description="How Idrisi got its name, and why a 12th-century Arab cartographer was the right namesake."
+  path="/about/naming"
+>
+  <main class="container">
+    <nav class="topnav" aria-label="Site">
+      <a href="/" class="home">
+        <Compass size={14} />
+        <span>Idrisi</span>
+      </a>
+    </nav>
+    <article class="prose">
+      <Content />
+    </article>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .topnav {
+    padding: var(--space-4) 0 var(--space-3);
+  }
+  .topnav .home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-accent);
+    padding-bottom: 2px;
+  }
+  .prose {
+    max-width: 60ch;
+    padding: var(--space-3) 0 var(--space-5);
+  }
+  .prose :global(h1) { margin-bottom: var(--space-3); }
+  .prose :global(h2) { margin-top: var(--space-4); margin-bottom: var(--space-2); font-size: 1.25rem; }
+  .prose :global(p) { margin-bottom: var(--space-2); }
+  .prose :global(ul) { margin: var(--space-2) 0 var(--space-3) 1.25rem; }
+  .prose :global(li) { margin-bottom: 0.5rem; }
+</style>
