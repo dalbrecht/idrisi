@@ -6,11 +6,11 @@ if TYPE_CHECKING:
     from uuid import UUID
 
 
-class VoyagesError(Exception):
+class IdrisiError(Exception):
     """Base error class for all Idrisi domain errors."""
 
 
-class EntityNotFoundError(VoyagesError):
+class EntityNotFoundError(IdrisiError):
     """Raised when a domain entity cannot be found by its ID."""
 
     def __init__(self, entity_type: str, entity_id: UUID) -> None:
@@ -47,7 +47,7 @@ class RegionNotFoundError(EntityNotFoundError):
         super().__init__(entity_type="Region", entity_id=entity_id)
 
 
-class BadRequestError(VoyagesError):
+class BadRequestError(IdrisiError):
     """Raised for malformed client input (invalid UUIDs, enum values, etc.)."""
 
 
@@ -58,5 +58,5 @@ class PhotoNotFoundError(EntityNotFoundError):
         super().__init__("Photo", entity_id)
 
 
-class RenderError(VoyagesError):
+class RenderError(IdrisiError):
     """Raised when map rendering fails."""

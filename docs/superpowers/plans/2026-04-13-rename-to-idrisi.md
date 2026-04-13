@@ -94,10 +94,12 @@ Also check `[tool.coverage.run]` / `[tool.coverage.report]` / `[tool.pytest.ini_
 - [ ] **Step 6: Verify no stale `voyages` references remain in Python code or pyproject**
 
 ```bash
-grep -rnE "\bvoyages\b|\bVoyages\b" src/ tests/ pyproject.toml
+grep -rnE "voyages|Voyages|VOYAGES" src/ tests/ pyproject.toml
 ```
 
-Expected: zero matches.
+Expected: zero matches (binary `.pyc` cache files are acceptable false positives; only source file hits count).
+
+> **Note:** Use an unbounded grep (no `\b` word boundaries) — word-boundary patterns miss compound identifiers like `VoyagesError` or method names like `test_help_shows_voyages_description`.
 
 - [ ] **Step 7: Reinstall and run full CI locally**
 
