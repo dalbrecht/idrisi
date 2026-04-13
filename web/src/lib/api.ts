@@ -1,4 +1,4 @@
-// API client for the Voyages backend
+// API client for the Idrisi backend
 
 export interface Place {
   id: string

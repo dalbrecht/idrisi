@@ -15,7 +15,7 @@
 
 <main>
   <nav>
-    <h1>Voyages</h1>
+    <h1>Idrisi</h1>
     <div class="nav-links">
       <button class:active={currentView === 'dashboard'} onclick={() => currentView = 'dashboard'}>
         Dashboard
