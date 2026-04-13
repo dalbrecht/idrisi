@@ -20,7 +20,7 @@ Note: WebP is defined in the `OutputFormat` enum but the CLI render command curr
 
 ## Projections
 
-Voyages uses two projections depending on map type:
+Idrisi uses two projections depending on map type:
 
 | Projection | Used For | Characteristics |
 |---|---|---|
@@ -48,23 +48,23 @@ Voyages uses two projections depending on map type:
 Quick preview:
 
 ```bash
-voyages render "My Map" --format png
+idrisi render "My Map" --format png
 ```
 
 Print-ready PDF at 300 DPI:
 
 ```bash
-voyages render "My Map" --format pdf --dpi 300
+idrisi render "My Map" --format pdf --dpi 300
 ```
 
 High-resolution poster for printing:
 
 ```bash
-voyages render "My Map" --format png --dpi 300 --width 3600
+idrisi render "My Map" --format png --dpi 300 --width 3600
 ```
 
 SVG export for editing in Illustrator or Inkscape:
 
 ```bash
-voyages render "My Map" --format svg --output ./exports
+idrisi render "My Map" --format svg --output ./exports
 ```

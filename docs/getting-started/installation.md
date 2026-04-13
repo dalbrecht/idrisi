@@ -1,6 +1,6 @@
 ---
 title: "Installation"
-description: "Install Voyages from source on macOS or Linux"
+description: "Install Idrisi from source on macOS or Linux"
 section: "getting-started"
 order: 1
 ---
@@ -33,8 +33,8 @@ sudo apt install libgeos-dev libproj-dev
 ## Install from Source
 
 ```bash
-git clone https://github.com/dalbrecht/Voyages.git
-cd Voyages
+git clone https://github.com/dalbrecht/Idrisi.git
+cd Idrisi
 ```
 
 Initialize git submodules:
@@ -66,7 +66,7 @@ This runs `cd web && npm ci && npm run build`.
 Check that the CLI is available:
 
 ```bash
-voyages --help
+idrisi --help
 ```
 
 Expected output shows Typer help with subcommands: `place`, `trip`, `project`, `import`, plus top-level `serve` and `render` commands.
@@ -74,10 +74,10 @@ Expected output shows Typer help with subcommands: `place`, `trip`, `project`, `
 Start the development server and confirm it responds:
 
 ```bash
-voyages serve
+idrisi serve
 ```
 
-Open `http://127.0.0.1:8080` in a browser. You should see the Voyages web UI.
+Open `http://127.0.0.1:8080` in a browser. You should see the Idrisi web UI.
 
 ## What's Next
 

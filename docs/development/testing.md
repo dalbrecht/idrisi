@@ -1,6 +1,6 @@
 ---
 title: "Testing"
-description: "How to run tests, test structure, coverage targets, and testing conventions for Voyages"
+description: "How to run tests, test structure, coverage targets, and testing conventions for Idrisi"
 section: "development"
 order: 3
 ---
@@ -25,7 +25,7 @@ pytest tests/domain/test_entities.py
 pytest -v
 
 # With coverage report
-pytest --cov=voyages
+pytest --cov=idrisi
 ```
 
 Pytest is configured in `pyproject.toml`:
@@ -100,7 +100,7 @@ Command tests use Typer's `CliRunner` to invoke commands as a subprocess would.
 
 ```python
 from typer.testing import CliRunner
-from voyages.cli import app
+from idrisi.cli import app
 
 runner = CliRunner()
 result = runner.invoke(app, ["place", "list"])
@@ -118,7 +118,7 @@ Endpoint tests use FastAPI's `TestClient` with an in-memory database injected vi
 
 ```python
 from fastapi.testclient import TestClient
-from voyages.server import create_app
+from idrisi.server import create_app
 
 client = TestClient(create_app())
 response = client.get("/api/places")

@@ -1,11 +1,11 @@
-# Voyages
+# Idrisi
 
 A Python map generation toolbox for travel cartography.
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 
-Voyages combines a CLI and an interactive web UI to help you curate travel
+Idrisi combines a CLI and an interactive web UI to help you curate travel
 data and render publication-quality cartographic maps. Import geotagged photos,
 organize trips, choose from multiple styles and projections, and export to
 SVG, PDF, PNG, WebP, or EPS.
@@ -43,8 +43,8 @@ sudo apt install libgeos-dev libproj-dev
 ### Install
 
 ```bash
-git clone https://github.com/dalbrecht/Voyages.git
-cd Voyages
+git clone https://github.com/dalbrecht/Idrisi.git
+cd Idrisi
 make repo-setup    # Initialize git submodules
 make bootstrap     # Create venv and install dependencies
 make build-web     # Build the Svelte frontend
@@ -54,14 +54,14 @@ make build-web     # Build the Svelte frontend
 
 ```bash
 # Add places to the database
-voyages place add --name "Paris" --lat 48.8566 --lon 2.3522
-voyages place add --name "Rome" --lat 41.9028 --lon 12.4964
+idrisi place add --name "Paris" --lat 48.8566 --lon 2.3522
+idrisi place add --name "Rome" --lat 41.9028 --lon 12.4964
 
 # Create a project
-voyages project create "My Map" --map-type travel
+idrisi project create "My Map" --map-type travel
 
 # Associate places with the project via the API, then render
-voyages render "My Map" --style vintage --format png
+idrisi render "My Map" --style vintage --format png
 ```
 
 > **Note:** There is no CLI command to associate places with a project. Use the web UI or
@@ -70,7 +70,7 @@ voyages render "My Map" --style vintage --format png
 ### Web UI
 
 ```bash
-voyages serve
+idrisi serve
 ```
 
 Open [http://127.0.0.1:8080](http://127.0.0.1:8080) in your browser to access
@@ -132,7 +132,7 @@ See [Contributing](docs/development/contributing.md) for the full development gu
 
 ## License
 
-Voyages is licensed under the [GNU Affero General Public License v3.0](LICENSE).
+Idrisi is licensed under the [GNU Affero General Public License v3.0](LICENSE).
 You are free to use, modify, and distribute this software under the terms of the
 AGPL-3.0. If you run a modified version on a server, you must make the source
 code available to users of that server.

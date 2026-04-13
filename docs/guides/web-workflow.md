@@ -1,20 +1,20 @@
 ---
 title: "Web UI Workflow"
-description: "End-to-end walkthrough of a Voyages session through the browser"
+description: "End-to-end walkthrough of a Idrisi session through the browser"
 section: "guides"
 order: 2
 ---
 
 # Web UI Workflow
 
-This guide walks through the same end-to-end workflow as the CLI guide — importing places, organizing trips, composing a map, and rendering output — using the Voyages web interface.
+This guide walks through the same end-to-end workflow as the CLI guide — importing places, organizing trips, composing a map, and rendering output — using the Idrisi web interface.
 
 ## 1. Start the Server
 
 Start the server:
 
 ```bash
-voyages serve
+idrisi serve
 ```
 
 Open your browser to `http://127.0.0.1:8080`.
@@ -28,12 +28,12 @@ make serve
 This runs uvicorn directly:
 
 ```bash
-uv run uvicorn voyages.server:create_app --factory --reload
+uv run uvicorn idrisi.server:create_app --factory --reload
 ```
 
-> **Note:** `make serve` runs uvicorn directly and defaults to port **8000**, not 8080. Use `http://127.0.0.1:8000` when starting with `make serve`. `voyages serve` defaults to port **8080**.
+> **Note:** `make serve` runs uvicorn directly and defaults to port **8000**, not 8080. Use `http://127.0.0.1:8000` when starting with `make serve`. `idrisi serve` defaults to port **8080**.
 
-Screenshot: [Browser showing the Voyages dashboard at http://127.0.0.1:8080]
+Screenshot: [Browser showing the Idrisi dashboard at http://127.0.0.1:8080]
 
 ## 2. Dashboard
 
@@ -92,7 +92,7 @@ Once a project is configured, the **map preview** displays your places on an int
 
 Screenshot: [Map preview with place markers visible on an OpenStreetMap base layer]
 
-When you are satisfied with the preview, click **Render**. Voyages generates the output file server-side using the project's style and format settings.
+When you are satisfied with the preview, click **Render**. Idrisi generates the output file server-side using the project's style and format settings.
 
 When rendering completes, a **Download** button appears. Click it to save the output file to your machine.
 

@@ -1,6 +1,6 @@
 ---
 title: "Data Model"
-description: "Entities, value objects, and relationships in the Voyages SQLite database"
+description: "Entities, value objects, and relationships in the Idrisi SQLite database"
 section: "reference"
 order: 4
 ---
@@ -9,7 +9,7 @@ order: 4
 
 ## Overview
 
-Voyages stores travel data in a SQLite database with 6 entity types: Place, Trip, TripStop, Region, Project, and Photo. Entities are Python dataclasses defined in `src/voyages/domain/entities.py`. Value objects live in `src/voyages/domain/value_objects.py`.
+Idrisi stores travel data in a SQLite database with 6 entity types: Place, Trip, TripStop, Region, Project, and Photo. Entities are Python dataclasses defined in `src/idrisi/domain/entities.py`. Value objects live in `src/idrisi/domain/value_objects.py`.
 
 ## Entities
 
@@ -114,7 +114,7 @@ erDiagram
 
 ## Value Objects
 
-Value objects are immutable frozen dataclasses defined in `src/voyages/domain/value_objects.py`.
+Value objects are immutable frozen dataclasses defined in `src/idrisi/domain/value_objects.py`.
 
 ### Coordinates
 

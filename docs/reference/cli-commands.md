@@ -1,13 +1,13 @@
 ---
 title: "CLI Reference"
-description: "Complete reference for all Voyages CLI commands and options"
+description: "Complete reference for all Idrisi CLI commands and options"
 section: "reference"
 order: 1
 ---
 
 # CLI Reference
 
-The `voyages` CLI is the primary interface for managing places, trips, projects, and map output. All subcommands follow the pattern `voyages <group> <command>`.
+The `idrisi` CLI is the primary interface for managing places, trips, projects, and map output. All subcommands follow the pattern `idrisi <group> <command>`.
 
 ---
 
@@ -20,7 +20,7 @@ Manage places stored in the local database.
 **Synopsis**
 
 ```
-voyages place list
+idrisi place list
 ```
 
 **Description**
@@ -38,7 +38,7 @@ None.
 **Example**
 
 ```
-$ voyages place list
+$ idrisi place list
 Paris (48.8566, 2.3522)
 Tokyo (35.6762, 139.6503)
 ```
@@ -50,7 +50,7 @@ Tokyo (35.6762, 139.6503)
 **Synopsis**
 
 ```
-voyages place search <query>
+idrisi place search <query>
 ```
 
 **Description**
@@ -70,7 +70,7 @@ None.
 **Example**
 
 ```
-$ voyages place search "Kyoto Japan"
+$ idrisi place search "Kyoto Japan"
 Kyoto (35.0116, 135.7681)
 ```
 
@@ -81,7 +81,7 @@ Kyoto (35.0116, 135.7681)
 **Synopsis**
 
 ```
-voyages place add --name <name> --lat <lat> --lon <lon> [--category <category>]
+idrisi place add --name <name> --lat <lat> --lon <lon> [--category <category>]
 ```
 
 **Description**
@@ -104,7 +104,7 @@ None.
 **Example**
 
 ```
-$ voyages place add --name "Asakusa Temple" --lat 35.7148 --lon 139.7967 --category shrine
+$ idrisi place add --name "Asakusa Temple" --lat 35.7148 --lon 139.7967 --category shrine
 Created place: Asakusa Temple (a1b2c3d4)
 ```
 
@@ -119,7 +119,7 @@ Manage trips and their associated stops.
 **Synopsis**
 
 ```
-voyages trip list
+idrisi trip list
 ```
 
 **Description**
@@ -137,7 +137,7 @@ None.
 **Example**
 
 ```
-$ voyages trip list
+$ idrisi trip list
 Japan 2024 (12 stops)
 Europe Summer (8 stops)
 ```
@@ -149,7 +149,7 @@ Europe Summer (8 stops)
 **Synopsis**
 
 ```
-voyages trip create <name> [--description <description>]
+idrisi trip create <name> [--description <description>]
 ```
 
 **Description**
@@ -171,7 +171,7 @@ Creates a new named trip. Trips are collections of ordered stops that can later 
 **Example**
 
 ```
-$ voyages trip create "Japan 2024" --description "Two-week itinerary through Honshu"
+$ idrisi trip create "Japan 2024" --description "Two-week itinerary through Honshu"
 Created trip: Japan 2024 (e5f6a7b8)
 ```
 
@@ -186,7 +186,7 @@ Manage map projects. A project groups places, trips, and regions and defines the
 **Synopsis**
 
 ```
-voyages project list
+idrisi project list
 ```
 
 **Description**
@@ -204,7 +204,7 @@ None.
 **Example**
 
 ```
-$ voyages project list
+$ idrisi project list
 Japan 2024 (travel)
 Europe Highlights (region)
 ```
@@ -216,7 +216,7 @@ Europe Highlights (region)
 **Synopsis**
 
 ```
-voyages project create <name> [--map-type <type>] [--description <description>]
+idrisi project create <name> [--map-type <type>] [--description <description>]
 ```
 
 **Description**
@@ -239,7 +239,7 @@ Creates a new project. The map type controls how the project is rendered: `trave
 **Example**
 
 ```
-$ voyages project create "Japan 2024" --map-type route --description "Full itinerary"
+$ idrisi project create "Japan 2024" --map-type route --description "Full itinerary"
 Created project: Japan 2024 (c9d0e1f2)
 ```
 
@@ -250,7 +250,7 @@ Created project: Japan 2024 (c9d0e1f2)
 **Synopsis**
 
 ```
-voyages project show <name>
+idrisi project show <name>
 ```
 
 **Description**
@@ -270,7 +270,7 @@ None.
 **Example**
 
 ```
-$ voyages project show "Japan 2024"
+$ idrisi project show "Japan 2024"
 Name: Japan 2024
 Type: travel
 Description: Two-week itinerary
@@ -283,14 +283,14 @@ Regions: 0
 
 ## import
 
-Import external data into the Voyages database.
+Import external data into the Idrisi database.
 
 ### import photos
 
 **Synopsis**
 
 ```
-voyages import photos <path> [--trip <trip_id>] [--dry-run]
+idrisi import photos <path> [--trip <trip_id>] [--dry-run]
 ```
 
 **Description**
@@ -313,7 +313,7 @@ Scans a directory for JPEG files with embedded GPS EXIF data and imports each ge
 **Example**
 
 ```
-$ voyages import photos ~/Pictures/Japan2024 --dry-run
+$ idrisi import photos ~/Pictures/Japan2024 --dry-run
 [dry-run] Found 34 geotagged photos.
   /Users/alice/Pictures/Japan2024/DSC_0001.jpg (35.6762, 139.6503)
   /Users/alice/Pictures/Japan2024/DSC_0002.jpg (34.9671, 135.7727)
@@ -324,17 +324,17 @@ $ voyages import photos ~/Pictures/Japan2024 --dry-run
 
 ## serve
 
-Start the Voyages web server for the browser-based map interface.
+Start the Idrisi web server for the browser-based map interface.
 
 **Synopsis**
 
 ```
-voyages serve [--host <host>] [--port <port>]
+idrisi serve [--host <host>] [--port <port>]
 ```
 
 **Description**
 
-Launches a uvicorn ASGI server hosting the Voyages web application. By default the server binds to localhost only; set `--host 0.0.0.0` to expose it on all network interfaces.
+Launches a uvicorn ASGI server hosting the Idrisi web application. By default the server binds to localhost only; set `--host 0.0.0.0` to expose it on all network interfaces.
 
 **Arguments**
 
@@ -350,7 +350,7 @@ None.
 **Example**
 
 ```
-$ voyages serve --port 9000
+$ idrisi serve --port 9000
 INFO:     Started server process [12345]
 INFO:     Uvicorn running on http://127.0.0.1:9000 (Press CTRL+C to quit)
 ```
@@ -364,7 +364,7 @@ Render a map project to an image or vector file.
 **Synopsis**
 
 ```
-voyages render <project_name> [--format <fmt>] [--style <style>] [--dpi <dpi>] [--width <width>] [--output <dir>]
+idrisi render <project_name> [--format <fmt>] [--style <style>] [--dpi <dpi>] [--width <width>] [--output <dir>]
 ```
 
 **Description**
@@ -394,6 +394,6 @@ Generates a map for the named project using its associated places, trips, and re
 **Example**
 
 ```
-$ voyages render "Japan 2024" --format pdf --dpi 300 --output ~/Desktop
+$ idrisi render "Japan 2024" --format pdf --dpi 300 --output ~/Desktop
 Rendered: /Users/alice/Desktop/Japan 2024.pdf
 ```

@@ -16,26 +16,26 @@ Choose the track that matches how you prefer to work. Both produce the same resu
 **1. Add places:**
 
 ```bash
-voyages place add --name "Paris" --lat 48.8566 --lon 2.3522
-voyages place add --name "Rome" --lat 41.9028 --lon 12.4964
+idrisi place add --name "Paris" --lat 48.8566 --lon 2.3522
+idrisi place add --name "Rome" --lat 41.9028 --lon 12.4964
 ```
 
 **2. Create a trip:**
 
 ```bash
-voyages trip create "Europe 2025"
+idrisi trip create "Europe 2025"
 ```
 
 **3. Create a project:**
 
 ```bash
-voyages project create "My First Map" --map-type travel
+idrisi project create "My First Map" --map-type travel
 ```
 
 **4. Render the map:**
 
 ```bash
-voyages render "My First Map" --style vintage --format png --output .
+idrisi render "My First Map" --style vintage --format png --output .
 ```
 
 **5. Open the output:**
@@ -55,7 +55,7 @@ xdg-open "My First Map.png"
 **1. Start the server:**
 
 ```bash
-voyages serve
+idrisi serve
 ```
 
 Open `http://127.0.0.1:8080`.

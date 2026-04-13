@@ -1,17 +1,17 @@
 ---
 title: "API Overview"
-description: "Base URL, content type, authentication, and error format for the Voyages REST API"
+description: "Base URL, content type, authentication, and error format for the Idrisi REST API"
 section: "reference"
 order: 2
 ---
 
 # API Overview
 
-The Voyages API is a REST API built with FastAPI. It serves as the backend for the Voyages web UI and can be used directly from any HTTP client.
+The Idrisi API is a REST API built with FastAPI. It serves as the backend for the Idrisi web UI and can be used directly from any HTTP client.
 
 ## Base URL
 
-When running `voyages serve` with default settings:
+When running `idrisi serve` with default settings:
 
 ```
 http://127.0.0.1:8080
@@ -46,7 +46,7 @@ Example: `"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"`
 
 ## Authentication
 
-None. Voyages is a single-user local tool intended to run on localhost. No API keys, tokens, or sessions are required.
+None. Idrisi is a single-user local tool intended to run on localhost. No API keys, tokens, or sessions are required.
 
 ## Error Responses
 

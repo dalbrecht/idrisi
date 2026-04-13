@@ -1,6 +1,6 @@
 ---
 title: "Map Types"
-description: "Overview of the three Voyages map types and their configuration options"
+description: "Overview of the three Idrisi map types and their configuration options"
 section: "reference"
 order: 5
 ---
@@ -9,7 +9,7 @@ order: 5
 
 ## Overview
 
-Voyages supports three map types, each optimized for a different visualization goal. The map type is set when creating a project via the `--map-type` flag and stored on the Project entity. It determines which render method is called and which cartographic projection is used.
+Idrisi supports three map types, each optimized for a different visualization goal. The map type is set when creating a project via the `--map-type` flag and stored on the Project entity. It determines which render method is called and which cartographic projection is used.
 
 ## Travel Map (`travel`)
 
