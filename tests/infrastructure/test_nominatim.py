@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-from voyages.domain.value_objects import Coordinates
-from voyages.infrastructure.geocoding.nominatim import NominatimGeocodingService
+from idrisi.domain.value_objects import Coordinates
+from idrisi.infrastructure.geocoding.nominatim import NominatimGeocodingService
 
 
 def _mock_search_response() -> list[dict]:
@@ -44,7 +44,7 @@ def _mock_reverse_response() -> dict:
 
 
 class TestNominatimSearch:
-    @patch("voyages.infrastructure.geocoding.nominatim.httpx.get")
+    @patch("idrisi.infrastructure.geocoding.nominatim.httpx.get")
     def test_search_returns_places(self, mock_get: MagicMock) -> None:
         mock_response = MagicMock()
         mock_response.json.return_value = _mock_search_response()
@@ -63,7 +63,7 @@ class TestNominatimSearch:
         assert results[0].source == "nominatim"
         assert results[1].country == "United States"
 
-    @patch("voyages.infrastructure.geocoding.nominatim.httpx.get")
+    @patch("idrisi.infrastructure.geocoding.nominatim.httpx.get")
     def test_search_empty_results(self, mock_get: MagicMock) -> None:
         mock_response = MagicMock()
         mock_response.json.return_value = []
@@ -77,7 +77,7 @@ class TestNominatimSearch:
 
 
 class TestNominatimReverseGeocode:
-    @patch("voyages.infrastructure.geocoding.nominatim.httpx.get")
+    @patch("idrisi.infrastructure.geocoding.nominatim.httpx.get")
     def test_reverse_geocode_returns_place(self, mock_get: MagicMock) -> None:
         mock_response = MagicMock()
         mock_response.json.return_value = _mock_reverse_response()
@@ -92,7 +92,7 @@ class TestNominatimReverseGeocode:
         assert result.name == "Eiffel Tower, Paris, France"
         assert result.country == "France"
 
-    @patch("voyages.infrastructure.geocoding.nominatim.httpx.get")
+    @patch("idrisi.infrastructure.geocoding.nominatim.httpx.get")
     def test_reverse_geocode_error_returns_none(self, mock_get: MagicMock) -> None:
         mock_response = MagicMock()
         mock_response.json.return_value = {"error": "Unable to geocode"}

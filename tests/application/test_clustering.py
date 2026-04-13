@@ -4,8 +4,8 @@ from datetime import UTC, datetime
 
 import pytest
 
-from voyages.application.clustering import cluster_photos
-from voyages.domain.value_objects import GeotaggedPhoto
+from idrisi.application.clustering import cluster_photos
+from idrisi.domain.value_objects import GeotaggedPhoto
 
 TOKYO_LAT = 35.6762
 TOKYO_LON = 139.6503

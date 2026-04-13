@@ -3,11 +3,11 @@ from __future__ import annotations
 import uuid
 from typing import TYPE_CHECKING
 
-from voyages.application.place_service import PlaceService
-from voyages.domain.entities import Place
+from idrisi.application.place_service import PlaceService
+from idrisi.domain.entities import Place
 
 if TYPE_CHECKING:
-    from voyages.domain.value_objects import Coordinates
+    from idrisi.domain.value_objects import Coordinates
 
 PARIS_LAT = 48.8566
 PARIS_LON = 2.3522

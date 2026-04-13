@@ -15,7 +15,7 @@ pytestmark = [
 ]
 
 if sys.platform == "darwin":
-    from voyages.infrastructure.photos.osxphotos_adapter import OsxPhotosAdapter
+    from idrisi.infrastructure.photos.osxphotos_adapter import OsxPhotosAdapter
 
 
 class TestOsxPhotosAdapter:

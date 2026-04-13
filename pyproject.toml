@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "voyages"
+name = "idrisi"
 version = "0.1.0"
 description = "A Python map generation toolbox for travel cartography."
 requires-python = ">=3.12"
@@ -36,10 +36,10 @@ dev = [
 ]
 
 [project.scripts]
-voyages = "voyages.cli:app"
+idrisi = "idrisi.cli:app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/voyages"]
+packages = ["src/idrisi"]
 
 # ---------- Ruff ----------
 [tool.ruff]
@@ -78,7 +78,7 @@ ignore = [
 "tests/**/*.py" = ["S101", "ARG001", "ARG002", "ARG005", "PLR2004"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["voyages"]
+known-first-party = ["idrisi"]
 
 # ---------- Mypy ----------
 [tool.mypy]
@@ -99,13 +99,13 @@ module = [
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = "voyages.infrastructure.db.repository"
+module = "idrisi.infrastructure.db.repository"
 # Legacy-style Column models produce false positives on attribute assignment
 disable_error_code = ["assignment", "unused-ignore"]
 
 # ---------- Coverage ----------
 [tool.coverage.run]
-source = ["voyages"]
+source = ["idrisi"]
 omit = [
     "*/application/interfaces.py",
     "*/__main__.py",

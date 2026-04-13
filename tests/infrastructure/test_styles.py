@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from voyages.infrastructure.renderer.styles import MapStyle, get_builtin_styles, load_style
+from idrisi.infrastructure.renderer.styles import MapStyle, get_builtin_styles, load_style
 
 if TYPE_CHECKING:
     from pathlib import Path

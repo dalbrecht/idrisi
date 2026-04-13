@@ -7,8 +7,8 @@ from uuid import uuid4
 import pytest
 from sqlalchemy import inspect
 
-from voyages.infrastructure.db.models import PlaceModel
-from voyages.infrastructure.db.session import create_engine_and_tables, get_session
+from idrisi.infrastructure.db.models import PlaceModel
+from idrisi.infrastructure.db.session import create_engine_and_tables, get_session
 
 
 @pytest.fixture

@@ -8,12 +8,12 @@ from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
-from voyages.cli import app
-from voyages.cli.place_commands import get_place_service
-from voyages.cli.project_commands import get_project_service
-from voyages.cli.trip_commands import get_trip_service
-from voyages.domain.entities import Place, Project, Trip
-from voyages.domain.value_objects import MapType
+from idrisi.cli import app
+from idrisi.cli.place_commands import get_place_service
+from idrisi.cli.project_commands import get_project_service
+from idrisi.cli.trip_commands import get_trip_service
+from idrisi.domain.entities import Place, Project, Trip
+from idrisi.domain.value_objects import MapType
 
 runner = CliRunner()
 
@@ -23,7 +23,7 @@ runner = CliRunner()
 # ---------------------------------------------------------------------------
 
 
-@patch("voyages.cli.place_commands.get_place_service")
+@patch("idrisi.cli.place_commands.get_place_service")
 def test_place_list_empty(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.list_all.return_value = []
@@ -34,7 +34,7 @@ def test_place_list_empty(mock_get_svc: MagicMock) -> None:
     assert "No places found" in result.output
 
 
-@patch("voyages.cli.place_commands.get_place_service")
+@patch("idrisi.cli.place_commands.get_place_service")
 def test_place_list_with_results(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.list_all.return_value = [
@@ -47,7 +47,7 @@ def test_place_list_with_results(mock_get_svc: MagicMock) -> None:
     assert "Paris" in result.output
 
 
-@patch("voyages.cli.place_commands.get_place_service")
+@patch("idrisi.cli.place_commands.get_place_service")
 def test_place_search(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.search.return_value = [
@@ -61,7 +61,7 @@ def test_place_search(mock_get_svc: MagicMock) -> None:
     svc.search.assert_called_once_with("Tokyo")
 
 
-@patch("voyages.cli.place_commands.get_place_service")
+@patch("idrisi.cli.place_commands.get_place_service")
 def test_place_search_no_results(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.search.return_value = []
@@ -72,7 +72,7 @@ def test_place_search_no_results(mock_get_svc: MagicMock) -> None:
     assert "No results found" in result.output
 
 
-@patch("voyages.cli.place_commands.get_place_service")
+@patch("idrisi.cli.place_commands.get_place_service")
 def test_place_add(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     place = Place(id=uuid.uuid4(), name="Test", latitude=1.0, longitude=2.0, source="cli")
@@ -89,7 +89,7 @@ def test_place_add(mock_get_svc: MagicMock) -> None:
 # ---------------------------------------------------------------------------
 
 
-@patch("voyages.cli.project_commands.get_project_service")
+@patch("idrisi.cli.project_commands.get_project_service")
 def test_project_list_empty(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.list_all.return_value = []
@@ -100,7 +100,7 @@ def test_project_list_empty(mock_get_svc: MagicMock) -> None:
     assert "No projects found" in result.output
 
 
-@patch("voyages.cli.project_commands.get_project_service")
+@patch("idrisi.cli.project_commands.get_project_service")
 def test_project_list_with_results(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.list_all.return_value = [
@@ -114,7 +114,7 @@ def test_project_list_with_results(mock_get_svc: MagicMock) -> None:
     assert "travel" in result.output
 
 
-@patch("voyages.cli.project_commands.get_project_service")
+@patch("idrisi.cli.project_commands.get_project_service")
 def test_project_create(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     project = Project(id=uuid.uuid4(), name="Asia Trip", map_type=MapType.TRAVEL)
@@ -127,7 +127,7 @@ def test_project_create(mock_get_svc: MagicMock) -> None:
     svc.create.assert_called_once()
 
 
-@patch("voyages.cli.project_commands.get_project_service")
+@patch("idrisi.cli.project_commands.get_project_service")
 def test_project_show(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     project = Project(
@@ -145,7 +145,7 @@ def test_project_show(mock_get_svc: MagicMock) -> None:
     assert "travel" in result.output
 
 
-@patch("voyages.cli.project_commands.get_project_service")
+@patch("idrisi.cli.project_commands.get_project_service")
 def test_project_show_not_found(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.get_by_name.return_value = None
@@ -161,7 +161,7 @@ def test_project_show_not_found(mock_get_svc: MagicMock) -> None:
 # ---------------------------------------------------------------------------
 
 
-@patch("voyages.cli.trip_commands.get_trip_service")
+@patch("idrisi.cli.trip_commands.get_trip_service")
 def test_trip_list_empty(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.list_all.return_value = []
@@ -172,7 +172,7 @@ def test_trip_list_empty(mock_get_svc: MagicMock) -> None:
     assert "No trips found" in result.output
 
 
-@patch("voyages.cli.trip_commands.get_trip_service")
+@patch("idrisi.cli.trip_commands.get_trip_service")
 def test_trip_list_with_results(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     svc.list_all.return_value = [
@@ -185,7 +185,7 @@ def test_trip_list_with_results(mock_get_svc: MagicMock) -> None:
     assert "Road Trip" in result.output
 
 
-@patch("voyages.cli.trip_commands.get_trip_service")
+@patch("idrisi.cli.trip_commands.get_trip_service")
 def test_trip_create(mock_get_svc: MagicMock) -> None:
     svc = MagicMock()
     trip = Trip(id=uuid.uuid4(), name="Summer 2024", stops=[])
@@ -218,7 +218,7 @@ class TestCliErrorPaths:
         result = runner.invoke(app, ["place", "add", "--name", "Paris", "--lat", "48.85"])
         assert result.exit_code != 0
 
-    @patch("voyages.cli.project_commands.get_project_service")
+    @patch("idrisi.cli.project_commands.get_project_service")
     def test_project_create_invalid_map_type(self, mock_get_svc: MagicMock) -> None:
         svc = MagicMock()
         mock_get_svc.return_value = svc
@@ -230,7 +230,7 @@ class TestCliErrorPaths:
         result = runner.invoke(app, ["trip", "create"])
         assert result.exit_code != 0
 
-    @patch("voyages.cli.place_commands.get_place_service")
+    @patch("idrisi.cli.place_commands.get_place_service")
     def test_place_add_invalid_coordinates(self, mock_get_svc: MagicMock) -> None:
         """Document behavior when lat > 90 — CLI has no validation."""
         svc = MagicMock()
@@ -251,7 +251,7 @@ def test_get_place_service_creates_real_service() -> None:
     """Verify get_place_service wires up a real PlaceService."""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = f"{tmpdir}/test.db"
-        with patch("voyages.cli.place_commands._DB_URL", f"sqlite:///{db_path}"):
+        with patch("idrisi.cli.place_commands._DB_URL", f"sqlite:///{db_path}"):
             svc = get_place_service()
             assert svc is not None
             result = svc.list_all()
@@ -262,7 +262,7 @@ def test_get_project_service_creates_real_service() -> None:
     """Verify get_project_service wires up a real ProjectService."""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = f"{tmpdir}/test.db"
-        with patch("voyages.cli.project_commands._DB_URL", f"sqlite:///{db_path}"):
+        with patch("idrisi.cli.project_commands._DB_URL", f"sqlite:///{db_path}"):
             svc = get_project_service()
             assert svc is not None
             result = svc.list_all()
@@ -273,7 +273,7 @@ def test_get_trip_service_creates_real_service() -> None:
     """Verify get_trip_service wires up a real TripService."""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = f"{tmpdir}/test.db"
-        with patch("voyages.cli.trip_commands._DB_URL", f"sqlite:///{db_path}"):
+        with patch("idrisi.cli.trip_commands._DB_URL", f"sqlite:///{db_path}"):
             svc = get_trip_service()
             assert svc is not None
             result = svc.list_all()

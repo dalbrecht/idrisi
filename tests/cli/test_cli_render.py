@@ -8,15 +8,15 @@ from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
-from voyages.cli import app
-from voyages.cli.render_commands import get_render_dependencies
-from voyages.domain.entities import Project
-from voyages.domain.value_objects import MapType
+from idrisi.cli import app
+from idrisi.cli.render_commands import get_render_dependencies
+from idrisi.domain.entities import Project
+from idrisi.domain.value_objects import MapType
 
 runner = CliRunner()
 
 
-@patch("voyages.cli.render_commands.get_render_dependencies")
+@patch("idrisi.cli.render_commands.get_render_dependencies")
 def test_render_travel_map(mock_deps: MagicMock) -> None:
     project_service = MagicMock()
     place_repo = MagicMock()
@@ -49,7 +49,7 @@ def test_render_travel_map(mock_deps: MagicMock) -> None:
     render_engine.render_travel_map.assert_called_once()
 
 
-@patch("voyages.cli.render_commands.get_render_dependencies")
+@patch("idrisi.cli.render_commands.get_render_dependencies")
 def test_render_project_not_found(mock_deps: MagicMock) -> None:
     project_service = MagicMock()
     place_repo = MagicMock()
@@ -72,7 +72,7 @@ def test_render_project_not_found(mock_deps: MagicMock) -> None:
     assert "not found" in result.output
 
 
-@patch("voyages.cli.render_commands.get_render_dependencies")
+@patch("idrisi.cli.render_commands.get_render_dependencies")
 def test_render_region_map(mock_deps: MagicMock) -> None:
     project_service = MagicMock()
     place_repo = MagicMock()
@@ -105,7 +105,7 @@ def test_render_region_map(mock_deps: MagicMock) -> None:
     render_engine.render_region_map.assert_called_once()
 
 
-@patch("voyages.cli.render_commands.get_render_dependencies")
+@patch("idrisi.cli.render_commands.get_render_dependencies")
 def test_render_route_map(mock_deps: MagicMock) -> None:
     project_service = MagicMock()
     place_repo = MagicMock()
@@ -141,7 +141,7 @@ def test_render_route_map(mock_deps: MagicMock) -> None:
     render_engine.render_route_map.assert_called_once()
 
 
-@patch("voyages.cli.render_commands.get_render_dependencies")
+@patch("idrisi.cli.render_commands.get_render_dependencies")
 def test_render_route_map_no_trips(mock_deps: MagicMock) -> None:
     """Verifies that render exits with error when no trips are found for a route map."""
     project_service = MagicMock()
@@ -176,7 +176,7 @@ def test_render_route_map_no_trips(mock_deps: MagicMock) -> None:
     assert "No trips" in result.output
 
 
-@patch("voyages.cli.render_commands.get_render_dependencies")
+@patch("idrisi.cli.render_commands.get_render_dependencies")
 def test_render_with_custom_style(mock_deps: MagicMock) -> None:
     """Verifies that passing --style overrides the default map style during rendering."""
     project_service = MagicMock()
@@ -213,7 +213,7 @@ def test_get_render_dependencies_creates_real_dependencies() -> None:
     """Verifies that the render dependencies factory returns five real dependency objects."""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = f"{tmpdir}/render_test.db"
-        with patch("voyages.cli.render_commands._DB_URL", f"sqlite:///{db_path}"):
+        with patch("idrisi.cli.render_commands._DB_URL", f"sqlite:///{db_path}"):
             result = get_render_dependencies()
             try:
                 assert len(result) == 5

@@ -546,6 +546,59 @@ wheels = [
 ]
 
 [[package]]
+name = "idrisi"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "cartopy" },
+    { name = "fastapi" },
+    { name = "httpx" },
+    { name = "matplotlib" },
+    { name = "osxphotos", marker = "sys_platform == 'darwin'" },
+    { name = "pillow" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+    { name = "questionary" },
+    { name = "scikit-learn" },
+    { name = "sqlalchemy" },
+    { name = "typer" },
+    { name = "uvicorn" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+    { name = "types-pillow" },
+    { name = "types-pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "cartopy", specifier = ">=0.23" },
+    { name = "fastapi", specifier = ">=0.115" },
+    { name = "httpx", specifier = ">=0.27" },
+    { name = "matplotlib", specifier = ">=3.9" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.11" },
+    { name = "osxphotos", marker = "sys_platform == 'darwin'", specifier = ">=0.68" },
+    { name = "pillow", specifier = ">=10" },
+    { name = "pydantic", specifier = ">=2.9" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
+    { name = "pyyaml", specifier = ">=6" },
+    { name = "questionary", specifier = ">=2.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6" },
+    { name = "scikit-learn", specifier = ">=1.5" },
+    { name = "sqlalchemy", specifier = ">=2.0" },
+    { name = "typer", specifier = ">=0.12" },
+    { name = "types-pillow", marker = "extra == 'dev'" },
+    { name = "types-pyyaml", marker = "extra == 'dev'" },
+    { name = "uvicorn", specifier = ">=0.30" },
+]
+
+[[package]]
 name = "iniconfig"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2306,59 +2359,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/5e/da/6eee1ff8b6cbeed47eeb5229749168e81eb4b7b999a1a15a7176e51410c9/uvicorn-0.44.0.tar.gz", hash = "sha256:6c942071b68f07e178264b9152f1f16dfac5da85880c4ce06366a96d70d4f31e", size = 86947 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/23/a5bbd9600dd607411fa644c06ff4951bec3a4d82c4b852374024359c19c0/uvicorn-0.44.0-py3-none-any.whl", hash = "sha256:ce937c99a2cc70279556967274414c087888e8cec9f9c94644dfca11bd3ced89", size = 69425 },
-]
-
-[[package]]
-name = "voyages"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "cartopy" },
-    { name = "fastapi" },
-    { name = "httpx" },
-    { name = "matplotlib" },
-    { name = "osxphotos", marker = "sys_platform == 'darwin'" },
-    { name = "pillow" },
-    { name = "pydantic" },
-    { name = "pyyaml" },
-    { name = "questionary" },
-    { name = "scikit-learn" },
-    { name = "sqlalchemy" },
-    { name = "typer" },
-    { name = "uvicorn" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "ruff" },
-    { name = "types-pillow" },
-    { name = "types-pyyaml" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "cartopy", specifier = ">=0.23" },
-    { name = "fastapi", specifier = ">=0.115" },
-    { name = "httpx", specifier = ">=0.27" },
-    { name = "matplotlib", specifier = ">=3.9" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.11" },
-    { name = "osxphotos", marker = "sys_platform == 'darwin'", specifier = ">=0.68" },
-    { name = "pillow", specifier = ">=10" },
-    { name = "pydantic", specifier = ">=2.9" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
-    { name = "pyyaml", specifier = ">=6" },
-    { name = "questionary", specifier = ">=2.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6" },
-    { name = "scikit-learn", specifier = ">=1.5" },
-    { name = "sqlalchemy", specifier = ">=2.0" },
-    { name = "typer", specifier = ">=0.12" },
-    { name = "types-pillow", marker = "extra == 'dev'" },
-    { name = "types-pyyaml", marker = "extra == 'dev'" },
-    { name = "uvicorn", specifier = ">=0.30" },
 ]
 
 [[package]]

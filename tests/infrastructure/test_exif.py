@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from voyages.infrastructure.exif.extractor import PillowExifService
+from idrisi.infrastructure.exif.extractor import PillowExifService
 
 
 def _make_mock_image_with_gps() -> MagicMock:
@@ -46,7 +46,7 @@ def _make_mock_image_without_gps() -> MagicMock:
 
 
 class TestPillowExifExtraction:
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_extract_with_gps_data(self, mock_open: MagicMock) -> None:
         mock_open.return_value = _make_mock_image_with_gps()
         service = PillowExifService()
@@ -60,7 +60,7 @@ class TestPillowExifExtraction:
         assert abs(photo.longitude - 2.2944) < 0.001  # type: ignore[operator]
         assert photo.taken_at is not None
 
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_extract_without_gps_data(self, mock_open: MagicMock) -> None:
         mock_open.return_value = _make_mock_image_without_gps()
         service = PillowExifService()
@@ -70,14 +70,14 @@ class TestPillowExifExtraction:
 
 
 class TestPillowExifEdgeCases:
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_corrupt_image_returns_none(self, mock_open: MagicMock) -> None:
         mock_open.side_effect = OSError("corrupt image")
         service = PillowExifService()
         result = service.extract_from_file(Path("/photos/corrupt.jpg"))
         assert result is None
 
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_no_exif_data_returns_none(self, mock_open: MagicMock) -> None:
         mock_img = MagicMock()
         exif = MagicMock()
@@ -88,7 +88,7 @@ class TestPillowExifEdgeCases:
         result = service.extract_from_file(Path("/photos/no_exif.jpg"))
         assert result is None
 
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_missing_lat_lon_returns_none(self, mock_open: MagicMock) -> None:
         mock_img = MagicMock()
         exif = MagicMock()
@@ -145,7 +145,7 @@ class TestPillowExifEdgeCases:
 
 
 class TestPillowExifDirectory:
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_extract_from_directory(self, mock_open: MagicMock) -> None:
         mock_open.return_value = _make_mock_image_with_gps()
 
@@ -184,7 +184,7 @@ class TestPillowExifDirectory:
 
         assert photos == []
 
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_gps_info_as_dict_branch(self, mock_open: MagicMock) -> None:
         """Verifies GPS extraction when gps_info is already a dict rather than an IFD object."""
         mock_img = MagicMock()
@@ -209,7 +209,7 @@ class TestPillowExifDirectory:
         assert photo is not None
         assert abs(photo.latitude - 48.8567) < 0.001  # type: ignore[operator]
 
-    @patch("voyages.infrastructure.exif.extractor.Image.open")
+    @patch("idrisi.infrastructure.exif.extractor.Image.open")
     def test_invalid_gps_coords_returns_none(self, mock_open: MagicMock) -> None:
         """Verifies that invalid GPS coordinate values cause extraction to return None."""
         mock_img = MagicMock()

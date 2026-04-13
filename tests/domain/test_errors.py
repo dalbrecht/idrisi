@@ -4,7 +4,7 @@ import uuid
 
 import pytest
 
-from voyages.domain.errors import (
+from idrisi.domain.errors import (
     BadRequestError,
     EntityNotFoundError,
     PhotoNotFoundError,

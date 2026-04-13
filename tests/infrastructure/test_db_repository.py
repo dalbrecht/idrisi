@@ -7,16 +7,16 @@ from uuid import uuid4
 
 import pytest
 
-from voyages.domain.entities import Photo, Place, Project, Region, Trip, TripStop
-from voyages.domain.value_objects import MapType
-from voyages.infrastructure.db.repository import (
+from idrisi.domain.entities import Photo, Place, Project, Region, Trip, TripStop
+from idrisi.domain.value_objects import MapType
+from idrisi.infrastructure.db.repository import (
     SqlPhotoRepository,
     SqlPlaceRepository,
     SqlProjectRepository,
     SqlRegionRepository,
     SqlTripRepository,
 )
-from voyages.infrastructure.db.session import create_engine_and_tables, get_session
+from idrisi.infrastructure.db.session import create_engine_and_tables, get_session
 
 
 @pytest.fixture

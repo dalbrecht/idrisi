@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
-from voyages.cli import app
+from idrisi.cli import app
 
 runner = CliRunner()
 

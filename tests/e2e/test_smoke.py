@@ -1,4 +1,4 @@
-"""End-to-end smoke tests for the full Voyages workflow."""
+"""End-to-end smoke tests for the full Idrisi workflow."""
 
 from __future__ import annotations
 
@@ -9,19 +9,19 @@ from typing import TYPE_CHECKING
 from fastapi.testclient import TestClient
 from typer.testing import CliRunner
 
-from voyages.application.place_service import PlaceService
-from voyages.application.project_service import ProjectService
-from voyages.cli import app
-from voyages.domain.value_objects import MapType, OutputFormat
-from voyages.infrastructure.db.repository import SqlPlaceRepository, SqlProjectRepository
-from voyages.infrastructure.db.session import create_engine_and_tables, get_session
-from voyages.infrastructure.renderer.engine import RenderEngine
-from voyages.infrastructure.renderer.styles import load_style
-from voyages.server import create_app
+from idrisi.application.place_service import PlaceService
+from idrisi.application.project_service import ProjectService
+from idrisi.cli import app
+from idrisi.domain.value_objects import MapType, OutputFormat
+from idrisi.infrastructure.db.repository import SqlPlaceRepository, SqlProjectRepository
+from idrisi.infrastructure.db.session import create_engine_and_tables, get_session
+from idrisi.infrastructure.renderer.engine import RenderEngine
+from idrisi.infrastructure.renderer.styles import load_style
+from idrisi.server import create_app
 
 if TYPE_CHECKING:
-    from voyages.domain.entities import Place
-    from voyages.domain.value_objects import Coordinates
+    from idrisi.domain.entities import Place
+    from idrisi.domain.value_objects import Coordinates
 
 runner = CliRunner(env={"COLUMNS": "200", "NO_COLOR": "1"})
 
